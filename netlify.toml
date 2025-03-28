@@ -1,0 +1,20 @@
+[build]
+  command = "npm run build && npm run optimize-assets"
+  publish = "dist"
+  functions = "functions"
+
+[context.production.environment]
+  NODE_VERSION = "18.x"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' https://js.stripe.com https://connect.facebook.net;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      img-src 'self' data: https://*.stripe.com https://*.facebook.com;
+      frame-src https://www.youtube.com https://www.facebook.com https://js.stripe.com;
+      connect-src 'self' https://api.stripe.com https://bible-api.com;
+    """
+    X-Frame-Options = "DENY"

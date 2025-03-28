@@ -1,0 +1,19 @@
+# ========================
+# MAIN WEBSITE CONFIGURATION
+# ========================
+VITE_MAGIC_PUB_KEY=pk_live_XXXX            # Magic.link for passwordless auth
+VITE_STRIPE_PUB_KEY=pk_test_xxxxxxxx       # Stripe.js public key
+VITE_YOUTUBE_API_KEY=xxxxxxxxxx            # YouTube Data API v3
+
+# ========================
+# ADMIN PANEL CONFIGURATION
+# ========================
+REACT_APP_API_KEY=hnm_admin_XXXX           # Admin API access key
+REACT_APP_FB_APP_ID=xxxxxxxxxx             # Facebook App ID
+REACT_APP_FB_ACCESS_TOKEN=xxxxxxxxxx       # Facebook Page Access Token
+
+# ========================
+# SERVERLESS/BACKEND SECRETS
+# ========================
+STRIPE_SECRET_KEY=sk_test_xxxxxxxx         # Stripe API secret key
+FAUNA_SECRET=fnAXXXX                       # FaunaDB server secret

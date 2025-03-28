@@ -1,0 +1,24 @@
+{
+  "name": "hnm-ministry",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "optimize-assets": "imagemin src/assets/images/* --out-dir=dist/assets/images"
+  },
+  "dependencies": {
+    "@stripe/stripe-js": "^3.1.0",
+    "axios": "^1.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-facebook": "^9.1.0",
+    "react-youtube": "^10.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "imagemin-cli": "^7.0.0",
+    "sass": "^1.62.1",
+    "vite": "^4.3.9"
+  }
+}
