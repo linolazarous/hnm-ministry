@@ -1,319 +1,383 @@
-// admin/src/pages/Livestream.js
-import React, { useState, useEffect } from 'react';
-import logo from '../assets/logo.png';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import axios from 'axios';
+import debounce from 'lodash.debounce';
+import io from 'socket.io-client';
+import PropTypes from 'prop-types';
+import logo from '../assets/logo.png';
+import BibleVerseSearch from '../components/BibleVerseSearch';
+import LivestreamNotes from '../components/LivestreamNotes';
+import LivestreamOverlay from '../components/LivestreamOverlay';
+import LowerThirdGenerator from '../components/LowerThirdGenerator';
+import CountdownTimer from '../components/CountdownTimer';
+import { useBroadcast } from '../hooks/useBroadcast';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useAuth } from '../hooks/useAuth';
+import { BibleAPI } from '../services/BibleAPI';
+import { BroadcastAPI } from '../services/BroadcastAPI';
+import { formatTime } from '../utils/timeUtils';
+import './Livestream.css';
+
+// Constants
+const TRANSLATIONS = [
+  { id: 'NIV', name: 'New International Version' },
+  { id: 'KJV', name: 'King James Version' },
+  { id: 'ESV', name: 'English Standard Version' },
+  { id: 'NASB', name: 'New American Standard Bible' },
+  { id: 'NLT', name: 'New Living Translation' },
+  { id: 'MSG', name: 'The Message' },
+  { id: 'AMP', name: 'Amplified Bible' },
+];
 
 const Livestream = () => {
+  // Authentication
+  const { user, isAuthenticated, logout } = useAuth();
+  const socketRef = useRef(null);
+  
+  // State management
   const [showNotes, setShowNotes] = useState(false);
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useLocalStorage('livestream-notes', '');
   const [showBible, setShowBible] = useState(false);
   const [bibleVerse, setBibleVerse] = useState('');
-  const [translation, setTranslation] = useState('NIV');
+  const [translation, setTranslation] = useLocalStorage('bible-translation', 'NIV');
   const [verseSearch, setVerseSearch] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('controls');
+  const [streamStatus, setStreamStatus] = useState('offline');
+  const [viewerCount, setViewerCount] = useState(0);
+  const [lowerThird, setLowerThird] = useState({
+    visible: false,
+    title: '',
+    subtitle: '',
+    color: '#4a6fa5'
+  });
 
-  // Available Bible translations (YouVersion supported versions)
-  const translations = [
-    { id: 'NIV', name: 'New International Version' },
-    { id: 'KJV', name: 'King James Version' },
-    { id: 'ESV', name: 'English Standard Version' },
-    { id: 'NASB', name: 'New American Standard Bible' },
-    { id: 'NLT', name: 'New Living Translation' },
-    { id: 'MSG', name: 'The Message' },
-    { id: 'AMP', name: 'Amplified Bible' },
-  ];
+  // Custom hook for broadcast state management
+  const { broadcastState, updateBroadcast, syncWithServer } = useBroadcast();
 
-  // Fetch Bible verse from YouVersion API (mock implementation)
-  const fetchBibleVerse = async (reference, version) => {
-    try {
-      // In a real implementation, you would use the YouVersion API
-      // This is a mock implementation for demonstration
-      console.log(`Fetching ${reference} in ${version}`);
-      
-      // Mock response
-      const mockVerses = {
-        'John 3:16': {
-          NIV: 'For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.',
-          KJV: 'For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.',
-          ESV: 'For God so loved the world, that he gave his only Son, that whoever believes in him should not perish but have eternal life.',
-        },
-        'Psalm 23:1': {
-          NIV: 'The LORD is my shepherd, I lack nothing.',
-          KJV: 'The LORD is my shepherd; I shall not want.',
-          ESV: 'The LORD is my shepherd; I shall not want.',
-        },
-        // Add more mock verses as needed
-      };
+  // Refs
+  const notesRef = useRef(null);
+  const bibleRef = useRef(null);
 
-      const verseText = mockVerses[reference]?.[version] || 
-                       `Verse not found for ${reference} in ${version}. Please try another reference.`;
-      
-      setBibleVerse(verseText);
-    } catch (error) {
-      console.error('Error fetching Bible verse:', error);
-      setBibleVerse('Error loading verse. Please try again.');
+  // Memoized values
+  const availableTranslations = useMemo(() => TRANSLATIONS, []);
+  const isBroadcasting = useMemo(() => streamStatus === 'live', [streamStatus]);
+
+  // Initialize WebSocket connection
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    socketRef.current = io(process.env.REACT_APP_WEBSOCKET_URL, {
+      auth: { token: user.token },
+      transports: ['websocket']
+    });
+
+    socketRef.current.on('connect', () => {
+      console.log('Connected to WebSocket server');
+      setStreamStatus('connecting');
+    });
+
+    socketRef.current.on('stream-status', (status) => {
+      setStreamStatus(status);
+    });
+
+    socketRef.current.on('viewer-count', (count) => {
+      setViewerCount(count);
+    });
+
+    socketRef.current.on('broadcast-update', (update) => {
+      syncWithServer(update);
+    });
+
+    socketRef.current.on('disconnect', () => {
+      setStreamStatus('offline');
+    });
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, [isAuthenticated, user, syncWithServer]);
+
+  // Fetch initial broadcast state
+  useEffect(() => {
+    const fetchInitialState = async () => {
+      try {
+        const response = await BroadcastAPI.getCurrentState();
+        syncWithServer(response.data);
+      } catch (err) {
+        console.error('Failed to fetch initial state:', err);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchInitialState();
     }
-  };
+  }, [isAuthenticated, syncWithServer]);
+
+  // Debounced verse search
+  const debouncedSearch = useCallback(
+    debounce(async (searchTerm, version) => {
+      if (searchTerm.trim()) {
+        setIsLoading(true);
+        setError(null);
+        
+        try {
+          const verse = await BibleAPI.getVerse(searchTerm, version);
+          setBibleVerse(verse.text);
+          updateBroadcast({ 
+            bibleVerse: verse.text, 
+            bibleReference: searchTerm, 
+            translation: version 
+          });
+        } catch (err) {
+          console.error('Error fetching Bible verse:', err);
+          setError('Failed to fetch verse. Please try again.');
+          setBibleVerse('');
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }, 500),
+    [updateBroadcast]
+  );
 
   // Handle verse search
   const handleVerseSearch = (e) => {
     e.preventDefault();
-    if (verseSearch.trim()) {
-      fetchBibleVerse(verseSearch, translation);
+    debouncedSearch(verseSearch, translation);
+  };
+
+  // Auto-suggest Bible references
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (verseSearch.length > 2) {
+        try {
+          const results = await BibleAPI.searchReferences(verseSearch);
+          setSuggestions(results);
+        } catch (err) {
+          console.error('Error fetching suggestions:', err);
+          setSuggestions([]);
+        }
+      } else {
+        setSuggestions([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [verseSearch]);
+
+  // Broadcast control functions
+  const startBroadcast = async () => {
+    try {
+      await BroadcastAPI.startBroadcast();
+      setStreamStatus('live');
+    } catch (err) {
+      console.error('Failed to start broadcast:', err);
     }
   };
 
-  // Auto-suggest Bible references (mock implementation)
-  useEffect(() => {
-    if (verseSearch.length > 2) {
-      // In a real app, you would fetch suggestions from YouVersion API
-      const mockSuggestions = [
-        'John 3:16',
-        'Psalm 23:1',
-        'Romans 8:28',
-        'Philippians 4:13',
-        'Matthew 11:28',
-      ].filter(ref => ref.toLowerCase().includes(verseSearch.toLowerCase()));
-      
-      setSuggestions(mockSuggestions);
-    } else {
-      setSuggestions([]);
+  const endBroadcast = async () => {
+    try {
+      await BroadcastAPI.endBroadcast();
+      setStreamStatus('offline');
+    } catch (err) {
+      console.error('Failed to end broadcast:', err);
     }
-  }, [verseSearch]);
+  };
+
+  const savePreset = async (presetName) => {
+    try {
+      await BroadcastAPI.savePreset({
+        name: presetName,
+        state: broadcastState
+      });
+    } catch (err) {
+      console.error('Failed to save preset:', err);
+    }
+  };
+
+  // Lower third controls
+  const showLowerThird = () => {
+    updateBroadcast({ lowerThird: { ...lowerThird, visible: true } });
+  };
+
+  const hideLowerThird = () => {
+    updateBroadcast({ lowerThird: { ...lowerThird, visible: false } });
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="auth-required">
+        <h2>Authentication Required</h2>
+        <p>Please log in to access the livestream controls.</p>
+      </div>
+    );
+  }
 
   return (
-    <div style={styles.container}>
-      <img src={logo} alt="Heavenly Nature Ministry Logo" style={styles.logo} />
-      <h2>Livestream Management</h2>
-      
-      {/* Livestream Embed */}
-      <div style={styles.livestreamContainer}>
-        <iframe
-          width="100%"
-          height="500"
-          src="https://www.youtube.com/embed/your-livestream-id"
-          title="Livestream"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
+    <div className="livestream-admin">
+      {/* Header with stream status */}
+      <header className="livestream-header">
+        <img src={logo} alt="Heavenly Nature Ministry Logo" className="livestream-logo" />
+        <div className="stream-status">
+          <span className={`status-indicator ${streamStatus}`}>
+            {streamStatus.toUpperCase()}
+          </span>
+          <span className="viewer-count">
+            {viewerCount} {viewerCount === 1 ? 'viewer' : 'viewers'}
+          </span>
+          {isBroadcasting ? (
+            <button onClick={endBroadcast} className="btn btn-danger">
+              End Broadcast
+            </button>
+          ) : (
+            <button onClick={startBroadcast} className="btn btn-success">
+              Start Broadcast
+            </button>
+          )}
+        </div>
+      </header>
 
-      {/* Controls Section */}
-      <div style={styles.controls}>
-        {/* Notes Controls */}
-        <div style={styles.controlGroup}>
-          <button 
-            onClick={() => setShowNotes(!showNotes)}
-            style={showNotes ? styles.activeButton : styles.button}
-          >
-            {showNotes ? 'Hide Notes' : 'Show Notes'}
-          </button>
-          {showNotes && (
-            <div style={styles.notesInputContainer}>
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Type notes to display during livestream..."
-                style={styles.notesInput}
+      {/* Main content area */}
+      <main className="livestream-main">
+        {/* Livestream preview and overlay */}
+        <section className="livestream-preview">
+          <div className="livestream-embed-container">
+            <div className="livestream-embed-wrapper">
+              <iframe
+                src={`https://www.youtube.com/embed/your-livestream-id?autoplay=1&mute=1`}
+                title="Livestream Preview"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="livestream-embed"
               />
-              <button 
-                onClick={() => setNotes('')}
-                style={styles.button}
-              >
-                Clear Notes
-              </button>
             </div>
-          )}
-        </div>
+          </div>
 
-        {/* Bible Verse Controls */}
-        <div style={styles.controlGroup}>
-          <button 
-            onClick={() => setShowBible(!showBible)}
-            style={showBible ? styles.activeButton : styles.button}
-          >
-            {showBible ? 'Hide Bible Verse' : 'Show Bible Verse'}
-          </button>
-          {showBible && (
-            <div style={styles.bibleControls}>
-              <form onSubmit={handleVerseSearch} style={styles.searchForm}>
-                <input
-                  type="text"
-                  value={verseSearch}
-                  onChange={(e) => setVerseSearch(e.target.value)}
-                  placeholder="Enter Bible reference (e.g., John 3:16)"
-                  style={styles.searchInput}
+          <LivestreamOverlay 
+            showNotes={showNotes}
+            notes={notes}
+            showBible={showBible}
+            bibleVerse={bibleVerse}
+            translation={translation}
+            verseSearch={verseSearch}
+            lowerThird={broadcastState.lowerThird}
+          />
+        </section>
+
+        {/* Control panels */}
+        <section className="livestream-controls">
+          <nav className="control-tabs">
+            <button 
+              className={activeTab === 'controls' ? 'active' : ''}
+              onClick={() => setActiveTab('controls')}
+            >
+              Controls
+            </button>
+            <button 
+              className={activeTab === 'lower-third' ? 'active' : ''}
+              onClick={() => setActiveTab('lower-third')}
+            >
+              Lower Third
+            </button>
+            <button 
+              className={activeTab === 'countdown' ? 'active' : ''}
+              onClick={() => setActiveTab('countdown')}
+            >
+              Countdown
+            </button>
+            <button 
+              className={activeTab === 'presets' ? 'active' : ''}
+              onClick={() => setActiveTab('presets')}
+            >
+              Presets
+            </button>
+          </nav>
+
+          <div className="tab-content">
+            {activeTab === 'controls' && (
+              <>
+                <LivestreamNotes 
+                  showNotes={showNotes}
+                  setShowNotes={setShowNotes}
+                  notes={notes}
+                  setNotes={setNotes}
+                  ref={notesRef}
+                  updateBroadcast={updateBroadcast}
                 />
-                <select
-                  value={translation}
-                  onChange={(e) => setTranslation(e.target.value)}
-                  style={styles.translationSelect}
-                >
-                  {translations.map((trans) => (
-                    <option key={trans.id} value={trans.id}>{trans.name}</option>
-                  ))}
-                </select>
-                <button type="submit" style={styles.button}>Search</button>
-              </form>
-              
-              {suggestions.length > 0 && (
-                <div style={styles.suggestionsContainer}>
-                  {suggestions.map((suggestion, index) => (
-                    <div 
-                      key={index}
-                      style={styles.suggestion}
-                      onClick={() => {
-                        setVerseSearch(suggestion);
-                        setSuggestions([]);
-                      }}
-                    >
-                      {suggestion}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
 
-      {/* Overlay Display Area */}
-      <div style={styles.overlayContainer}>
-        {showNotes && notes && (
-          <div style={styles.notesDisplay}>
-            <h4>Livestream Notes:</h4>
-            <p>{notes}</p>
+                <BibleVerseSearch 
+                  showBible={showBible}
+                  setShowBible={setShowBible}
+                  verseSearch={verseSearch}
+                  setVerseSearch={setVerseSearch}
+                  translation={translation}
+                  setTranslation={setTranslation}
+                  translations={availableTranslations}
+                  suggestions={suggestions}
+                  isLoading={isLoading}
+                  error={error}
+                  handleVerseSearch={handleVerseSearch}
+                  setSuggestions={setSuggestions}
+                  ref={bibleRef}
+                  updateBroadcast={updateBroadcast}
+                />
+              </>
+            )}
+
+            {activeTab === 'lower-third' && (
+              <LowerThirdGenerator
+                lowerThird={lowerThird}
+                setLowerThird={setLowerThird}
+                showLowerThird={showLowerThird}
+                hideLowerThird={hideLowerThird}
+                updateBroadcast={updateBroadcast}
+              />
+            )}
+
+            {activeTab === 'countdown' && (
+              <CountdownTimer 
+                updateBroadcast={updateBroadcast}
+                isBroadcasting={isBroadcasting}
+              />
+            )}
+
+            {activeTab === 'presets' && (
+              <div className="presets-panel">
+                <h3>Save Current State as Preset</h3>
+                <div className="preset-form">
+                  <input 
+                    type="text" 
+                    placeholder="Preset name"
+                    id="preset-name"
+                  />
+                  <button 
+                    className="btn btn-primary"
+                    onClick={() => savePreset(document.getElementById('preset-name').value)}
+                  >
+                    Save Preset
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-        {showBible && bibleVerse && (
-          <div style={styles.bibleDisplay}>
-            <h4>Bible Verse ({translation}):</h4>
-            <p>{bibleVerse}</p>
-            {verseSearch && <small>Reference: {verseSearch}</small>}
-          </div>
-        )}
-      </div>
+        </section>
+      </main>
+
+      {/* Broadcast status debug panel */}
+      <details className="debug-panel">
+        <summary>Broadcast State</summary>
+        <pre>{JSON.stringify(broadcastState, null, 2)}</pre>
+      </details>
     </div>
   );
 };
 
-const styles = {
-  container: {
-    textAlign: 'center',
-    padding: '20px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  },
-  logo: {
-    height: '50px',
-    marginBottom: '20px',
-  },
-  livestreamContainer: {
-    marginBottom: '30px',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-  },
-  controls: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '20px',
-    marginBottom: '30px',
-    flexWrap: 'wrap',
-  },
-  controlGroup: {
-    backgroundColor: '#f5f5f5',
-    padding: '15px',
-    borderRadius: '8px',
-    minWidth: '300px',
-  },
-  button: {
-    padding: '10px 15px',
-    backgroundColor: '#4a6fa5',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    margin: '5px',
-  },
-  activeButton: {
-    padding: '10px 15px',
-    backgroundColor: '#3a5a8a',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    margin: '5px',
-    fontWeight: 'bold',
-  },
-  notesInputContainer: {
-    marginTop: '10px',
-  },
-  notesInput: {
-    width: '100%',
-    minHeight: '100px',
-    padding: '10px',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-    marginBottom: '10px',
-  },
-  bibleControls: {
-    marginTop: '10px',
-  },
-  searchForm: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '10px',
-    alignItems: 'center',
-  },
-  searchInput: {
-    flex: '1',
-    minWidth: '200px',
-    padding: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-  },
-  translationSelect: {
-    padding: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-    backgroundColor: 'white',
-  },
-  suggestionsContainer: {
-    marginTop: '10px',
-    backgroundColor: 'white',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-    maxHeight: '150px',
-    overflowY: 'auto',
-  },
-  suggestion: {
-    padding: '8px 10px',
-    cursor: 'pointer',
-    borderBottom: '1px solid #eee',
-  },
-  suggestionHover: {
-    backgroundColor: '#f0f0f0',
-  },
-  overlayContainer: {
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    color: 'white',
-    padding: '15px',
-    borderRadius: '8px',
-    textAlign: 'left',
-    marginTop: '20px',
-  },
-  notesDisplay: {
-    marginBottom: '15px',
-    paddingBottom: '15px',
-    borderBottom: '1px solid rgba(255,255,255,0.2)',
-  },
-  bibleDisplay: {
-    marginTop: '15px',
-  },
+Livestream.propTypes = {
+  // Add prop types if this component receives any props
 };
 
 export default Livestream;
