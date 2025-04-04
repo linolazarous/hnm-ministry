@@ -146,8 +146,15 @@ jobs:
       url: https://hnm.org
     steps:
       - uses: actions/checkout@v4
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+      - name: Verify Netlify Access
+        run: |
+          echo "Netlify CLI version:"
+          netlify --version
+          echo "Site ID: ${{ secrets.NETLIFY_SITE_ID }}"
       - name: Deploy to Netlify
-        uses: netlify/actions/cli@v2.0.0
+        uses: netlify/actions/cli@v3.0.0
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -212,8 +219,14 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+      - name: Verify Rollback Credentials
+        run: |
+          echo "Verifying Netlify credentials for rollback..."
+          echo "Site ID: ${{ secrets.NETLIFY_SITE_ID }}"
       - name: Revert Production
-        uses: netlify/actions/cli@v2.0.0
+        uses: netlify/actions/cli@v3.0.0
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
