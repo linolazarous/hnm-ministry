@@ -1,0 +1,8 @@
+# .github/emergency-contacts.yml
+   security:
+     - name: "Security Lead"
+       email: "security@hnm.org"
+       phone: "+211XXXXXXXX"
+   finance:
+     - name: "Finance Director"
+       email: "finance@hnm.org"
