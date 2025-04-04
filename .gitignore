@@ -1,78 +1,142 @@
 # --------------------------
-# General Development Files
+# Project-Specific Exclusions
 # --------------------------
-.DS_Store
-Thumbs.db
-*.log
-*.tmp
-*.swp
-*.env
-.vscode/
-.idea/
+/public/_redirects.local
+/functions/_config.local.json
+/admin/config.local.js
+/cypress/videos/
+/cypress/screenshots/
+
+# --------------------------
+# Environment & Secrets
+# --------------------------
+# Local environment files
+.env
+.env.*
+!.env.example
+.env.local
+.env.development
+.env.production
+.env.test
+.secret*
+*.key
+*.pem
+*.crt
+firebase-credentials.json
+service-account.json
+netlify.toml.local
 
 # --------------------------
 # Dependency Directories
 # --------------------------
 node_modules/
+jspm_packages/
+.pnp/
+.pnp.js
 .pnpm-store/
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-build/
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pytest_cache/
+
+# --------------------------
+# Build Output
+# --------------------------
 dist/
-out/
+build/
+.out/
+.next/
+.nuxt/
+.vite/
+.serverless/
+.fusebox/
+.netlify/
+.turbo/
 .cache/
+# Include build directory but exclude specific production files
+!/dist/assets/
+/dist/assets/*.map
 
 # --------------------------
-# Environment Files
+# Debug & Logs
 # --------------------------
-.env
-.env.local
-.env.*.local
-*.env
-secrets.*
-*.secret
+*.log*
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+debug.log
+*.sublime-project
+*.sublime-workspace
 
 # --------------------------
-# Test & Coverage Reports
+# Testing & Coverage
 # --------------------------
 coverage/
 .nyc_output/
 *.lcov
+.vscode-test/
 test-results/
-junit.xml
+playwright-report/
+jest-stare/
+cypress/downloads/
+cypress/screenshots/
+cypress/videos/
 
 # --------------------------
-# Build Artifacts
+# Editor & IDE
 # --------------------------
-*.apk
-*.ipa
-*.aab
-*.dmg
-*.exe
-*.msi
-*.app
-*.jar
-*.war
-*.tar.gz
-*.zip
-
-# --------------------------
-# IDE/Editor Specific
-# --------------------------
-.idea/
 .vscode/
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.code-workspace
 
 # --------------------------
-# OS Generated Files
+# OS-Specific Files
 # --------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 ehthumbs.db
+Thumbs.db
 [Tt]humbs.db
-*.stackdump
+desktop.ini
+
+# --------------------------
+# Netlify Specific
+# --------------------------
+.netlify/state.json
+.netlify/cache/
+
+# --------------------------
+# Ministry-Specific Exclusions
+# --------------------------
+# Donation processing reports
+/donations/reports/*.csv
+/donations/reports/*.xlsx
+
+# Livestream configuration backups
+/streaming/config_backups/
+
+# Volunteer personal data samples
+/volunteers/sample_data/
+
+# --------------------------
+# Temporary Files
+# --------------------------
+*.tmp
+*.temp
+*~
+~$*
+*.bak
+*.swp
+*.swo
