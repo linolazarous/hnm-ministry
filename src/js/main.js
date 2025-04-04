@@ -1,16 +1,57 @@
-import { createApp } from 'react-dom';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import App from './components/App.jsx';
-import './modules/analytics';
-import './modules/prayer-request';
+import { initAnalytics } from './modules/analytics';
+import { initPrayerRequest } from './modules/prayer-request';
+import { registerServiceWorker } from './lib/service-worker';
+import { initErrorTracking } from './lib/error-tracking';
+import { loadFacebookSDK } from './lib/social/facebook';
+import './styles/main.css';
 
-// Initialize Facebook SDK
-window.fbAsyncInit = function() {
-  FB.init({
-    appId: process.env.FB_APP_ID,
-    xfbml: true,
-    version: 'v18.0'
+// Initialize core functionality
+function initApp() {
+  // Error tracking (Sentry)
+  initErrorTracking();
+  
+  // Performance analytics
+  initAnalytics();
+  
+  // Prayer request module
+  initPrayerRequest();
+  
+  // Facebook SDK initialization
+  loadFacebookSDK(process.env.FB_APP_ID);
+  
+  // Service worker registration
+  if (process.env.NODE_ENV === 'production') {
+    registerServiceWorker();
+  }
+}
+
+// DOM Content Loaded handler
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize app features
+  initApp();
+  
+  // Create React root
+  const container = document.getElementById('app');
+  const root = createRoot(container);
+  
+  // Render application
+  root.render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
+});
+
+// Web Vitals Reporting
+if (process.env.NODE_ENV === 'production') {
+  import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+    getCLS(console.log);
+    getFID(console.log);
+    getFCP(console.log);
+    getLCP(console.log);
+    getTTFB(console.log);
   });
-};
-
-// Mount React app
-createApp(App).mount('#app');
+    }
