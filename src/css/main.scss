@@ -1,31 +1,204 @@
+// Import variables and mixins first
 @use 'variables' as *;
+@use 'mixins' as *;
+@use 'functions' as *;
 
+/* ======================
+   Base Styles
+   ====================== */
 :root {
   --header-height: 80px;
+  --content-max-width: 1440px;
+  --transition-base: 0.3s ease;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
 }
 
+/* Reset and Base Styles */
 body {
   font-family: $font-main;
   line-height: 1.6;
   margin: 0;
+  color: $text-primary;
+  background-color: $background;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
 }
 
+/* ======================
+   Layout Components
+   ====================== */
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   height: var(--header-height);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 $gap-medium;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background: $white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform var(--transition-base);
+  
+  @include respond-to('medium') {
+    padding: 0 $gap-large;
+  }
+  
+  &--hidden {
+    transform: translateY(-100%);
+  }
+  
+  &__logo {
+    display: flex;
+    align-items: center;
+    
+    img {
+      height: 60px;
+      width: auto;
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
 }
 
+/* ======================
+   Navigation
+   ====================== */
+.primary-nav {
+  display: none;
+  
+  @include respond-to('medium') {
+    display: block;
+  }
+  
+  &__list {
+    display: flex;
+    gap: $gap-medium;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  &__link {
+    position: relative;
+    color: $text-secondary;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 0;
+    transition: color var(--transition-base);
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: $accent;
+      transition: width var(--transition-base);
+    }
+    
+    &:hover,
+    &[aria-current="page"] {
+      color: $text-primary;
+      
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+  @include respond-to('medium') {
+    display: none;
+  }
+}
+
+/* ======================
+   Buttons & CTAs
+   ====================== */
 .donate-btn {
+  @include button-base;
   background: $accent;
-  color: white;
+  color: $white;
   padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  border-radius: var(--border-radius-sm);
   font-weight: 600;
-  border: none;
-  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all var(--transition-base);
+  
+  &:hover {
+    background: darken($accent, 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba($accent, 0.2);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &--secondary {
+    background: transparent;
+    border-color: $accent;
+    color: $accent;
+    
+    &:hover {
+      background: rgba($accent, 0.1);
+    }
+  }
+}
+
+/* ======================
+   Utility Classes
+   ====================== */
+.visually-hidden {
+  @include visually-hidden;
+}
+
+.skip-link {
+  @include skip-link;
+}
+
+/* ======================
+   Responsive Helpers
+   ====================== */
+@include respond-to('small') {
+  :root {
+    --header-height: 90px;
+  }
+}
+
+@include respond-to('large') {
+  :root {
+    --header-height: 100px;
+  }
+}
+
+/* ======================
+   Print Styles
+   ====================== */
+@media print {
+  .header {
+    position: static;
+    box-shadow: none;
+  }
+  
+  .donate-btn {
+    display: none;
+  }
 }
