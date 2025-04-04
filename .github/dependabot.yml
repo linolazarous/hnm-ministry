@@ -1,11 +1,124 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # Primary npm dependencies (weekly)
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
+      time: "06:00" # Early morning Juba time
+      timezone: "Africa/Juba"
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(dev-deps)"
+    labels:
+      - "dependencies"
+      - "javascript"
+      - "automated"
+    reviewers:
+      - "linolazarous"
+      - "hnm-security-team"
+    assignees:
+      - "hnm-tech-team"
+    ignore:
+      # Payment processing - manual review required
+      - dependency-name: "@stripe/stripe-js"
+      - dependency-name: "stripe"
+      
+      # Authentication - critical security
+      - dependency-name: "magic-sdk"
+      - dependency-name: "@magic-sdk/react-native-bare"
+      
+      # Ministry core frameworks
+      - dependency-name: "react"
+        versions: ["18.x"]
+      - dependency-name: "react-dom"
+        versions: ["18.x"]
+
+  # Critical security updates (daily)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "03:00" # Off-peak hours
+    labels:
+      - "security"
+      - "urgent"
+      - "ministry-critical"
+    reviewers:
+      - "hnm-security-team"
+    milestone: 1
+    ignore:
+      - dependency-name: "typescript"
+
+  # GitHub Actions (monthly)
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workflows"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "github-actions"
+      - "devops"
+
+# Emergency Update Rules
+package-rules:
+  # Auto-merge critical security patches
+  - match-package-patterns: ["^@magic-", "^@stripe/", "^react"]
+    allowed-updates:
+      - match:
+          update-type: "security"
+    auto-merge: true
+    auto-merge-strategy: "squash"
+    when: "severity:critical"
+    labels:
+      - "emergency"
+      - "security-patch"
+    assignees:
+      - "hnm-security-lead"
+    milestone: 0 # Highest priority
+
+  # Payment processing special rules
+  - match-package-names: ["@stripe/stripe-js", "stripe"]
+    reviewers: ["hnm-finance-team"]
+    labels: ["payment-processing", "pci-dss"]
+    required-approvals: 2
+    milestone: 2
+
+  # Authentication framework rules
+  - match-package-patterns: ["^@magic-"]
+    labels: ["auth", "security-critical"]
+    required-approvals: 2
+    milestone: 2
+
+# Security Policy
+security-updates:
+  enabled: true
+  update-policy: "all"
+  minimum-severity: "medium"
+  commit-message:
+    prefix: "[SECURITY]"
+    include: "scope"
+  labels:
+    - "security"
+    - "critical"
+  assignees:
+    - "hnm-security-lead"
+  milestone: 1
+
+# Compliance Tracking
+compliance:
+  - type: "pci-dss"
+    packages: ["@stripe/stripe-js", "stripe"]
+    review-period: "2 weeks"
+    
+  - type: "gdpr"
+    packages: ["@magic-sdk/*"]
+    review-period: "1 month"
+
+# Fallback Rules (catch-all)
+  - match-managers: ["npm", "github-actions"]
+    match-update-types: ["version-update:semver-major"]
+    labels:
+      - "breaking-change"
+      - "needs-testing"
+    reviewers:
+      - "hnm-tech-lead"
