@@ -1,29 +1,271 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Heavenly Nature Ministry - Empowering street children and orphans in South Sudan through spiritual, physical, and mental development">
+  <meta property="og:title" content="Heavenly Nature Ministry | We Are One">
+  <meta property="og:image" content="https://hnm.org/assets/images/social-share.jpg">
   <title>Heavenly Nature Ministry | We Are One</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="/css/main.min.css" as="style">
+  <link rel="preload" href="/js/main.js" as="script">
+  <link rel="preload" href="/assets/fonts/NotoSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <!-- CSS -->
   <link rel="stylesheet" href="/css/main.min.css">
-  <script type="module" src="/js/main.js"></script>
+  <link rel="stylesheet" href="/css/print.min.css" media="print">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicons/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/favicons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/favicons/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/favicons/site.webmanifest">
+  
+  <!-- PWA -->
+  <meta name="theme-color" content="#1a5335">
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Structured data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Church",
+      "name": "Heavenly Nature Ministry",
+      "url": "https://hnm.org",
+      "logo": "https://hnm.org/assets/images/logo.webp",
+      "description": "Empowering street children and orphans in South Sudan",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Gudele 2, Joppa Block 3",
+        "addressLocality": "Juba",
+        "addressCountry": "South Sudan"
+      }
+    }
+  </script>
 </head>
-<body>
-  <header class="header">
-    <img src="/assets/images/logo.webp" alt="HNM Logo" width="180">
-    <nav>
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/donate">Donate</a>
-      <a href="/watch">Watch Live</a>
-    </nav>
-  </header>
+<body class="loading">
+  <!-- Skip to content link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- App Shell -->
+  <div id="app-shell">
+    <!-- Header with progressive enhancement -->
+    <header class="header" id="main-header">
+      <div class="header__container">
+        <a href="/" class="header__logo" aria-label="Heavenly Nature Ministry Home">
+          <picture>
+            <source srcset="/assets/images/logo.webp" type="image/webp">
+            <source srcset="/assets/images/logo.png" type="image/png"> 
+            <img src="/assets/images/logo.png" alt="HNM Logo" width="180" height="60" loading="eager">
+          </picture>
+        </a>
+        
+        <!-- Mobile menu toggle -->
+        <button class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-toggle__bar"></span>
+          <span class="menu-toggle__bar"></span>
+          <span class="menu-toggle__bar"></span>
+        </button>
+        
+        <!-- Navigation -->
+        <nav class="primary-nav" id="primary-navigation">
+          <ul class="nav-list">
+            <li><a href="/" class="nav-link active" aria-current="page">Home</a></li>
+            <li><a href="/about" class="nav-link">About</a></li>
+            <li><a href="/programs" class="nav-link">Programs</a></li>
+            <li><a href="/donate" class="nav-link cta-button">Donate</a></li>
+            <li><a href="/watch" class="nav-link live-indicator">
+              <span class="live-pulse" aria-hidden="true"></span>
+              Watch Live
+            </a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-  <main id="app">
-    <!-- React app mounts here -->
-  </main>
+    <!-- Main content -->
+    <main id="main-content">
+      <!-- Hero section -->
+      <section class="hero" aria-labelledby="hero-heading">
+        <div class="hero__content">
+          <h1 id="hero-heading">Building God-Fearing Generations in South Sudan</h1>
+          <p class="hero__motto">"We Are One"</p>
+          <div class="hero__actions">
+            <a href="/donate" class="button button--primary">Support Our Mission</a>
+            <a href="/volunteer" class="button button--secondary">Join as Volunteer</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <video class="hero-video" autoplay muted loop playsinline poster="/assets/videos/hero-poster.jpg">
+            <source src="/assets/videos/hero-bg.mp4" type="video/mp4">
+          </video>
+        </div>
+      </section>
 
-  <footer>
-    <p>&copy; 2025 Heavenly Nature Ministry</p>
-  </footer>
+      <!-- Vision Section -->
+      <section class="vision-section" aria-labelledby="vision-heading">
+        <div class="section-container">
+          <h2 id="vision-heading">Our Vision</h2>
+          <blockquote class="vision-statement">
+            "Self-reliant and God-fearing generations in South Sudan and beyond"
+          </blockquote>
+          <div class="vision-pillars">
+            <div class="pillar">
+              <div class="pillar__icon">🙏</div>
+              <h3>Spiritual Growth</h3>
+              <p>Teaching biblical principles for life transformation</p>
+            </div>
+            <div class="pillar">
+              <div class="pillar__icon">👨‍👩‍👧‍👦</div>
+              <h3>Community Building</h3>
+              <p>Creating harmonious relationships in Christ</p>
+            </div>
+            <div class="pillar">
+              <div class="pillar__icon">🎓</div>
+              <h3>Education</h3>
+              <p>Equipping with life skills for self-reliance</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Core Values -->
+      <section class="values-section" aria-labelledby="values-heading">
+        <div class="section-container">
+          <h2 id="values-heading">Our Core Values: SEE HIM</h2>
+          <div class="values-grid">
+            <div class="value-card" data-value="s">
+              <h3>S - Seek God First</h3>
+              <p>"But seek first his kingdom and his righteousness..." (Matthew 6:33)</p>
+            </div>
+            <!-- Repeat for S-E-E-H-I-M -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Stream Section -->
+      <section class="stream-section" aria-labelledby="stream-heading">
+        <div class="section-container">
+          <h2 id="stream-heading">Join Our Worship</h2>
+          <div class="stream-embed" id="youtube-embed">
+            <!-- Dynamic embed will be inserted here -->
+            <div class="stream-placeholder">
+              <p>Our next live stream will begin soon</p>
+              <button class="notify-button" id="stream-notify">
+                Notify Me When Live
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials -->
+      <section class="testimonials" aria-labelledby="testimonials-heading">
+        <h2 id="testimonials-heading">Changed Lives</h2>
+        <div class="testimonial-carousel">
+          <!-- Carousel items will be dynamically loaded -->
+        </div>
+      </section>
+
+      <!-- Call to Action -->
+      <section class="cta-section" aria-labelledby="cta-heading">
+        <div class="cta-container">
+          <h2 id="cta-heading">Be Part of the Transformation</h2>
+          <div class="cta-options">
+            <div class="cta-card">
+              <h3>Give</h3>
+              <p>Support our programs for street children</p>
+              <a href="/donate" class="button">Donate Now</a>
+            </div>
+            <div class="cta-card">
+              <h3>Pray</h3>
+              <p>Join our prayer network</p>
+              <a href="/pray" class="button">Prayer Requests</a>
+            </div>
+            <div class="cta-card">
+              <h3>Volunteer</h3>
+              <p>Serve with us on the field</p>
+              <a href="/volunteer" class="button">Apply Now</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer__grid">
+        <div class="footer__about">
+          <h3 class="footer__heading">About HNM</h3>
+          <p>Empowering street children and orphans in South Sudan through spiritual, physical, and mental development.</p>
+          <div class="footer__social">
+            <a href="https://facebook.com/hnministry" aria-label="Facebook">
+              <svg class="social-icon"><use xlink:href="/assets/icons/social.svg#facebook"></use></svg>
+            </a>
+            <!-- Other social icons -->
+          </div>
+        </div>
+        
+        <div class="footer__contact">
+          <h3 class="footer__heading">Contact Us</h3>
+          <address>
+            Gudele 2, Joppa Block 3<br>
+            Juba, South Sudan<br>
+            <a href="tel:+211926006202">+211 926 006 202</a><br>
+            <a href="mailto:heavenlynatureministry@gmail.com">heavenlynatureministry@gmail.com</a>
+          </address>
+        </div>
+        
+        <div class="footer__quicklinks">
+          <h3 class="footer__heading">Quick Links</h3>
+          <ul>
+            <li><a href="/about">Our Story</a></li>
+            <li><a href="/beliefs">Statement of Faith</a></li>
+            <li><a href="/programs">Programs</a></li>
+            <li><a href="/financials">Financial Reports</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer__legal">
+        <p>&copy; 2025 Heavenly Nature Ministry. All rights reserved.</p>
+        <div class="footer__links">
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Loading indicator -->
+  <div class="loading-indicator" aria-hidden="true">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/main.js"></script>
+  <script nomodule src="/js/legacy.js"></script>
+  
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
+  </script>
+  
+  <!-- Performance monitoring -->
+  <script>
+    window.__hnm = {
+      config: {
+        sentryDsn: 'https://your-dsn@sentry.io/your-project',
+        stripeKey: 'pk_live_your_key',
+        youtubeApiKey: 'your-yt-api-key'
+      }
+    };
+  </script>
 </body>
-</html>
+  </html>
