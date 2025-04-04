@@ -23,13 +23,19 @@ jobs:
   preflight:
     name: Preflight Checks
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     env:
       DNS_SSH_USER: ${{ secrets.DNS_SSH_USER }}
-      DNS_SSH_KEY: ${{ secrets.DNS_SSH_KEY }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Debug Info
+        run: |
+          echo "GITHUB_REF: $GITHUB_REF"
+          echo "GITHUB_SHA: $GITHUB_SHA"
       - name: Verify DNS Records
         uses: appleboy/ssh-action@v0.1.10
+        env:
+          DNS_SSH_KEY: ${{ secrets.DNS_SSH_KEY }}
         with:
           host: dns-monitor.hnm.org
           username: ${{ env.DNS_SSH_USER }}
@@ -41,15 +47,16 @@ jobs:
     name: Security Audit
     needs: preflight
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Dependency Vulnerability Scan
         run: |
           npm ci
           npm audit --production --audit-level=critical
           npx snyk test --fail-on=upgradable --severity-threshold=high
       - name: TLS/SSL Inspection
-        uses: wearerequired/lastpass-tls-check@v1
+        uses: wearerequired/lastpass-tls-check@v2
         with:
           domains: |
             hnm.org
@@ -57,7 +64,7 @@ jobs:
             admin.hnm.org
           threshold: 30d
       - name: Security Headers Validation
-        uses: jakejarvis/header-checker-action@v1
+        uses: jakejarvis/header-checker-action@v2
         with:
           url: ${{ env.AUDIT_URLS }}
           headers: |
@@ -71,13 +78,9 @@ jobs:
     name: Build and Analyze
     needs: security_audit
     runs-on: ubuntu-latest
-    env:
-      # Backend-only secrets (not exposed to frontend)
-      FACEBOOK_APP_SECRET: ${{ secrets.FACEBOOK_APP_SECRET }}
-      FACEBOOK_CLIENT_TOKEN: ${{ secrets.FACEBOOK_CLIENT_TOKEN }}
-      FAUNADB_SECRET: ${{ secrets.FAUNADB_SECRET }}
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Cache Dependencies
         uses: actions/cache@v3
         with:
@@ -88,6 +91,10 @@ jobs:
       - name: Install Dependencies
         run: npm ci --prefer-offline
       - name: Build Production Assets
+        env:
+          FACEBOOK_APP_SECRET: ${{ secrets.FACEBOOK_APP_SECRET }}
+          FACEBOOK_CLIENT_TOKEN: ${{ secrets.FACEBOOK_CLIENT_TOKEN }}
+          FAUNADB_SECRET: ${{ secrets.FAUNADB_SECRET }}
         run: |
           npm run build
           npm run optimize-assets
@@ -102,11 +109,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}  # For test payments
-      YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Lighthouse Audit
         uses: treosh/lighthouse-ci-action@v9
         with:
@@ -117,6 +121,9 @@ jobs:
           budgetPath: ./lighthouse-budget.json
       - name: Load Testing
         uses: k6io/action@v0.3
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
         with:
           filename: load-test/hnm-test.js
           cloud: true
@@ -133,21 +140,23 @@ jobs:
     name: Multi-Environment Deployment
     needs: test
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     environment: 
       name: production
       url: https://hnm.org
-    env:
-      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      MAGIC_SECRET_KEY: ${{ secrets.MAGIC_SECRET_KEY }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Deploy to Netlify
-        uses: netlify/actions/cli@master
+        uses: netlify/actions/cli@v2.0.0
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          MAGIC_SECRET_KEY: ${{ secrets.MAGIC_SECRET_KEY }}
         with:
           args: deploy --dir=dist --prod --message="HNM Release ${{ github.sha }}"
       - name: Deploy Admin Panel
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd admin && npm install && npm run build
           netlify deploy --dir=admin/build --prod
@@ -165,9 +174,10 @@ jobs:
     name: Post-Deploy Verification
     needs: deploy
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Smoke Tests
-        uses: anthonyvscode/newman-action@v1
+        uses: anthonyvscode/newman-action@v2
         with:
           collection: './postman/hnm-smoke-tests.json'
           environment: './postman/prod-environment.json'
@@ -176,7 +186,7 @@ jobs:
           curl -s https://hnm.org/watch | grep -q 'youtube-embed'
           curl -s https://hnm.org/donate | grep -q 'stripe-button'
       - name: Notify Team
-        uses: slackapi/slack-github-action@v1.23.0
+        uses: slackapi/slack-github-action@v2.2.0
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
@@ -185,22 +195,32 @@ jobs:
             :church: New HNM Deployment Complete!
             Version: ${{ github.sha }}
             Live at: https://hnm.org
+      - name: Notify on Failure
+        if: failure()
+        uses: slackapi/slack-github-action@v2.2.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          channel-id: 'C001HNMALERTS'
+          slack-message: "Post-deploy verification failed for commit ${{ github.sha }}"
 
   rollback:
     name: Emergency Rollback
     if: failure()
     needs: [deploy, post_deploy]
     runs-on: ubuntu-latest
-    env:
-      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+    timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v4
       - name: Revert Production
-        uses: netlify/actions/cli@master
+        uses: netlify/actions/cli@v2.0.0
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         with:
           args: deploy --prod --alias=rollback
       - name: Alert Ministry Staff
-        uses: slackapi/slack-github-action@v1.23.0
+        uses: slackapi/slack-github-action@v2.2.0
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
