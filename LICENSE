@@ -1,16 +1,36 @@
-MIT License
+Heavenly Nature Ministry Software License
+Version 1.1 - Ministry-Adapted MIT License
 
-Copyright (c) 2025 Heavenly Nature Ministry
+Copyright (c) 2025 Heavenly Nature Ministry (HNM)
+Juba, South Sudan | https://hnm.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+in the Software for NON-COMMERCIAL MINISTRY PURPOSES ONLY, subject to the 
+following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Ministry Use Clause:
+   - The Software may be used, copied, and modified only for:
+     a) Christian ministry purposes
+     b) Non-profit religious activities
+     c) Humanitarian work aligned with HNM's mission
+
+2. Attribution Requirement:
+   - All copies must retain:
+     a) This copyright notice
+     b) The HNM "We Are One" motto
+     c) Visible link to https://hnm.org
+
+3. Modification Restrictions:
+   - Core functionality related to:
+     a) Donation processing
+     b) Child protection features
+     c) Ministry authentication flows
+   may not be altered without written permission from HNM.
+
+4. Commercial Use:
+   - For any commercial applications, contact:
+     licensing@hnm.org for a commercial license
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,3 +39,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Special Ministry Provisions:
+
+1. The Software incorporates:
+   - Third-party services (Stripe, Magic.link) with their own terms
+   - Ministry-specific content protected under separate copyright
+
+2. By using this Software, you agree:
+   - Not to use HNM's name or branding without permission
+   - To comply with all applicable child protection laws
+   - To respect the ministry's Statement of Faith (https://hnm.org/faith)
+
+For questions about permitted uses, contact:
+Heavenly Nature Ministry Legal Team
+legal@hnm.org
++211 926 006 202
