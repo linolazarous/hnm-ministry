@@ -89,11 +89,8 @@
   directory = "edge-functions"
   path = "/*"
 
- [[plugins]]
+[[plugins]]
   package = "netlify-plugin-one"
 
-  [[plugins]]
+[[plugins]]
   package = "netlify-plugin-two"
-
-: exit status 1
-3:05:28 PM: Failing build: Failed to parse configuration
