@@ -16,7 +16,7 @@
 
 [context.production]
   command = "npm ci --prefer-offline && npm run build && npm run optimize-assets && npm run type-check"
-  environment = {
+  environment = { 
     NODE_ENV = "production",
     VITE_APP_ENV = "production",
     SENTRY_RELEASE = "$COMMIT_REF",
@@ -25,7 +25,7 @@
 
 [context.deploy-preview]
   command = "npm install && npm run build"
-  environment = {
+  environment = { 
     NODE_ENV = "development",
     VITE_APP_ENV = "staging",
     VITE_API_BASE_URL = "https://staging.api.hnm.org"
@@ -33,7 +33,7 @@
 
 [context.branch-deploy]
   command = "npm install && npm run build"
-  environment = {
+  environment = { 
     NODE_ENV = "development",
     VITE_APP_ENV = "development"
   }
@@ -75,7 +75,6 @@
   from = "/*"
   to = "/index.html"
   status = 200
-  conditions = {Language = ["en"], Country = ["US"]}
 
 [dev]
   framework = "vite"
@@ -96,3 +95,9 @@
 [plugins]
   [plugins."@netlify/plugin-lighthouse"]
     threshold = 90
+
+[plugins."@netlify/plugin-sitemap"]
+  [plugins."@netlify/plugin-sitemap".config]
+    domain = "https://hnm.org"
+    pretty_urls = true
+    exclude = ["/admin/*", "/api/*"]
