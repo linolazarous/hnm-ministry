@@ -159,7 +159,7 @@ jobs:
           rm -rf ~/.npm/_cacache
           rm -rf ~/.cache/netlify
       - name: Deploy to Netlify
-        uses: netlify/actions@v2.323.0
+        uses: netlify/actions@v2.324.0
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -235,7 +235,7 @@ jobs:
           echo "Verifying Netlify credentials for rollback..."
           echo "Site ID: ${{ secrets.NETLIFY_SITE_ID }}"
       - name: Revert Production
-        uses: netlify/actions@v2.323.0
+        uses: netlify/actions@v2.324.0
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
