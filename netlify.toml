@@ -6,7 +6,7 @@
 
 [build.environment]
   NODE_VERSION = "18.x"
-  NPM_VERSION = "9.x"
+  NPM_VERSION = "10.x"
   VITE_APP_VERSION = "$npm_package_version"
   VITE_API_BASE_URL = "https://api.hnm.org"
   VITE_SENTRY_DSN = "https://your-dsn@sentry.io/your-project"
