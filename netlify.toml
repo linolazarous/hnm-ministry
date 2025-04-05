@@ -16,27 +16,24 @@
 
 [context.production]
   command = "npm ci --prefer-offline && npm run build && npm run optimize-assets && npm run type-check"
-  environment = { 
-    NODE_ENV = "production",
-    VITE_APP_ENV = "production",
-    SENTRY_RELEASE = "$COMMIT_REF",
+  [context.production.environment]
+    NODE_ENV = "production"
+    VITE_APP_ENV = "production"
+    SENTRY_RELEASE = "$COMMIT_REF"
     SENTRY_ENVIRONMENT = "production"
-  }
 
 [context.deploy-preview]
   command = "npm install && npm run build"
-  environment = { 
-    NODE_ENV = "development",
-    VITE_APP_ENV = "staging",
+  [context.deploy-preview.environment]
+    NODE_ENV = "development"
+    VITE_APP_ENV = "staging"
     VITE_API_BASE_URL = "https://staging.api.hnm.org"
-  }
 
 [context.branch-deploy]
   command = "npm install && npm run build"
-  environment = { 
-    NODE_ENV = "development",
+  [context.branch-deploy.environment]
+    NODE_ENV = "development"
     VITE_APP_ENV = "development"
-  }
 
 [[headers]]
   for = "/*"
@@ -96,7 +93,6 @@
   [plugins."@netlify/plugin-lighthouse"]
     threshold = 90
 
-[plugins."@netlify/plugin-sitemap"]
   [plugins."@netlify/plugin-sitemap".config]
     domain = "https://hnm.org"
     pretty_urls = true
