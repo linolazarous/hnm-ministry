@@ -1,1 +1,253 @@
+name: Heavenly Nature Ministry Deployment Pipeline
 
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 2 * * *'  # Daily 2AM maintenance tasks
+
+env:
+  NODE_VERSION: 18.x
+  SENTRY_ORG: hnm-ministry
+  AUDIT_URLS: "https://hnm.org https://api.hnm.org"
+  # Public-facing variables (Vite-compatible)
+  VITE_FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
+  VITE_FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+  VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}
+  VITE_MAGIC_PUB_KEY: ${{ secrets.VITE_MAGIC_PUB_KEY }}
+  VITE_YOUTUBE_API_KEY: ${{ secrets.VITE_YOUTUBE_API_KEY }}
+
+jobs:
+  preflight:
+    name: Preflight Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DNS_SSH_USER: ${{ secrets.DNS_SSH_USER }}
+    steps:
+      - uses: ./.github/actions/checkout@v4
+      - name: Debug Info
+        run: |
+          echo "GITHUB_REF: $GITHUB_REF"
+          echo "GITHUB_SHA: $GITHUB_SHA"
+      - name: Verify DNS Records
+        uses: ./.github/actions/ssh-action@v0.1.10
+        env:
+          DNS_SSH_KEY: ${{ secrets.DNS_SSH_KEY }}
+        with:
+          host: dns-monitor.hnm.org
+          username: ${{ env.DNS_SSH_USER }}
+          key: ${{ env.DNS_SSH_KEY }}
+          script: |
+            ./verify-dns.sh $AUDIT_URLS
+
+  security_audit:
+    name: Security Audit
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: ./.github/actions/checkout@v4
+      - name: Dependency Vulnerability Scan
+        run: |
+          npm ci
+          npm audit --production --audit-level=critical
+          npx snyk test --fail-on=upgradable --severity-threshold=high
+      - name: TLS/SSL Inspection
+        uses: ./.github/actions/lastpass-tls-check@v2
+        with:
+          domains: |
+            hnm.org
+            donate.hnm.org
+            admin.hnm.org
+          threshold: 30d
+      - name: Security Headers Validation
+        uses: ./.github/actions/header-checker-action@v2
+        with:
+          url: ${{ env.AUDIT_URLS }}
+          headers: |
+            Content-Security-Policy
+            X-Frame-Options
+            Permissions-Policy
+            Strict-Transport-Security
+          allow-redirects: true
+
+  build:
+    name: Build and Analyze
+    needs: security_audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: ./.github/actions/checkout@v4
+      - name: Cache Dependencies
+        uses: ./.github/actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Dependencies
+        run: npm ci --prefer-offline
+      - name: Build Production Assets
+        env:
+          FACEBOOK_APP_SECRET: ${{ secrets.FACEBOOK_APP_SECRET }}
+          FACEBOOK_CLIENT_TOKEN: ${{ secrets.FACEBOOK_CLIENT_TOKEN }}
+          FAUNADB_SECRET: ${{ secrets.FAUNADB_SECRET }}
+        run: |
+          npm run build
+          npm run optimize-assets
+      - name: Analyze Bundle
+        uses: ./.github/actions/compressed-size-action@v2
+        with:
+          pattern: 'dist/**/*.{js,css,webp}'
+          compression: 'brotli'
+
+  test:
+    name: Comprehensive Testing
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: ./.github/actions/checkout@v4
+      - name: Lighthouse Audit
+        uses: ./.github/actions/lighthouse-ci-action@v9
+        with:
+          urls: |
+            http://localhost:3000/
+            http://localhost:3000/donate
+            http://localhost:3000/watch
+          budgetPath: ./lighthouse-budget.json
+      - name: Load Testing
+        uses: ./.github/actions/k6io-action@v0.3
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+        with:
+          filename: load-test/hnm-test.js
+          cloud: true
+          summary: true
+          tags: "env:prod,type:ministry"
+          vus: 50
+          duration: "3m"
+      - name: PWA Validation
+        run: |
+          npm install -g pwmetrics
+          pwmetrics https://hnm.org --json > pwa-metrics.json
+
+  deploy:
+    name: Multi-Environment Deployment
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: 
+      name: production
+      url: https://hnm.org
+    steps:
+      - uses: ./.github/actions/checkout@v4
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+      - name: Verify Netlify CLI
+        run: netlify --version
+      - name: Clear Action Cache
+        run: |
+          rm -rf ~/.npm/_cacache
+          rm -rf ~/.cache/netlify
+      - name: Deploy to Netlify
+        uses: ./.github/actions/netlify-actions@v2.324.0
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          MAGIC_SECRET_KEY: ${{ secrets.MAGIC_SECRET_KEY }}
+        with:
+          args: deploy --dir=dist --prod --message="HNM Release ${{ github.sha }}"
+      - name: Deploy Admin Panel
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd admin && npm install && npm run build
+          netlify deploy --dir=admin/build --prod
+      - name: Upload Source Maps
+        run: |
+          npx @sentry/cli releases new ${{ github.sha }}
+          npx @sentry/cli releases files ${{ github.sha }} upload-sourcemaps ./dist/js \
+            --rewrite --url-prefix '~/js'
+          npx @sentry/cli releases finalize ${{ github.sha }}
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_PROJECT: hnm-ministry
+
+  post_deploy:
+    name: Post-Deploy Verification
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Smoke Tests
+        uses: ./.github/actions/newman-action@v2
+        with:
+          collection: './postman/hnm-smoke-tests.json'
+          environment: './postman/prod-environment.json'
+      - name: Ministry-Specific Checks
+        run: |
+          curl -s https://hnm.org/watch | grep -q 'youtube-embed'
+          curl -s https://hnm.org/donate | grep -q 'stripe-button'
+      - name: Notify Team
+        uses: ./.github/actions/slack-github-action@v2.2.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          channel-id: 'C001HNMTEAM'
+          slack-message: |
+            :church: New HNM Deployment Complete!
+            Version: ${{ github.sha }}
+            Live at: https://hnm.org
+      - name: Notify on Failure
+        if: failure()
+        uses: ./.github/actions/slack-github-action@v2.2.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          channel-id: 'C001HNMALERTS'
+          slack-message: "Post-deploy verification failed for commit ${{ github.sha }}"
+
+  rollback:
+    name: Emergency Rollback
+    if: failure()
+    needs: [deploy, post_deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: ./.github/actions/checkout@v4
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+      - name: Verify Rollback Credentials
+        run: |
+          echo "Verifying Netlify credentials for rollback..."
+          echo "Site ID: ${{ secrets.NETLIFY_SITE_ID }}"
+      - name: Revert Production
+        uses: ./.github/actions/netlify-actions@v2.324.0
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        with:
+          args: deploy --prod --alias=rollback
+      - name: Alert Ministry Staff
+        uses: ./.github/actions/slack-github-action@v2.2.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          channel-id: 'C001HNMALERTS'
+          slack-message: |
+            :rotating_light: HNM Deployment Rollback Initiated
+            Reason: ${{ github.event.workflow_run.conclusion }}
+            Commit: ${{ github.sha }}
