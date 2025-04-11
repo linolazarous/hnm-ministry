@@ -1,19 +1,45 @@
-# ========================
-# MAIN WEBSITE CONFIGURATION
-# ========================
-VITE_MAGIC_PUB_KEY=pk_live_XXXX            # Magic.link for passwordless auth
-VITE_STRIPE_PUB_KEY=pk_test_xxxxxxxx       # Stripe.js public key
-VITE_YOUTUBE_API_KEY=xxxxxxxxxx            # YouTube Data API v3
+# ======================
+# Facebook Integration (Frontend)
+# ======================
+VITE_FACEBOOK_APP_ID=your_app_id
+VITE_FACEBOOK_PAGE_ID=your_page_id
 
-# ========================
-# ADMIN PANEL CONFIGURATION
-# ========================
-REACT_APP_API_KEY=hnm_admin_XXXX           # Admin API access key
-REACT_APP_FB_APP_ID=xxxxxxxxxx             # Facebook App ID
-REACT_APP_FB_ACCESS_TOKEN=xxxxxxxxxx       # Facebook Page Access Token
+# ======================
+# Facebook Integration (Backend-Only)
+# ======================
+FACEBOOK_APP_SECRET=your_app_secret
+FACEBOOK_CLIENT_TOKEN=your_client_token
 
-# ========================
-# SERVERLESS/BACKEND SECRETS
-# ========================
-STRIPE_SECRET_KEY=sk_test_xxxxxxxx         # Stripe API secret key
-FAUNA_SECRET=fnAXXXX                       # FaunaDB server secret
+# ======================
+# Serverless/Backend Secrets (Never expose to frontend)
+# ======================
+FAUNADB_SECRET=your_fauna_key
+NETLIFY_AUTH_TOKEN=your_netlify_token
+NETLIFY_SITE_ID=your_site_id
+GITHUB_TOKEN=your_github_personal_token
+
+# ======================
+# Payment Processing (Stripe)
+# ======================
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_key  # Frontend-safe
+STRIPE_SECRET_KEY=sk_test_your_key             # Backend-only
+
+# ======================
+# Authentication (Magic)
+# ======================
+VITE_MAGIC_PUB_KEY=your_magic_pk_key            # Frontend
+MAGIC_SECRET_KEY=your_magic_sk_key              # Backend-only
+
+# ======================
+# YouTube API
+# ======================
+VITE_YOUTUBE_API_KEY=your_yt_api_key            # Frontend-safe
+YOUTUBE_CLIENTID=your_yt_client_id              # Backend-only
+YOUTUBE_CLIENT_SECRET=your_yt_client_secret     # Backend-only
+YOUTUBE_PROJECT_NUMBER=your_yt_project_num      # Optional
+YOUTUBE_PROJECT_NUMBER_ID=your_yt_project_num_id # Optional
+
+# ======================
+# Monitoring (Sentry)
+# ======================
+SENTRY_AUTH_TOKEN=your_sentry_token            # Backend-only

@@ -1,29 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Heavenly Nature Ministry | We Are One</title>
-  <link rel="stylesheet" href="/css/main.min.css">
-  <script type="module" src="/js/main.js"></script>
+  <!-- ... (keep existing head content) ... -->
+  
+  <!-- Preload Stripe.js -->
+  <link rel="preload" href="https://js.stripe.com/v3/" as="script">
+  
+  <!-- Add Stripe.js to head for early loading -->
+  <script src="https://js.stripe.com/v3/"></script>
 </head>
-<body>
-  <header class="header">
-    <img src="/assets/images/logo.webp" alt="HNM Logo" width="180">
-    <nav>
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/donate">Donate</a>
-      <a href="/watch">Watch Live</a>
-    </nav>
-  </header>
+<body class="loading">
+  <!-- ... (keep existing body content until before scripts) ... -->
 
-  <main id="app">
-    <!-- React app mounts here -->
-  </main>
+  <!-- Enhanced Donation Section -->
+  <section class="donate-section" aria-labelledby="donate-heading">
+    <div class="section-container">
+      <h2 id="donate-heading">Support Our Mission</h2>
+      <div class="donation-options">
+        <div class="donation-card">
+          <h3>One-Time Donation</h3>
+          <form id="donation-form">
+            <div class="form-group">
+              <label for="donation-amount">Amount (USD)</label>
+              <input type="number" id="donation-amount" min="5" value="25" step="1" required>
+            </div>
+            <div id="card-element" class="stripe-card-element"></div>
+            <div id="card-errors" role="alert"></div>
+            <button type="submit" id="donate-button" class="button button--primary">
+              Donate $<span id="amount-display">25</span>
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="payment-methods">
+        <img src="https://js.stripe.com/v3/fingerprinted/img/pp-branding-stack-4x-61dc541f9b2e1a49a8555a011f6a4f9a.png" 
+             alt="Accepted payment methods" width="245" height="40">
+      </div>
+    </div>
+  </section>
 
-  <footer>
-    <p>&copy; 2025 Heavenly Nature Ministry</p>
-  </footer>
+  <!-- Scripts -->
+  <script type="module">
+    // Initialize Stripe with your publishable key
+    const stripe = Stripe('pk_live_your_key_here');
+    const elements = stripe.elements();
+    
+    // Custom styling for card element
+    const style = {
+      base: {
+        color: '#32325d',
+        fontFamily: '"Noto Sans", sans-serif',
+        fontSmoothing: 'antialiased',
+        fontSize: '16px',
+        '::placeholder': {
+          color: '#aab7c4'
+        }
+      },
+      invalid: {
+        color: '#fa755a',
+        iconColor: '#fa755a'
+      }
+    };
+    
+    // Create and mount card element
+    const card = elements.create('card', { style });
+    card.mount('#card-element');
+    
+    // Real-time validation errors
+    card.addEventListener('change', ({error}) => {
+      const displayError = document.getElementById('card-errors');
+      displayError.textContent = error ? error.message : '';
+    });
+    
+    // Handle form submission
+    const form = document.getElementById('donation-form');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      
+      const donateButton = document.getElementById('donate-button');
+      donateButton.disabled = true;
+      donateButton.textContent = 'Processing...';
+      
+      const {error, paymentMethod} = await stripe.createPaymentMethod({
+        type: 'card',
+        card: card,
+        billing_details: {
+          name: document.getElementById('name')?.value || 'Anonymous',
+          email: document.getElementById('email')?.value
+        }
+      });
+      
+      if (error) {
+        document.getElementById('card-errors').textContent = error.message;
+        donateButton.disabled = false;
+        donateButton.textContent = `Donate $${document.getElementById('donation-amount').value}`;
+      } else {
+        // Send to your server
+        const response = await fetch('/process-donation', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            payment_method_id: paymentMethod.id,
+            amount: document.getElementById('donation-amount').value * 100, // Convert to cents
+            currency: 'usd'
+          })
+        });
+        
+        const paymentIntent = await response.json();
+        
+        if (paymentIntent.error) {
+          showError(paymentIntent.error);
+        } else if (paymentIntent.requires_action) {
+          // Handle 3D Secure
+          const {error: actionError} = await stripe.handleCardAction(
+            paymentIntent.client_secret
+          );
+          
+          if (actionError) {
+            showError(actionError);
+          } else {
+            // Confirm payment after action
+            confirmPayment(paymentIntent.id);
+          }
+        } else {
+          // Success!
+          window.location.href = '/thank-you';
+        }
+      }
+    });
+    
+    // Update displayed amount
+    document.getElementById('donation-amount').addEventListener('input', (e) => {
+      document.getElementById('amount-display').textContent = e.target.value;
+    });
+    
+    function showError(error) {
+      const errorElement = document.getElementById('card-errors');
+      errorElement.textContent = error.message;
+      document.getElementById('donate-button').disabled = false;
+      document.getElementById('donate-button').textContent = 
+        `Donate $${document.getElementById('donation-amount').value}`;
+    }
+  </script>
+  
+  <!-- ... (keep existing service worker code) ... -->
 </body>
 </html>
