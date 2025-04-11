@@ -89,8 +89,4 @@
   path = "/edge-functions/hello"
   function = "hello"
 
-[[plugins]]
-  package = "netlify-plugin-one"
 
-[[plugins]]
-  package = "netlify-plugin-two"
