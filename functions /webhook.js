@@ -1,28 +1,42 @@
-// netlify/functions/webhook.js
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const http = require('http');
+const WebSocket = require('ws');
 
-exports.handler = async (event) => {
-  const sig = event.headers['stripe-signature'];
-  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+const wss = new WebSocket.Server({ port: 0 }, function () {
+  // Required WebSocket headers
+  const headers = {
+    Connection: 'Upgrade',
+    Upgrade: 'websocket',
+    'Sec-WebSocket-Key': 'dGhlIHNhbXBsZSBub25jZQ==',
+    'Sec-WebSocket-Version': '13'
+  };
 
-  try {
-    const stripeEvent = stripe.webhooks.constructEvent(
-      event.body,
-      sig,
-      endpointSecret
-    );
+  const request = http.request({
+    headers: headers,
+    host: '127.0.0.1',
+    port: wss.address().port
+  });
 
-    switch (stripeEvent.type) {
-      case 'payment_intent.succeeded':
-        const paymentIntent = stripeEvent.data.object;
-        // Save to database or send email
-        break;
-      default:
-        console.log(`Unhandled event type: ${stripeEvent.type}`);
-    }
+  request.on('response', (res) => {
+    console.log(`Status: ${res.statusCode}`);
+    res.on('data', (chunk) => {
+      console.log(`Body: ${chunk}`);
+    });
+  });
 
-    return { statusCode: 200 };
-  } catch (err) {
-    return { statusCode: 400, body: `Webhook Error: ${err.message}` };
-  }
-};
+  request.on('error', (err) => {
+    console.error('Request error:', err);
+  });
+
+  request.end();
+});
+
+wss.on('connection', (ws) => {
+  console.log('Client connected');
+  ws.on('message', (message) => {
+    console.log('Received:', message);
+  });
+});
+
+wss.on('error', (err) => {
+  console.error('Server error:', err);
+});
