@@ -1,50 +1,32 @@
 [build]
-  # Netlify will handle all dependency installation and building
-  command = "npm install && npm run build"
+  command = "npm ci --prefer-offline && npm run build"
   publish = "dist"
   functions = "functions"
   edge_functions = "edge-functions"
 
 [build.environment]
-  NODE_VERSION = "20"  # Auto-uses latest Node 20.x
-  NPM_VERSION = "auto" # Netlify-managed npm
-  VITE_APP_ENV = "production"
-
-  # Vite-specific optimizations
+  NODE_VERSION = "20"  # Uses latest Node 20.x automatically
+  NPM_VERSION = "10"   # Uses latest npm 10.x (remove "auto")
+  NODE_ENV = "development" # Allows devDependencies installation
+  
+  # Vite-specific
   VITE_APP_VERSION = "$npm_package_version"
   VITE_API_BASE_URL = "https://api.hnm.org"
-
-  # Disable type checking in build (run in CI separately if needed)
-  NODE_OPTIONS = "--max-old-space-size=4096"
 
 [context.production]
   command = "npm ci --prefer-offline && npm run build"
   [context.production.environment]
-    NODE_ENV = "production"
+    NODE_ENV = "production" # Now explicitly set AFTER initial install
 
 [context.deploy-preview]
-  command = "npm install && npm run build"
-  [context.deploy-preview.environment]
-    NODE_ENV = "development"
+  command = "npm ci --prefer-offline && npm run build"
 
-[context.branch-deploy]
-  command = "npm install && npm run build"
-
-# Vite-specific headers for React SPA
 [[headers]]
   for = "/*"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate" # Vite's default
-    Content-Security-Policy = """
-      default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval';
-      style-src 'self' 'unsafe-inline';
-      img-src 'self' data:;
-      connect-src 'self' https://api.hnm.org;
-    """
-    X-Frame-Options = "DENY"
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Content-Security-Policy = "default-src 'self'"
 
-# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -52,11 +34,5 @@
 
 [dev]
   framework = "vite"
-  targetPort = 5173  # Vite's default port
+  targetPort = 5173
   command = "npm run dev"
-  port = 5173
-  autoLaunch = false
-
-[functions]
-  directory = "functions"
-  node_bundler = "esbuild"
