@@ -1,90 +1,23 @@
 [build]
-  command = "npm install --legacy-peer-deps && npm run build"
+  command = "npm ci && npm run build"  # Let Netlify handle everything
   publish = "dist"
   functions = "functions"
   edge_functions = "edge-functions"
 
 [build.environment]
-  NODE_VERSION = "20.5.0"
-  NPM_VERSION = "10.9.2"
-  VITE_APP_VERSION = "$npm_package_version"
-  VITE_API_BASE_URL = "https://api.hnm.org"
-  VITE_SENTRY_DSN = "https://your-dsn@sentry.io/your-project"
-  VITE_STRIPE_PUBLISHABLE_KEY = "@stripe_publishable_key"
-  VITE_APP_ENV = "production"
-  ESLINT_NO_DEV_ERRORS = "true"  # Added to prevent ESLint errors from failing build
+  NODE_VERSION = "20"  # Just specify major version (Netlify will auto-select latest 20.x)
+  NPM_VERSION = "auto"  # Let Netlify choose compatible npm
+  ESLINT_NO_DEV_ERRORS = "true"  # Disable ESLint errors in build
 
+# Production environment (optimized)
 [context.production]
-  command = "npm ci --prefer-offline && npm run build && npm run optimize-assets"
+  command = "npm ci --prefer-offline && npm run build"
   [context.production.environment]
     NODE_ENV = "production"
-    VITE_APP_ENV = "production"
-    SENTRY_RELEASE = "$COMMIT_REF"
-    SENTRY_ENVIRONMENT = "production"
 
+# Simpler preview environments
 [context.deploy-preview]
-  command = "npm install --legacy-peer-deps && npm run build"
-  [context.deploy-preview.environment]
-    NODE_ENV = "development"
-    VITE_APP_ENV = "staging"
-    VITE_API_BASE_URL = "https://staging.api.hnm.org"
-
+  command = "npm install && npm run build"
+  
 [context.branch-deploy]
-  command = "npm install --legacy-peer-deps && npm run build"
-  [context.branch-deploy.environment]
-    NODE_ENV = "development"
-    VITE_APP_ENV = "development"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Content-Security-Policy = """
-      default-src 'self';
-      script-src 'self' https://js.stripe.com https://connect.facebook.net 'unsafe-inline' 'unsafe-eval';
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-      img-src 'self' data: blob: https://*.stripe.com https://*.facebook.com https://*.youtube.com;
-      font-src 'self' https://fonts.gstatic.com;
-      frame-src https://www.youtube.com https://www.facebook.com https://js.stripe.com;
-      connect-src 'self' https://api.stripe.com https://bible-api.com https://api.hnm.org;
-      media-src 'self' https://*.youtube.com;
-      worker-src 'self' blob:;
-    """
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = """
-      geolocation=(),
-      microphone=(),
-      camera=(),
-      payment=(self https://js.stripe.com)
-    """
-    Cross-Origin-Opener-Policy = "same-origin"
-    Cross-Origin-Embedder-Policy = "require-corp"
-
-[[redirects]]
-  from = "/admin/*"
-  to = "/admin/index.html"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-[dev]
-  framework = "vite"
-  targetPort = 3000
-  autoLaunch = false
-  command = "npm run dev"
-  port = 3000
-
-[functions]
-  directory = "functions"
-  node_bundler = "esbuild"
-  external_node_modules = ["faunadb", "stripe"]
-
-[[edge_functions]]
-  path = "/edge-functions/hello"
-  function = "hello"
+  command = "npm install && npm run build"
