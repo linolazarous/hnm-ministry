@@ -1,64 +1,12 @@
-{
-  "name": "hnm-ministry",
-  "version": "2.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "prebuild": "npm run lint",
-    "lint": "eslint . --ext js,jsx,ts,tsx --fix",
-    "type-check": "tsc --noEmit",
-    "optimize-assets": "imagemin src/assets/images/* --out-dir=dist/assets/images",
-    "test": "vitest",
-    "coverage": "vitest run --coverage",
-    "audit": "npm audit --production --audit-level=critical"
-  },
-  "dependencies": {
-    "@sentry/react": "^7.107.0",
-    "@sentry/tracing": "^7.107.0",
-    "axios": "^1.6.7",
-    "faunadb": "^4.8.0",
-    "magic-sdk": "^12.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-facebook": "^9.0.0",
-    "react-youtube": "^10.0.0"
-  },
-  "devDependencies": {
-    "@netlify/plugin-lighthouse": "^3.0.0",
-    "@netlify/plugin-nextjs": "^5.10.5",
-    "@types/node": "^20.11.19",
-    "@types/react": "^18.2.56",
-    "@types/react-dom": "^18.2.19",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.17",
-    "eslint": "^8.56.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "imagemin-cli": "^8.0.0",
-    "postcss": "^8.4.35",
-    "sass": "^1.71.1",
-    "typescript": "^5.3.3",
-    "vite": "^6.2.6",
-    "vite-plugin-checker": "^0.9.0",
-    "vitest": "^3.1.1"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=10.9.2"
-  }
+"devDependencies": {
+  "eslint": "^9.0.0",
+  "@eslint/js": "^9.0.0",
+  "typescript-eslint": "^7.0.0",
+  "globals": "^13.23.0",
+  "eslint-plugin-react": "^7.34.0",
+  "eslint-plugin-react-hooks": "^4.6.0"
+},
+"scripts": {
+  "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+  "prebuild": "npm run lint"
 }
