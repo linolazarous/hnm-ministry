@@ -5,4 +5,4 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  NODE_ENV = "development" # Required for devDependencies
+  NODE_ENV = "development"
