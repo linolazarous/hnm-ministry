@@ -1,15 +1,5 @@
-import js from "@eslint/js";
-import reactRecommended from "eslint-plugin-react/configs/recommended";
-import hooks from "eslint-plugin-react-hooks";
-
+import ts from "typescript-eslint";
 export default [
-  js.configs.recommended,
-  reactRecommended,
-  {
-    ...hooks.configs.recommended,
-    files: ["**/*.{js,jsx,ts,tsx}"],
-    rules: {
-      "react/react-in-jsx-scope": "off"
-    }
-  }
+  ...ts.configs.recommended,
+  // rest of your config
 ];
