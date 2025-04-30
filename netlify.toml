@@ -1,9 +1,11 @@
 [build]
-  publish = "dist"
+  command = "npm install && npm run build"
+  publish = "dist"  # This should match your build output directory
   functions = "functions"
   edge_functions = "edge-functions"
 
-[dev]
-  framework = "vite"
-  targetPort = 3000
-  autoLaunch = false
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
+
+# Remove context-specific commands to simplify
