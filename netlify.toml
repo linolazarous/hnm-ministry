@@ -1,11 +1,12 @@
 [build]
   command = "npm install && npm run build"
-  publish = "dist"  # This should match your build output directory
+  publish = "dist"
   functions = "functions"
   edge_functions = "edge-functions"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
+  NODE_ENV = "production"  # Force production mode
 
-# Remove context-specific commands to simplify
+# Remove all context-specific configurations
