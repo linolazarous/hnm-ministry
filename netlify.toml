@@ -11,8 +11,9 @@
 
 [context.production]
   command = "npm ci --prefer-offline && npm run build"
-  [context.production.environment]
-    NODE_ENV = "production"
+
+[context.production.environment]  # <-- Corrected (no indentation)
+  NODE_ENV = "production"
 
 [context.deploy-preview]
   command = "npm install && npm run build"
