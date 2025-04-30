@@ -1,8 +1,10 @@
 [build]
   command = "npm install --legacy-peer-deps --no-audit && npm run build"
   publish = "dist"
+  functions = "functions"
+  edge_functions = "edge-functions"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  NODE_ENV = "development"
+  NODE_ENV = "development" # Ensures devDependencies install
