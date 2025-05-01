@@ -1,0 +1,11 @@
+# Legacy URL support
+/old-ministry    /about     301
+/donate-old      /donate    301
+
+# Maintenance redirects
+/maintenance     /under-maintenance.html  200
+/emergency       /emergency.html         302
+
+# Language redirects
+/en/*            /english/:splat  200
+/ar/*            /arabic/:splat   200
