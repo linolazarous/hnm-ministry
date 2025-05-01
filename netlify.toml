@@ -2,31 +2,40 @@
   command = "npm install --legacy-peer-deps && npm run build"
   publish = "dist"
   functions = "functions"
-  edge_functions = "edge-functions"  # Add this line for edge functions
+  edge_functions = "edge-functions"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
   VITE_STRIPE_KEY = "your_publishable_key_here"
   VITE_FORMPREE_ID = "your_formspree_id_here"
+  STRIPE_SECRET_KEY = "your_stripe_secret_key_here"  # For server-side processing
 
 [[redirects]]
   from = "/api/donate"
-  to = "/.netlify/functions/donate"
+  to = "/.netlify/functions/process-payment"  # Changed to match standard naming
   status = 200
   force = true
 
 [[redirects]]
   from = "/*"
-  to = "/src/index.html"
+  to = "/index.html"  # Fixed path (should point to built file in dist/)
   status = 200
 
-# Edge function declarations
+# Edge function configuration
 [[edge_functions]]
-  path = "/*"  # Applies to all routes
-  function = "geo-redirect"  # Matches your geo-redirect.js filename
+  path = "/*"
+  function = "geo-redirect"
 
 [dev]
   framework = "vite"
   targetPort = 5173
   autoLaunch = false
+
+# Additional security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "default-src 'self' https:"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
