@@ -1,34 +1,35 @@
-// geo-redirect.js - Enhanced with caching
+// edge-functions/geo-redirect.js
 export default async (request, context) => {
-  const url = new URL(request.url)
-  
-  // Skip redirects for certain paths
-  if (url.pathname.startsWith('/api/') || 
-      url.pathname.startsWith('/_next/')) {
-    return new Response(null, { status: 200 })
-  }
+  try {
+    const url = new URL(request.url);
+    
+    // Skip API routes and internal paths
+    if (url.pathname.startsWith('/api/') || 
+        url.pathname.startsWith('/_next/') ||
+        url.pathname.startsWith('/.netlify/')) {
+      return context.next();
+    }
 
-  // Get country from context
-  const country = context.geo?.country?.toUpperCase() || 'US'
-  const region = context.geo?.subdivision?.code || ''
-  
-  // South Sudan redirect
-  if (country === 'SS') {
-    return Response.redirect('https://hnm-ministry.netlify.app/ss', 302)
-  }
+    // Get visitor location
+    const country = context.geo?.country?.toUpperCase() || 'US';
+    const isMobile = context.headers.get('user-agent')?.match(/mobile|android|iphone|ipad/i);
 
-  // Mobile redirect (with user agent check)
-  const userAgent = request.headers.get('user-agent') || ''
-  const isMobile = /mobile|android|iphone|ipad/i.test(userAgent)
-  
-  if (isMobile && !url.pathname.startsWith('/mobile')) {
-    return Response.redirect('https://hnm-ministry.netlify.app/mobile', 302)
-  }
+    // South Sudan redirect
+    if (country === 'SS') {
+      return Response.redirect('https://hnm-ministry.netlify.app/ss', 302);
+    }
 
-  // Cache control headers
-  const response = await context.next()
-  response.headers.set('Cache-Control', 'public, max-age=3600')
-  response.headers.set('CDN-Cache-Control', 'public, max-age=3600')
-  
-  return response
+    // Mobile redirect
+    if (isMobile && !url.pathname.startsWith('/mobile')) {
+      return Response.redirect('https://hnm-ministry.netlify.app/mobile', 302);
+    }
+
+    // Continue normal processing
+    return context.next();
+
+  } catch (error) {
+    // Fallback if anything fails
+    console.error('Edge function error:', error);
+    return context.next();
+  }
 }
