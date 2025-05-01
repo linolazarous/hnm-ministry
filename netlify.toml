@@ -8,7 +8,3 @@
   NODE_VERSION = "20"
   NPM_VERSION = "10"
   NODE_ENV = "production"  # Force production mode
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"  # Use appropriate plugin for your framework
-# Remove all context-specific configurations
