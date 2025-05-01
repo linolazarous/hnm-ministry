@@ -1,49 +1,67 @@
-import React, { useEffect } from 'react'
-import './App.css' // Optional CSS file
+import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Home from './pages/Home'
+import About from './pages/About'
+import Sermons from './pages/Sermons'
+import Donate from './pages/Donate'
+import Success from './pages/Success'
+import Cancel from './pages/Cancel'
+import ScrollToTop from './components/ScrollToTop'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 const App = () => {
-  useEffect(() => {
-    // Load Stripe.js asynchronously if not already loaded
-    if (!window.Stripe) {
-      const script = document.createElement('script')
-      script.src = 'https://js.stripe.com/v3/'
-      script.async = true
-      script.onload = () => {
-        window.Stripe = Stripe('pk_live_your_key_here')
-      }
-      document.head.appendChild(script)
-    }
+  const [livestreamActive, setLivestreamActive] = useState(false)
+  const [currentTime, setCurrentTime] = useState(new Date())
 
-    // Cleanup
-    return () => {
-      const stripeScript = document.querySelector('script[src="https://js.stripe.com/v3/"]')
-      if (stripeScript) {
-        document.head.removeChild(stripeScript)
-      }
-    }
+  // Check if current time matches livestream schedule
+  useEffect(() => {
+    AOS.init({ duration: 800 })
+    
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+      checkLivestreamSchedule()
+    }, 60000)
+
+    return () => clearInterval(timer)
   }, [])
 
+  const checkLivestreamSchedule = () => {
+    const now = currentTime
+    const day = now.getDay() // 0 = Sunday
+    const hours = now.getHours()
+    const minutes = now.getMinutes()
+
+    // Sunday Service 10AM CAT (8AM UTC)
+    if (day === 0 && hours === 8 && minutes >= 0 && minutes <= 59) {
+      setLivestreamActive(true)
+    } else {
+      setLivestreamActive(false)
+    }
+  }
+
   return (
-    <div className="app">
-      {/* Your existing HTML content goes here */}
-      {/* Convert your HTML sections to React components */}
-      
-      {/* Example: Donation Section */}
-      <section className="donate-section" aria-labelledby="donate-heading">
-        <div className="section-container">
-          <h2 id="donate-heading">Support Our Mission</h2>
-          <div className="donation-options">
-            <div className="donation-card">
-              <h3>One-Time Donation</h3>
-              {/* Form will be handled by existing Stripe elements */}
-              <form id="donation-form">
-                {/* ... existing form elements ... */}
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+    <Router>
+      <ScrollToTop />
+      <div className="app">
+        <Header livestreamActive={livestreamActive} />
+        
+        <main>
+          <Routes>
+            <Route path="/" element={<Home livestreamActive={livestreamActive} />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/sermons" element={<Sermons />} />
+            <Route path="/donate" element={<Donate />} />
+            <Route path="/success" element={<Success />} />
+            <Route path="/cancel" element={<Cancel />} />
+          </Routes>
+        </main>
+
+        <Footer />
+      </div>
+    </Router>
   )
 }
 
