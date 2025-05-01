@@ -29,7 +29,7 @@
 
 [dev]
   framework = "vite"
-  targetPort = 5173
+  targetPort = 2435
   autoLaunch = false
 
 # Additional security headers
