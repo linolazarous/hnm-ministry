@@ -1,15 +1,31 @@
 [build]
-  command = "npm install --omit=dev && npm run build"
+  # Install all dependencies (including devDependencies needed for build)
+  command = "npm install && npm run build"
   publish = "dist"
   functions = "functions"
-  edge_functions = "edge-functions" # Optional if using edge functions
+  edge_functions = "edge-functions"
 
 [build.environment]
+  # Updated to current LTS versions (as of 2023)
   NODE_VERSION = "20"
   NPM_VERSION = "10"
+  
+  # Environment variables prefixed with VITE_ will be available in your Vite app
   VITE_STRIPE_KEY = "your_publishable_key_here"
   VITE_FORMPREE_ID = "your_formspree_id_here"
   VITE_API_BASE_URL = "https://your-api-url.com"
+  
+  # Build-specific optimizations
+  NODE_ENV = "production"
+  NODE_OPTIONS = "--max-old-space-size=4096" # Increases memory limit for large builds
+
+[context.production.environment]
+  # Production-specific overrides
+  VITE_API_BASE_URL = "https://production-api-url.com"
+
+[context.deploy-preview.environment]
+  # Preview-specific settings
+  VITE_API_BASE_URL = "https://staging-api-url.com"
 
 [[redirects]]
   from = "/api/*"
@@ -21,10 +37,17 @@
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com; script-src 'self' 'unsafe-inline' https: *.stripe.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: *.stripe.com; connect-src 'self' https: *.stripe.com your-api-url.com"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
 
 [dev]
   framework = "vite"
-  targetPort = 2435
+  targetPort = 5173 # Standard Vite port (changed from 2435)
   autoLaunch = false
+  
+  # Development-specific settings
+  [dev.environment]
+    VITE_API_BASE_URL = "http://localhost:3000" # Local dev API URL
