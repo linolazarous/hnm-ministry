@@ -1,9 +1,16 @@
-import { defineStackbitConfig } from '@stackbit/types';
+import type { AnalyticsConfig } from 'stalkbit-types'
 
-export default defineStackbitConfig({
-    "stackbitVersion": "~0.6.0",
-    "nodeVersion": "18",
-    "ssgName": "custom",
-    "contentSources": [],
-    "postInstallCommand": "npm i --no-save @stackbit/types"
-})
+const config: AnalyticsConfig = {
+  trackingId: 'G-XXXXXXXXXX', // Replace with your GA4 ID
+  enabled: process.env.NODE_ENV === 'production',
+  trackPageViews: true,
+  trackUserEngagement: true,
+  events: {
+    donationComplete: 'donation_success',
+    livestreamView: 'livestream_engagement',
+    userLogin: 'user_authentication'
+  },
+  debug: process.env.NODE_ENV !== 'production'
+}
+
+export default config
