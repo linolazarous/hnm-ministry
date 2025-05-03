@@ -4,13 +4,24 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+      '@components': resolve(__dirname, './src/components'),
+      '@services': resolve(__dirname, './src/services')
+    }
+  },
   build: {
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html') // Explicit entry point
+        main: resolve(__dirname, 'index.html'),
+        success: resolve(__dirname, 'public/success.html'),
+        cancel: resolve(__dirname, 'public/cancel.html')
       }
     }
   },
-  publicDir: 'public'
+  server: {
+    port: 5173
+  }
 })
