@@ -1,53 +1,52 @@
 [build]
-  # Install all dependencies (including devDependencies needed for build)
-  command = "npm install && npm run build"
+  # Let Netlify handle all dependency management
+  command = "npm install --force && npm run build"
   publish = "dist"
   functions = "functions"
   edge_functions = "edge-functions"
 
 [build.environment]
-  # Updated to current LTS versions (as of 2023)
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  
-  # Environment variables prefixed with VITE_ will be available in your Vite app
-  VITE_STRIPE_KEY = "your_publishable_key_here"
-  VITE_FORMPREE_ID = "your_formspree_id_here"
-  VITE_API_BASE_URL = "https://your-api-url.com"
-  
-  # Build-specific optimizations
+  # Force clean dependency installation
+  NPM_FLAGS = "--legacy-peer-deps --force"
+  # Build optimization
   NODE_ENV = "production"
-  NODE_OPTIONS = "--max-old-space-size=4096" # Increases memory limit for large builds
+  NODE_OPTIONS = "--max-old-space-size=4096"
+  
+  # Vite-specific environment variables
+  VITE_STRIPE_KEY = "@stripe_publishable_key"
+  VITE_FORMPREE_ID = "@formspree_id"
+  VITE_API_BASE_URL = "https://api.hnm-ministry.org"
 
-[context.production.environment]
-  # Production-specific overrides
-  VITE_API_BASE_URL = "https://production-api-url.com"
+[context.production]
+  environment = { 
+    VITE_API_BASE_URL = "https://api.hnm-ministry.org",
+    NODE_ENV = "production"
+  }
 
-[context.deploy-preview.environment]
-  # Preview-specific settings
-  VITE_API_BASE_URL = "https://staging-api-url.com"
+[context.deploy-preview]
+  environment = { 
+    VITE_API_BASE_URL = "https://staging-api.hnm-ministry.org",
+    NODE_ENV = "development"
+  }
 
+[dev]
+  framework = "vite"
+  targetPort = 5173
+  autoLaunch = false
+
+# Security headers (using your existing config)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# API redirects
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
   force = true
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com; script-src 'self' 'unsafe-inline' https: *.stripe.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: *.stripe.com; connect-src 'self' https: *.stripe.com your-api-url.com"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-
-[dev]
-  framework = "vite"
-  targetPort = 5173 # Standard Vite port (changed from 2435)
-  autoLaunch = false
-  
-  # Development-specific settings
-  [dev.environment]
-    VITE_API_BASE_URL = "http://localhost:3000" # Local dev API URL
