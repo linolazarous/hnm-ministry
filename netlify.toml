@@ -2,16 +2,18 @@
   command = "npm install --omit=dev && npm run build"
   publish = "dist"
   functions = "functions"
+  edge_functions = "edge-functions" # Optional if using edge functions
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
   VITE_STRIPE_KEY = "your_publishable_key_here"
   VITE_FORMPREE_ID = "your_formspree_id_here"
+  VITE_API_BASE_URL = "https://your-api-url.com"
 
 [[redirects]]
-  from = "/api/donate"
-  to = "/.netlify/functions/process-payment"
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
   status = 200
   force = true
 
@@ -19,4 +21,10 @@
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https:"
+    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+[dev]
+  framework = "vite"
+  targetPort = 2435
+  autoLaunch = false
