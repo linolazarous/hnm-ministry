@@ -1,17 +1,11 @@
 [build]
-  command = "npm install --production=false && npm run build"
+  command = "npm install --omit=dev && npm run build"
   publish = "dist"
   functions = "functions"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  # Auto-install missing dependencies
-  NPM_CONFIG_PRODUCTION = "false"
-  NPM_CONFIG_AUDIT = "false"
-  NPM_CONFIG_FUND = "false"
-  
-  # Your environment variables
   VITE_STRIPE_KEY = "your_publishable_key_here"
   VITE_FORMPREE_ID = "your_formspree_id_here"
 
