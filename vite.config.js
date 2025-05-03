@@ -1,27 +1,29 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src'),
-      '@components': resolve(__dirname, './src/components'),
-      '@services': resolve(__dirname, './src/services')
-    }
+  server: {
+    port: 5173
   },
   build: {
     outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: true,
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        success: resolve(__dirname, 'public/success.html'),
-        cancel: resolve(__dirname, 'public/cancel.html')
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          stripe: ['@stripe/stripe-js']
+        }
       }
     }
   },
-  server: {
-    port: 5173
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "./src/css/_variables.scss";`
+      }
+    }
   }
 })
