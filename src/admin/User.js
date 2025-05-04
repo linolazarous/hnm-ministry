@@ -1,4 +1,3 @@
-// admin/src/pages/Users.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
@@ -18,34 +17,78 @@ import {
   DialogActions,
   TextField,
   Snackbar,
-  IconButton
+  IconButton,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  Tooltip,
+  Avatar,
+  Chip
 } from '@mui/material';
-import { Edit, Delete, Add, Close } from '@mui/icons-material';
+import { 
+  Edit, 
+  Delete, 
+  Add, 
+  Close, 
+  VerifiedUser, 
+  Person, 
+  EditNote,
+  Refresh
+} from '@mui/icons-material';
+import { useConfirm } from 'material-ui-confirm';
+import { format } from 'date-fns';
+import { useAuth } from '../../hooks/useAuth';
+import RoleChip from '../components/RoleChip';
+import UserAvatar from '../components/UserAvatar';
+import './Users.css';
+
+// Role options with permissions
+const ROLE_OPTIONS = [
+  { value: 'user', label: 'User', description: 'Basic access' },
+  { value: 'editor', label: 'Editor', description: 'Can create and edit content' },
+  { value: 'admin', label: 'Admin', description: 'Full administrative privileges' }
+];
+
+// Password validation regex
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 const Users = () => {
+  const { user: currentAdmin } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '' });
+  const [snackbar, setSnackbar] = useState({ 
+    open: false, 
+    message: '',
+    severity: 'success' 
+  });
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    role: 'user'
+    role: 'user',
+    password: '',
+    confirmPassword: ''
   });
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const confirm = useConfirm();
 
   // Fetch users from API
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/users');
+      const response = await axios.get('/api/admin/users', {
+        headers: {
+          'Authorization': `Bearer ${currentAdmin.token}`
+        }
+      });
       setUsers(response.data);
       setError(null);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch users');
-      console.error('Error fetching users:', err);
+      handleApiError(err, 'Failed to fetch users');
     } finally {
       setLoading(false);
     }
@@ -55,86 +98,186 @@ const Users = () => {
     fetchUsers();
   }, []);
 
-  // Handle form input changes
+  // Handle API errors consistently
+  const handleApiError = (err, defaultMessage) => {
+    const errorMessage = err.response?.data?.message || 
+                        err.message || 
+                        defaultMessage;
+    setError(errorMessage);
+    setSnackbar({
+      open: true,
+      message: errorMessage,
+      severity: 'error'
+    });
+    console.error('API Error:', err);
+  };
+
+  // Handle form input changes with validation
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+
+    // Clear error when user types
+    if (formErrors[name]) {
+      setFormErrors(prev => ({
+        ...prev,
+        [name]: null
+      }));
+    }
+  };
+
+  // Validate form fields
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.name.trim()) {
+      errors.name = 'Name is required';
+    }
+    
+    if (!formData.email) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Invalid email format';
+    }
+    
+    if (!currentUser && !formData.password) {
+      errors.password = 'Password is required';
+    } else if (formData.password && !PASSWORD_REGEX.test(formData.password)) {
+      errors.password = 'Password must be at least 8 characters with uppercase, lowercase, number and special character';
+    }
+    
+    if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match';
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   // Handle dialog open for creating/editing user
   const handleDialogOpen = (user = null) => {
     setCurrentUser(user);
-    if (user) {
-      setFormData({
-        name: user.name,
-        email: user.email,
-        role: user.role
-      });
-    } else {
-      setFormData({
-        name: '',
-        email: '',
-        role: 'user'
-      });
-    }
+    setFormData({
+      name: user?.name || '',
+      email: user?.email || '',
+      role: user?.role || 'user',
+      password: '',
+      confirmPassword: ''
+    });
+    setFormErrors({});
     setOpenDialog(true);
-  };
-
-  // Handle dialog close
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-    setCurrentUser(null);
-  };
-
-  // Handle delete confirmation dialog
-  const handleDeleteDialogOpen = (user) => {
-    setCurrentUser(user);
-    setOpenDeleteDialog(true);
-  };
-
-  const handleDeleteDialogClose = () => {
-    setOpenDeleteDialog(false);
-    setCurrentUser(null);
   };
 
   // Submit user form (create or update)
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     try {
+      setIsSubmitting(true);
+      const payload = { 
+        name: formData.name,
+        email: formData.email,
+        role: formData.role
+      };
+
+      // Only include password if it's set (for new users or password changes)
+      if (formData.password) {
+        payload.password = formData.password;
+      }
+
       if (currentUser) {
         // Update existing user
-        await axios.put(`/api/users/${currentUser.id}`, formData);
-        setSnackbar({ open: true, message: 'User updated successfully' });
+        await axios.put(`/api/admin/users/${currentUser._id}`, payload, {
+          headers: {
+            'Authorization': `Bearer ${currentAdmin.token}`
+          }
+        });
+        setSnackbar({ 
+          open: true, 
+          message: 'User updated successfully',
+          severity: 'success'
+        });
       } else {
         // Create new user
-        await axios.post('/api/users', formData);
-        setSnackbar({ open: true, message: 'User created successfully' });
+        await axios.post('/api/admin/users', payload, {
+          headers: {
+            'Authorization': `Bearer ${currentAdmin.token}`
+          }
+        });
+        setSnackbar({ 
+          open: true, 
+          message: 'User created successfully',
+          severity: 'success'
+        });
       }
       fetchUsers();
-      handleDialogClose();
+      setOpenDialog(false);
     } catch (err) {
-      setSnackbar({ 
-        open: true, 
-        message: err.response?.data?.message || 'Operation failed' 
-      });
+      handleApiError(err, currentUser ? 'Failed to update user' : 'Failed to create user');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // Delete user
-  const handleDelete = async () => {
+  // Handle user deletion with confirmation
+  const handleDelete = async (user) => {
     try {
-      await axios.delete(`/api/users/${currentUser.id}`);
-      setSnackbar({ open: true, message: 'User deleted successfully' });
-      fetchUsers();
-      handleDeleteDialogClose();
-    } catch (err) {
+      await confirm({
+        title: 'Confirm Delete',
+        description: `Are you sure you want to permanently delete ${user.name}? This action cannot be undone.`,
+        confirmationText: 'Delete',
+        confirmationButtonProps: { variant: 'contained', color: 'error' }
+      });
+
+      await axios.delete(`/api/admin/users/${user._id}`, {
+        headers: {
+          'Authorization': `Bearer ${currentAdmin.token}`
+        }
+      });
+      
       setSnackbar({ 
         open: true, 
-        message: err.response?.data?.message || 'Failed to delete user' 
+        message: 'User deleted successfully',
+        severity: 'success'
       });
+      fetchUsers();
+    } catch (err) {
+      if (err !== 'cancel') {
+        handleApiError(err, 'Failed to delete user');
+      }
+    }
+  };
+
+  // Handle password reset
+  const handleResetPassword = async (userId) => {
+    try {
+      await confirm({
+        title: 'Reset Password',
+        description: 'This will generate a temporary password for the user. Are you sure?',
+        confirmationText: 'Reset',
+        confirmationButtonProps: { variant: 'contained', color: 'warning' }
+      });
+
+      const response = await axios.post(`/api/admin/users/${userId}/reset-password`, {}, {
+        headers: {
+          'Authorization': `Bearer ${currentAdmin.token}`
+        }
+      });
+      
+      setSnackbar({ 
+        open: true, 
+        message: `Password reset successful. Temporary password: ${response.data.tempPassword}`,
+        severity: 'info',
+        autoHideDuration: 10000
+      });
+    } catch (err) {
+      if (err !== 'cancel') {
+        handleApiError(err, 'Failed to reset password');
+      }
     }
   };
 
@@ -144,57 +287,131 @@ const Users = () => {
   };
 
   return (
-    <div style={{ padding: '24px' }}>
-      <Typography variant="h4" gutterBottom>
-        User Management
-      </Typography>
-
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<Add />}
-        onClick={() => handleDialogOpen()}
-        style={{ marginBottom: '20px' }}
-      >
-        Add New User
-      </Button>
+    <div className="users-admin-container">
+      <div className="users-header">
+        <Typography variant="h4" component="h1">
+          User Management
+        </Typography>
+        <div className="users-actions">
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Add />}
+            onClick={() => handleDialogOpen()}
+          >
+            Add User
+          </Button>
+          <Tooltip title="Refresh users">
+            <IconButton onClick={fetchUsers}>
+              <Refresh />
+            </IconButton>
+          </Tooltip>
+        </div>
+      </div>
 
       {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+        <div className="loading-container">
           <CircularProgress />
         </div>
       ) : error ? (
-        <Typography color="error">{error}</Typography>
+        <div className="error-container">
+          <Typography color="error">{error}</Typography>
+          <Button 
+            variant="outlined" 
+            color="primary" 
+            onClick={fetchUsers}
+            startIcon={<Refresh />}
+          >
+            Retry
+          </Button>
+        </div>
       ) : (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className="users-table">
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
+                <TableCell>User</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Role</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>Joined</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.role}</TableCell>
+                <TableRow key={user._id} hover>
                   <TableCell>
-                    <IconButton 
-                      color="primary" 
-                      onClick={() => handleDialogOpen(user)}
-                    >
-                      <Edit />
-                    </IconButton>
-                    <IconButton 
-                      color="error" 
-                      onClick={() => handleDeleteDialogOpen(user)}
-                    >
-                      <Delete />
-                    </IconButton>
+                    <div className="user-cell">
+                      <UserAvatar user={user} />
+                      <div className="user-info">
+                        <Typography variant="body1">{user.name}</Typography>
+                        {user._id === currentAdmin._id && (
+                          <Chip 
+                            size="small" 
+                            label="You" 
+                            color="primary" 
+                            variant="outlined"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>
+                    <RoleChip role={user.role} />
+                  </TableCell>
+                  <TableCell>
+                    {format(new Date(user.createdAt), 'MMM d, yyyy')}
+                  </TableCell>
+                  <TableCell>
+                    {user.emailVerified ? (
+                      <Chip 
+                        icon={<VerifiedUser fontSize="small" />} 
+                        label="Verified" 
+                        size="small" 
+                        color="success" 
+                        variant="outlined"
+                      />
+                    ) : (
+                      <Chip 
+                        icon={<Person fontSize="small" />} 
+                        label="Pending" 
+                        size="small" 
+                        color="warning" 
+                        variant="outlined"
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell align="right">
+                    <div className="action-buttons">
+                      <Tooltip title="Edit user">
+                        <IconButton 
+                          color="primary" 
+                          onClick={() => handleDialogOpen(user)}
+                          disabled={user._id === currentAdmin._id}
+                        >
+                          <Edit />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Reset password">
+                        <IconButton 
+                          color="secondary"
+                          onClick={() => handleResetPassword(user._id)}
+                        >
+                          <EditNote />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete user">
+                        <IconButton 
+                          color="error" 
+                          onClick={() => handleDelete(user)}
+                          disabled={user._id === currentAdmin._id}
+                        >
+                          <Delete />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -203,27 +420,34 @@ const Users = () => {
         </TableContainer>
       )}
 
-      {/* Add/Edit User Dialog */}
-      <Dialog open={openDialog} onClose={handleDialogClose}>
+      {/* User Form Dialog */}
+      <Dialog 
+        open={openDialog} 
+        onClose={() => !isSubmitting && setOpenDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>
-          {currentUser ? 'Edit User' : 'Add New User'}
+          {currentUser ? 'Edit User' : 'Create New User'}
         </DialogTitle>
         <form onSubmit={handleSubmit}>
-          <DialogContent>
+          <DialogContent dividers>
             <TextField
-              autoFocus
-              margin="dense"
+              margin="normal"
               name="name"
               label="Full Name"
-              type="text"
               fullWidth
               variant="outlined"
               value={formData.name}
               onChange={handleInputChange}
+              error={!!formErrors.name}
+              helperText={formErrors.name}
               required
+              disabled={isSubmitting}
             />
+            
             <TextField
-              margin="dense"
+              margin="normal"
               name="email"
               label="Email Address"
               type="email"
@@ -231,69 +455,114 @@ const Users = () => {
               variant="outlined"
               value={formData.email}
               onChange={handleInputChange}
+              error={!!formErrors.email}
+              helperText={formErrors.email}
               required
+              disabled={isSubmitting || !!currentUser}
             />
-            <TextField
-              margin="dense"
-              name="role"
-              label="Role"
-              select
-              fullWidth
-              variant="outlined"
-              value={formData.role}
-              onChange={handleInputChange}
-              SelectProps={{
-                native: true,
-              }}
-              required
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-              <option value="editor">Editor</option>
-            </TextField>
+            
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Role</InputLabel>
+              <Select
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+                label="Role"
+                required
+                disabled={isSubmitting}
+              >
+                {ROLE_OPTIONS.map((option) => (
+                  <MenuItem 
+                    key={option.value} 
+                    value={option.value}
+                  >
+                    <div className="role-option">
+                      <span>{option.label}</span>
+                      <Typography variant="caption" color="textSecondary">
+                        {option.description}
+                      </Typography>
+                    </div>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            
+            {!currentUser && (
+              <>
+                <TextField
+                  margin="normal"
+                  name="password"
+                  label="Password"
+                  type="password"
+                  fullWidth
+                  variant="outlined"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  error={!!formErrors.password}
+                  helperText={formErrors.password || 'Min 8 chars with uppercase, lowercase, number and special char'}
+                  required
+                  disabled={isSubmitting}
+                />
+                
+                <TextField
+                  margin="normal"
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  fullWidth
+                  variant="outlined"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  error={!!formErrors.confirmPassword}
+                  helperText={formErrors.confirmPassword}
+                  required
+                  disabled={isSubmitting}
+                />
+              </>
+            )}
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleDialogClose}>Cancel</Button>
-            <Button type="submit" color="primary">
-              {currentUser ? 'Update' : 'Create'}
+            <Button 
+              onClick={() => setOpenDialog(false)} 
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              color="primary" 
+              variant="contained"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <CircularProgress size={20} style={{ marginRight: 8 }} />
+                  {currentUser ? 'Updating...' : 'Creating...'}
+                </>
+              ) : currentUser ? 'Update User' : 'Create User'}
             </Button>
           </DialogActions>
         </form>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={openDeleteDialog} onClose={handleDeleteDialogClose}>
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to delete user: {currentUser?.name}?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteDialogClose}>Cancel</Button>
-          <Button onClick={handleDelete} color="error">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-
       {/* Snackbar for notifications */}
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={6000}
+        autoHideDuration={snackbar.autoHideDuration || 6000}
         onClose={handleSnackbarClose}
-        message={snackbar.message}
-        action={
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <div className={`snackbar-content ${snackbar.severity}`}>
+          <Typography>{snackbar.message}</Typography>
           <IconButton
             size="small"
-            aria-label="close"
             color="inherit"
             onClick={handleSnackbarClose}
           >
             <Close fontSize="small" />
           </IconButton>
-        }
-      />
+        </div>
+      </Snackbar>
     </div>
   );
 };
