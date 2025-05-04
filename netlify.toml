@@ -1,34 +1,36 @@
 [build]
+  # Let Netlify handle all dependency installation and building
   command = "npm install --force && npm run build"
-  publish = "dist"
-  functions = "functions"
-  edge_functions = "edge-functions"
+  publish = "dist"            # Vite's default output folder
+  functions = "functions"     # Serverless functions directory
+  edge_functions = "edge-functions" # Edge functions (optional)
 
 [build.environment]
-  NODE_VERSION = "20"
+  # Node.js environment
+  NODE_VERSION = "20"         # Current LTS
   NPM_VERSION = "10"
-  NPM_FLAGS = "--legacy-peer-deps --force"
-  NODE_ENV = "production"
-  NODE_OPTIONS = "--max-old-space-size=4096"
   
-  # Environment variables (set these in Netlify UI)
-  VITE_STRIPE_KEY = "@stripe_publishable_key"
+  # Dependency resolution (bypasses peer conflicts)
+  NPM_FLAGS = "--legacy-peer-deps --force"
+  
+  # Build optimizations
+  NODE_ENV = "production"
+  NODE_OPTIONS = "--max-old-space-size=4096" # Prevents memory issues
+  
+  # Environment variables (set in Netlify UI)
+  VITE_STRIPE_KEY = "@stripe_key"
   VITE_FORMPREE_ID = "@formspree_id"
-  VITE_API_BASE_URL = "@api_base_url"
+  VITE_API_BASE_URL = "@api_url"
 
-[context.production]
-  [context.production.environment]
-    NODE_ENV = "production"
+# Production-specific config
+[context.production.environment]
+  NODE_ENV = "production"
 
-[context.deploy-preview]
-  [context.deploy-preview.environment]
-    NODE_ENV = "development"
+# Preview deployments (PRs)
+[context.deploy-preview.environment]
+  NODE_ENV = "development"
 
-[dev]
-  framework = "vite"
-  targetPort = 5173
-  autoLaunch = false
-
+# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -36,6 +38,7 @@
     Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
 
+# API redirects to serverless functions
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
