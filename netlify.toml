@@ -1,5 +1,4 @@
 [build]
-  # Let Netlify handle all dependency management
   command = "npm install --force && npm run build"
   publish = "dist"
   functions = "functions"
@@ -8,32 +7,28 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  # Force clean dependency installation
   NPM_FLAGS = "--legacy-peer-deps --force"
-  # Build optimization
   NODE_ENV = "production"
   NODE_OPTIONS = "--max-old-space-size=4096"
   
-  # Vite-specific environment variables
+  # Environment variables (set these in Netlify UI)
   VITE_STRIPE_KEY = "@stripe_publishable_key"
   VITE_FORMPREE_ID = "@formspree_id"
+  VITE_API_BASE_URL = "@api_base_url"
 
 [context.production]
-  environment = { 
+  [context.production.environment]
     NODE_ENV = "production"
-  }
 
 [context.deploy-preview]
-  environment = { 
+  [context.deploy-preview.environment]
     NODE_ENV = "development"
-  }
 
 [dev]
   framework = "vite"
   targetPort = 5173
   autoLaunch = false
 
-# Security headers (using your existing config)
 [[headers]]
   for = "/*"
   [headers.values]
@@ -41,7 +36,6 @@
     Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
 
-# API redirects
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
