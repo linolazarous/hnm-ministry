@@ -1,28 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    port: 5173
-  },
+  publicDir: 'public', // Explicitly point to public folder
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
-    sourcemap: true,
     rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          stripe: ['@stripe/stripe-js']
-        }
-      }
-    }
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "./src/css/_variables.scss";`
+      input: {
+        main: resolve(__dirname, 'public/index.html') // Direct path to HTML
       }
     }
   }
