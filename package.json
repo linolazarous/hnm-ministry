@@ -4,11 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "clean-install": "rm -rf node_modules && npm install --legacy-peer-deps --force",
-    "serve": "vite preview --port 4173"
+    "build": "vite build"  # Only essential script (Netlify runs this)
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -19,21 +15,6 @@
   "devDependencies": {
     "vite": "^5.0.0",
     "@vitejs/plugin-react": "^4.0.3",
-    "sass": "^1.66.1",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "typescript": "^5.0.0"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "sass": "^1.66.1"
   }
 }
