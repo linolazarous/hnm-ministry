@@ -1,18 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Heavenly Nature Ministry - Empowering generations through faith in South Sudan"/>
+  <!-- Primary Meta Tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Heavenly Nature Ministry - Empowering generations through faith in South Sudan">
   <title>Heavenly Nature Ministry | Juba, South Sudan</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <!-- Favicon (Modern Approach) -->
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- PWA Manifest & Theme Color -->
   <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#1a4b8c">
+
+  <!-- iOS PWA Config -->
+  <link rel="apple-touch-icon" href="/icon-192x192.png">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Microsoft PWA Config -->
+  <meta name="msapplication-config" content="/browserconfig.xml">
+  <meta name="msapplication-TileColor" content="#1a4b8c">
+
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" as="style" crossorigin>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" crossorigin>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" as="style" crossorigin>
+
+  <!-- CSS (Render-Blocking) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  
   <style>
     :root {
       --primary-blue: #1a4b8c;
@@ -22,12 +43,17 @@
       --dark-text: #2c3e50;
       --light-text: #f8f9fa;
       --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
     }
     
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
     }
     
     body {
@@ -37,6 +63,7 @@
       background-size: cover;
       color: var(--dark-text);
       line-height: 1.6;
+      overflow-x: hidden;
     }
     
     h1, h2, h3, h4 {
@@ -44,6 +71,23 @@
       color: var(--primary-blue);
     }
     
+    /* Skip to content link for accessibility */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary-blue);
+      color: white;
+      padding: 8px;
+      z-index: 100;
+      transition: top 0.3s;
+    }
+    
+    .skip-link:focus {
+      top: 0;
+    }
+    
+    /* Header styles */
     header {
       background-color: var(--primary-blue);
       padding: 1rem 2rem;
@@ -59,6 +103,7 @@
     
     header img {
       height: 70px;
+      width: auto;
       transition: transform 0.3s ease;
     }
     
@@ -78,7 +123,7 @@
       font-size: 1.1rem;
       padding: 0.5rem 0;
       position: relative;
-      transition: color 0.3s ease;
+      transition: var(--transition);
     }
     
     nav a::after {
@@ -89,7 +134,7 @@
       width: 0;
       height: 2px;
       background-color: var(--accent-gold);
-      transition: width 0.3s ease;
+      transition: var(--transition);
     }
     
     nav a:hover {
@@ -100,6 +145,19 @@
       width: 100%;
     }
     
+    .donate-button {
+      background-color: var(--accent-gold);
+      color: var(--dark-text) !important;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    
+    .donate-button:hover {
+      background-color: #e8c874;
+    }
+    
+    /* Hero section */
     .hero {
       text-align: center;
       padding: 5rem 2rem;
@@ -129,15 +187,22 @@
     }
     
     .hero h1 {
-      font-size: 3.5rem;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
       margin-bottom: 1rem;
       color: var(--light-text);
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
     
     .hero p {
-      font-size: 1.3rem;
+      font-size: clamp(1.1rem, 2vw, 1.3rem);
       margin-bottom: 2rem;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
     }
     
     .cta-button {
@@ -148,8 +213,10 @@
       border-radius: 50px;
       text-decoration: none;
       font-weight: 700;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       box-shadow: var(--shadow);
+      border: none;
+      cursor: pointer;
     }
     
     .cta-button:hover {
@@ -158,6 +225,7 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
     
+    /* Main content sections */
     .section {
       padding: 4rem 2rem;
       margin: 0 auto;
@@ -166,7 +234,7 @@
     
     .section h2 {
       text-align: center;
-      font-size: 2.5rem;
+      font-size: clamp(2rem, 4vw, 2.5rem);
       margin-bottom: 3rem;
       position: relative;
     }
@@ -185,24 +253,7 @@
       margin: 0 auto;
     }
     
-    .section ul {
-      list-style-type: none;
-    }
-    
-    .section li {
-      margin-bottom: 1rem;
-      padding-left: 1.5rem;
-      position: relative;
-    }
-    
-    .section li::before {
-      content: '•';
-      color: var(--secondary-blue);
-      font-weight: bold;
-      position: absolute;
-      left: 0;
-    }
-    
+    /* Mission grid styles */
     .mission-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -215,7 +266,7 @@
       border-radius: 8px;
       padding: 2rem;
       box-shadow: var(--shadow);
-      transition: transform 0.3s ease;
+      transition: var(--transition);
     }
     
     .mission-card:hover {
@@ -235,6 +286,7 @@
       font-size: 1.5rem;
     }
     
+    /* Livestream section */
     .livestream-container {
       position: relative;
       padding-bottom: 56.25%; /* 16:9 aspect ratio */
@@ -254,6 +306,7 @@
       border: none;
     }
     
+    /* Schedule grid */
     .schedule-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -267,6 +320,11 @@
       padding: 1.5rem;
       box-shadow: var(--shadow);
       border-top: 4px solid var(--secondary-blue);
+      transition: var(--transition);
+    }
+    
+    .schedule-card:hover {
+      transform: translateY(-3px);
     }
     
     .schedule-card h3 {
@@ -279,6 +337,12 @@
       opacity: 0.8;
     }
     
+    .schedule-card i {
+      margin-right: 0.5rem;
+      color: var(--accent-gold);
+    }
+    
+    /* Form styles */
     form {
       background-color: white;
       padding: 2rem;
@@ -308,7 +372,7 @@
       border-radius: 4px;
       font-family: inherit;
       font-size: 1rem;
-      transition: border-color 0.3s ease;
+      transition: var(--transition);
     }
     
     form input:focus,
@@ -327,7 +391,7 @@
       font-weight: 700;
       border-radius: 4px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       width: 100%;
     }
     
@@ -336,6 +400,7 @@
       transform: translateY(-2px);
     }
     
+    /* Footer styles */
     footer {
       background-color: var(--primary-blue);
       color: var(--light-text);
@@ -354,12 +419,13 @@
       justify-content: center;
       gap: 2rem;
       margin: 2rem 0;
+      flex-wrap: wrap;
     }
     
     .footer-links a {
       color: var(--light-text);
       text-decoration: none;
-      transition: color 0.3s ease;
+      transition: var(--transition);
     }
     
     .footer-links a:hover {
@@ -376,18 +442,35 @@
     .social-icons a {
       color: var(--light-text);
       font-size: 1.5rem;
-      transition: transform 0.3s ease, color 0.3s ease;
+      transition: var(--transition);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
     
     .social-icons a:hover {
       color: var(--accent-gold);
       transform: translateY(-3px);
+      background-color: rgba(255, 255, 255, 0.1);
     }
     
     .copyright {
       margin-top: 2rem;
       opacity: 0.8;
       font-size: 0.9rem;
+    }
+    
+    /* Loading animation for buttons */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .fa-spinner {
+      animation: spin 1s linear infinite;
     }
     
     /* Responsive adjustments */
@@ -401,10 +484,16 @@
         margin-top: 1rem;
         flex-wrap: wrap;
         justify-content: center;
+        gap: 1rem;
       }
       
-      .hero h1 {
-        font-size: 2.5rem;
+      .hero {
+        padding: 3rem 1rem;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
       }
       
       .section {
@@ -416,240 +505,265 @@
         grid-template-columns: 1fr;
       }
     }
+    
+    @media (max-width: 480px) {
+      nav a {
+        font-size: 1rem;
+      }
+      
+      .mission-card,
+      .schedule-card {
+        padding: 1.5rem;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Skip to content link for keyboard users -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
   <header>
-    <img src="logo.png" alt="Heavenly Nature Ministry Logo" />
-    <nav>
-      <a href="#about"><i class="fas fa-cross"></i> About</a>
-      <a href="#mission"><i class="fas fa-hand-holding-heart"></i> Mission</a>
-      <a href="#sermons"><i class="fas fa-church"></i> Sermons</a>
-      <a href="#schedule"><i class="fas fa-calendar-alt"></i> Events</a>
-      <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
-      <a href="#donate" class="donate-button"><i class="fas fa-donate"></i> Donate</a>
+    <a href="/" aria-label="Home">
+      <img src="/images/logo.png" alt="Heavenly Nature Ministry" width="180" height="70">
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#about"><i class="fas fa-cross" aria-hidden="true"></i> About</a>
+      <a href="#mission"><i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Mission</a>
+      <a href="#sermons"><i class="fas fa-church" aria-hidden="true"></i> Sermons</a>
+      <a href="#schedule"><i class="fas fa-calendar-alt" aria-hidden="true"></i> Events</a>
+      <a href="#contact"><i class="fas fa-envelope" aria-hidden="true"></i> Contact</a>
+      <a href="#donate" class="donate-button"><i class="fas fa-donate" aria-hidden="true"></i> Donate</a>
     </nav>
   </header>
 
-  <section class="hero" data-aos="fade-down">
-    <div class="hero-content">
-      <h1>Welcome to Heavenly Nature Ministry</h1>
-      <p>"Empowering generations through faith and love in Christ"</p>
-      <div class="hero-buttons">
-        <a href="#sermons" class="cta-button"><i class="fas fa-video"></i> Watch Live</a>
-        <a href="#donate" class="cta-button"><i class="fas fa-donate"></i> Support Us</a>
+  <main id="main-content">
+    <section class="hero" data-aos="fade-down">
+      <div class="hero-content">
+        <h1>Welcome to Heavenly Nature Ministry</h1>
+        <p>"Empowering generations through faith and love in Christ"</p>
+        <div class="hero-buttons">
+          <a href="#sermons" class="cta-button"><i class="fas fa-video" aria-hidden="true"></i> Watch Live</a>
+          <a href="#donate" class="cta-button"><i class="fas fa-donate" aria-hidden="true"></i> Support Us</a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="about" class="section" data-aos="fade-up">
-    <h2>Our Vision & Goal</h2>
-    <div class="section-content">
-      <p>Self-reliant and God-fearing generations in South Sudan and beyond.</p>
-      
-      <div class="mission-grid">
-        <div class="mission-card">
-          <h3><i class="fas fa-pray"></i> Spiritual Growth</h3>
-          <p>Empowering children spiritually with the Word of God, teaching them to obey and honor God's Word in their lives.</p>
-        </div>
-        <div class="mission-card">
-          <h3><i class="fas fa-hands-helping"></i> Physical Support</h3>
-          <p>Providing physical support and resources to help the community thrive.</p>
-        </div>
-        <div class="mission-card">
-          <h3><i class="fas fa-graduation-cap"></i> Mental Development</h3>
-          <p>Building people in the Word of God to become useful citizens in South Sudan and beyond.</p>
+    <section id="about" class="section" data-aos="fade-up">
+      <h2>Our Vision & Goal</h2>
+      <div class="section-content">
+        <p>Self-reliant and God-fearing generations in South Sudan and beyond.</p>
+        
+        <div class="mission-grid">
+          <div class="mission-card">
+            <h3><i class="fas fa-pray" aria-hidden="true"></i> Spiritual Growth</h3>
+            <p>Empowering children spiritually with the Word of God, teaching them to obey and honor God's Word in their lives.</p>
+          </div>
+          <div class="mission-card">
+            <h3><i class="fas fa-hands-helping" aria-hidden="true"></i> Physical Support</h3>
+            <p>Providing physical support and resources to help the community thrive.</p>
+          </div>
+          <div class="mission-card">
+            <h3><i class="fas fa-graduation-cap" aria-hidden="true"></i> Mental Development</h3>
+            <p>Building people in the Word of God to become useful citizens in South Sudan and beyond.</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="mission" class="section" data-aos="fade-up">
-    <h2>Our Mission</h2>
-    <div class="section-content">
-      <p>Heavenly Nature Ministry exists to empower street/abandoned children and orphans to fully utilize their spiritual, physical, and mental gifts to become self-reliant and harmonious citizens in society.</p>
-      
-      <h3 style="margin-top: 2rem; text-align: center;">Core Values: SEE HIM</h3>
-      <div class="mission-grid" style="margin-top: 1rem;">
-        <div class="mission-card">
-          <h3><i class="fas fa-search"></i> Seek God First</h3>
-          <p>Matthew 6:33 - "But seek first his kingdom and his righteousness, and all these things will be given to you as well."</p>
-        </div>
-        <div class="mission-card">
-          <h3><i class="fas fa-bullhorn"></i> Evangelism</h3>
-          <p>Matthew 28:19 - "Therefore go and make disciples of all nations..."</p>
-        </div>
-        <div class="mission-card">
-          <h3><i class="fas fa-star"></i> Excellence</h3>
-          <p>Daniel 5:14, 6:3 - "Now I have heard that the spirit of the gods is in you..."</p>
-        </div>
-        <div class="mission-card">
-          <h3><i class="fas fa-user-friends"></i> Honor & Humility</h3>
-          <p>Romans 12:10, 1 Peter 5:5 - "Be devoted to one another in love. Honor one another above yourselves."</p>
-        </div>
-        <div class="mission-card">
-          <h3><i class="fas fa-shield-alt"></i> Integrity</h3>
-          <p>Job 31:6 - "Let me be weighed in an even balance, that God may know mine integrity."</p>
-        </div>
-        <div class="mission-card">
-          <h3><i class="fas fa-users"></i> Mentoring</h3>
-          <p>2 Timothy 2:2 - "And the things you have heard me say... entrust to reliable people who will also be qualified to teach others."</p>
+    <section id="mission" class="section" data-aos="fade-up">
+      <h2>Our Mission</h2>
+      <div class="section-content">
+        <p>Heavenly Nature Ministry exists to empower street/abandoned children and orphans to fully utilize their spiritual, physical, and mental gifts to become self-reliant and harmonious citizens in society.</p>
+        
+        <h3 style="margin-top: 2rem; text-align: center;">Core Values: SEE HIM</h3>
+        <div class="mission-grid" style="margin-top: 1rem;">
+          <div class="mission-card">
+            <h3><i class="fas fa-search" aria-hidden="true"></i> Seek God First</h3>
+            <p>Matthew 6:33 - "But seek first his kingdom and his righteousness, and all these things will be given to you as well."</p>
+          </div>
+          <div class="mission-card">
+            <h3><i class="fas fa-bullhorn" aria-hidden="true"></i> Evangelism</h3>
+            <p>Matthew 28:19 - "Therefore go and make disciples of all nations..."</p>
+          </div>
+          <div class="mission-card">
+            <h3><i class="fas fa-star" aria-hidden="true"></i> Excellence</h3>
+            <p>Daniel 5:14, 6:3 - "Now I have heard that the spirit of the gods is in you..."</p>
+          </div>
+          <div class="mission-card">
+            <h3><i class="fas fa-user-friends" aria-hidden="true"></i> Honor & Humility</h3>
+            <p>Romans 12:10, 1 Peter 5:5 - "Be devoted to one another in love. Honor one another above yourselves."</p>
+          </div>
+          <div class="mission-card">
+            <h3><i class="fas fa-shield-alt" aria-hidden="true"></i> Integrity</h3>
+            <p>Job 31:6 - "Let me be weighed in an even balance, that God may know mine integrity."</p>
+          </div>
+          <div class="mission-card">
+            <h3><i class="fas fa-users" aria-hidden="true"></i> Mentoring</h3>
+            <p>2 Timothy 2:2 - "And the things you have heard me say... entrust to reliable people who will also be qualified to teach others."</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="sermons" class="section" data-aos="fade-up">
-    <h2>Sermons & Livestream</h2>
-    <div class="section-content">
-      <p>Join us for powerful teachings and worship. Our sermons are streamed live every Sunday and available for replay.</p>
-      
-      <div class="livestream-container">
-        <!-- Replace with your actual livestream embed code -->
-        <iframe src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID" frameborder="0" allowfullscreen></iframe>
+    <section id="sermons" class="section" data-aos="fade-up">
+      <h2>Sermons & Livestream</h2>
+      <div class="section-content">
+        <p>Join us for powerful teachings and worship. Our sermons are streamed live every Sunday and available for replay.</p>
+        
+        <div class="livestream-container">
+          <!-- Replace with your actual livestream embed code -->
+          <iframe 
+            src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+            title="Live Worship Service"
+            loading="lazy">
+          </iframe>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+          <a href="#" class="cta-button"><i class="fas fa-video" aria-hidden="true"></i> Watch Previous Sermons</a>
+        </div>
       </div>
-      
-      <div style="text-align: center; margin-top: 2rem;">
-        <a href="#" class="cta-button"><i class="fas fa-video"></i> Watch Previous Sermons</a>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="schedule" class="section" data-aos="fade-up">
-    <h2>Weekly Schedule</h2>
-    <div class="section-content">
-      <p>Join us for our regular services and events:</p>
-      
-      <div class="schedule-grid">
-        <div class="schedule-card">
-          <h3>Sunday Worship</h3>
-          <p><i class="far fa-clock"></i> Every Sunday at 10:00 AM CAT</p>
-          <p><i class="fas fa-map-marker-alt"></i> Main Sanctuary</p>
-        </div>
-        <div class="schedule-card">
-          <h3>Midweek Prayer</h3>
-          <p><i class="far fa-clock"></i> Wednesdays at 7:00 PM CAT</p>
-          <p><i class="fas fa-map-marker-alt"></i> Prayer Chapel</p>
-        </div>
-        <div class="schedule-card">
-          <h3>Youth Ministry</h3>
-          <p><i class="far fa-clock"></i> Saturdays at 4:00 PM CAT</p>
-          <p><i class="fas fa-map-marker-alt"></i> Youth Hall</p>
-        </div>
-        <div class="schedule-card">
-          <h3>Monthly Crusade</h3>
-          <p><i class="far fa-clock"></i> First Friday at 6:00 PM CAT</p>
-          <p><i class="fas fa-map-marker-alt"></i> Open Air Ground</p>
+    <section id="schedule" class="section" data-aos="fade-up">
+      <h2>Weekly Schedule</h2>
+      <div class="section-content">
+        <p>Join us for our regular services and events:</p>
+        
+        <div class="schedule-grid">
+          <div class="schedule-card">
+            <h3>Sunday's Main Service</h3>
+            <p><i class="far fa-clock" aria-hidden="true"></i> Every Sunday at 9:00 AM - 1:00 PM CAT</p>
+            <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Church Main Premises</p>
+          </div>
+          <div class="schedule-card">
+            <h3> Student's Service</h3>
+            <p><i class="far fa-clock" aria-hidden="true"></i> Every Sunday at 3:00 - 4:30 PM CAT</p>
+            <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Church Main Premises</p>
+          </div>
+          <div class="schedule-card">
+            <h3> Bible Studies</h3>
+            <p><i class="far fa-clock" aria-hidden="true"></i> Every Monday, Thursday and Friday at 4:00 - 5:30 PM CAT</p>
+            <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Church Main Premises</p>
+          </div>
+          <div class="schedule-card">
+            <h3> Counseling and Guidance</h3>
+            <p><i class="far fa-clock" aria-hidden="true"></i> Every Tuesday and Friday at 3:00 - 5:30 PM CAT</p>
+            <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Church Main Premises</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="donate" class="section" data-aos="fade-up" style="background-color: var(--light-blue);">
-    <h2>Support Our Mission</h2>
-    <div class="section-content">
-      <p>Your generous donations help us continue our work with street children and orphans in South Sudan.</p>
-      
-      <div class="mission-grid">
-        <div class="mission-card">
-          <h3><i class="fas fa-hand-holding-usd"></i> One-Time Donation</h3>
-          <form id="donation-form">
-            <div class="form-group">
-              <label for="donation-amount">Amount (USD)</label>
-              <input type="number" id="donation-amount" min="5" value="25" step="1" required>
-            </div>
-            <div id="card-element" class="stripe-card-element"></div>
-            <div id="card-errors" role="alert" style="color: #dc3545; margin: 1rem 0;"></div>
-            <button type="submit" id="donate-button" class="cta-button">
-              Donate $<span id="amount-display">25</span>
-            </button>
-          </form>
+    <section id="donate" class="section" data-aos="fade-up" style="background-color: var(--light-blue);">
+      <h2>Support Our Mission</h2>
+      <div class="section-content">
+        <p>Your generous donations help us continue our work with street children and orphans in South Sudan.</p>
+        
+        <div class="mission-grid">
+          <div class="mission-card">
+            <h3><i class="fas fa-hand-holding-usd" aria-hidden="true"></i> One-Time Donation</h3>
+            <form id="donation-form">
+              <div class="form-group">
+                <label for="donation-amount">Amount (USD)</label>
+                <input type="number" id="donation-amount" min="5" value="" step="1" required>
+              </div>
+              <div id="card-element" class="stripe-card-element">$</div>
+              <div id="card-errors" role="alert" style="color: #dc3545; margin: 1rem 0;"></div>
+              <button type="submit" id="donate-button" class="cta-button">
+                Donate <span id="amount-display">$</span>
+              </button>
+            </form>
+          </div>
+          <div class="mission-card">
+            <h3><i class="fas fa-calendar-check" aria-hidden="true"></i> Monthly Partnership</h3>
+            <p>Become a monthly partner and provide consistent support for our programs.</p>
+            <form id="monthly-form">
+              <div class="form-group">
+                <label for="monthly-amount">Monthly Amount (USD)</label>
+                <select id="monthly-amount" required>
+                  <option value="25">$25</option>
+                  <option value="50">$50</option>
+                  <option value="100">$100</option>
+                  <option value="other">other</option>
+                </select>
+              </div>
+              <div id="monthly-card-element" class="stripe-card-element"></div>
+              <button type="submit" class="cta-button" style="background-color: var(--accent-gold);">
+                Become a Partner
+              </button>
+            </form>
+          </div>
         </div>
-        <div class="mission-card">
-          <h3><i class="fas fa-calendar-check"></i> Monthly Partnership</h3>
-          <p>Become a monthly partner and provide consistent support for our programs.</p>
-          <form id="monthly-form">
-            <div class="form-group">
-              <label for="monthly-amount">Monthly Amount (USD)</label>
-              <select id="monthly-amount" required>
-                <option value="25">$25</option>
-                <option value="50">$50</option>
-                <option value="100">$100</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div id="monthly-card-element" class="stripe-card-element"></div>
-            <button type="submit" class="cta-button" style="background-color: var(--accent-gold);">
-              Become a Partner
-            </button>
-          </form>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+          <p>Other ways to give:</p>
+          <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+            <a href="#" class="cta-button" style="background-color: #25D366;"><i class="fab fa-whatsapp" aria-hidden="true"></i> Mobile Money</a>
+            <a href="#" class="cta-button" style="background-color: #6c757d;"><i class="fas fa-university" aria-hidden="true"></i> Bank Transfer</a>
+          </div>
         </div>
       </div>
-      
-      <div style="text-align: center; margin-top: 2rem;">
-        <p>Other ways to give:</p>
-        <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
-          <a href="#" class="cta-button" style="background-color: #25D366;"><i class="fab fa-whatsapp"></i> Mobile Money</a>
-          <a href="#" class="cta-button" style="background-color: #6c757d;"><i class="fas fa-university"></i> Bank Transfer</a>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="contact" class="section" data-aos="fade-up">
-    <h2>Contact Us</h2>
-    <div class="section-content">
-      <p>We'd love to hear from you. Reach out with questions, prayer requests, or to learn more about our ministry.</p>
-      
-      <form action="https://formspree.io/f/your-form-id" method="POST">
-        <div class="form-group">
-          <label for="name">Your Name</label>
-          <input type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="_replyto" required>
-        </div>
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone">
-        </div>
-        <div class="form-group">
-          <label for="subject">Subject</label>
-          <select id="subject" name="subject">
-            <option value="general">General Inquiry</option>
-            <option value="prayer">Prayer Request</option>
-            <option value="volunteer">Volunteer Opportunity</option>
-            <option value="donation">Donation Question</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="message">Your Message</label>
-          <textarea id="message" name="message" rows="5" required></textarea>
-        </div>
-        <button type="submit">Send Message <i class="fas fa-paper-plane"></i></button>
-      </form>
-      
-      <div class="mission-grid" style="margin-top: 3rem;">
-        <div class="mission-card">
-          <h3><i class="fas fa-map-marker-alt"></i> Visit Us</h3>
-          <p>Gudele 2, Joppa Block 3<br>Juba, South Sudan</p>
-        </div>
-        <div class="mission-card">
-          <h3><i class="fas fa-phone-alt"></i> Call Us</h3>
-          <p>+211 926 006 202<br>+211 988 802 002</p>
-        </div>
-        <div class="mission-card">
-          <h3><i class="fas fa-envelope"></i> Email Us</h3>
-          <p>heaveniynstureninistry@emi.com</p>
+    <section id="contact" class="section" data-aos="fade-up">
+      <h2>Contact Us</h2>
+      <div class="section-content">
+        <p>We'd love to hear from you. Reach out with questions, prayer requests, or to learn more about our ministry.</p>
+        
+        <form action="https://formspree.io/f/your-form-id" method="POST">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="_replyto" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone">
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject">
+              <option value="general">General Inquiry</option>
+              <option value="prayer">Prayer Request</option>
+              <option value="volunteer">Volunteer Opportunity</option>
+              <option value="donation">Donation Question</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit">Send Message <i class="fas fa-paper-plane" aria-hidden="true"></i></button>
+        </form>
+        
+        <div class="mission-grid" style="margin-top: 3rem;">
+          <div class="mission-card">
+            <h3><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Visit Us</h3>
+            <p>Gudele 2, Joppa Block 3<br>Juba, South Sudan</p>
+          </div>
+          <div class="mission-card">
+            <h3><i class="fas fa-phone-alt" aria-hidden="true"></i> Call Us</h3>
+            <p>+211 926 006 202<br>+211 988 802 002</p>
+          </div>
+          <div class="mission-card">
+            <h3><i class="fas fa-envelope" aria-hidden="true"></i> Email Us</h3>
+            <p>heavenlynatureministry@gmail.com</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <footer>
     <div class="footer-content">
-      <img src="logo-white.png" alt="Heavenly Nature Ministry Logo" style="height: 80px; margin-bottom: 1rem;">
+      <img src="logo-white.png" alt="Heavenly Nature Ministry Logo" width="180" height="80" loading="lazy">
       
       <div class="footer-links">
         <a href="#about">About</a>
@@ -661,21 +775,23 @@
       </div>
       
       <div class="social-icons">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
       </div>
       
       <p class="copyright">
-        &copy; 2025 Heavenly Nature Ministry | Founded by Brother John Mundari<br>
+        &copy; <span id="current-year"></span> Heavenly Nature Ministry | Founded by Brother John Mundari<br>
         All Rights Reserved
       </p>
     </div>
   </footer>
 
+  <!-- Load scripts at the end of body -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
   <script>
     // Initialize animations
     AOS.init({
@@ -683,6 +799,9 @@
       easing: 'ease-in-out',
       once: true
     });
+    
+    // Set current year in footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
     
     // Testimonials rotation
     const testimonials = [
@@ -702,17 +821,20 @@
       testimonialAuthor.textContent = `– ${testimonials[currentTestimonial].author}`;
     }
     
-    setInterval(rotateTestimonial, 6000);
+    if (testimonialText && testimonialAuthor) {
+      setInterval(rotateTestimonial, 6000);
+    }
     
     // Donation amount display
-    document.getElementById("donation-amount").addEventListener("input", function(e) {
-      document.getElementById("amount-display").textContent = e.target.value;
-    });
-  </script>
-  
-  <!-- Stripe.js should be loaded in head -->
-  <script src="https://js.stripe.com/v3/"></script>
-  <script>
+    const donationAmount = document.getElementById("donation-amount");
+    const amountDisplay = document.getElementById("amount-display");
+    
+    if (donationAmount && amountDisplay) {
+      donationAmount.addEventListener("input", function(e) {
+        amountDisplay.textContent = `$${e.target.value || '0'}`;
+      });
+    }
+    
     // Initialize Stripe with your publishable key
     const stripe = Stripe('pk_live_your_key_here');
     const elements = stripe.elements();
@@ -734,9 +856,12 @@
       }
     };
     
-    // Create and mount card element
+    // Create and mount card elements
     const card = elements.create('card', { style });
     card.mount('#card-element');
+    
+    const monthlyCard = elements.create('card', { style });
+    monthlyCard.mount('#monthly-card-element');
     
     // Real-time validation errors
     card.addEventListener('change', ({error}) => {
@@ -745,69 +870,117 @@
     });
     
     // Handle form submission
-    const form = document.getElementById('donation-form');
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      
-      const donateButton = document.getElementById('donate-button');
-      donateButton.disabled = true;
-      donateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-      
-      const {error, paymentMethod} = await stripe.createPaymentMethod({
-        type: 'card',
-        card: card,
-        billing_details: {
-          name: document.getElementById('name')?.value || 'Anonymous Donor',
-          email: document.getElementById('email')?.value
-        }
-      });
-      
-      if (error) {
-        document.getElementById('card-errors').textContent = error.message;
-        donateButton.disabled = false;
-        donateButton.innerHTML = `Donate $${document.getElementById('donation-amount').value}`;
-      } else {
-        // Send to your server
-        const response = await fetch('/process-donation', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            payment_method_id: paymentMethod.id,
-            amount: document.getElementById('donation-amount').value * 100, // Convert to cents
-            currency: 'usd'
-          })
+    const donationForm = document.getElementById('donation-form');
+    if (donationForm) {
+      donationForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        const donateButton = document.getElementById('donate-button');
+        donateButton.disabled = true;
+        donateButton.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Processing...';
+        
+        const {error, paymentMethod} = await stripe.createPaymentMethod({
+          type: 'card',
+          card: card,
+          billing_details: {
+            name: document.getElementById('name')?.value || 'Anonymous Donor',
+            email: document.getElementById('email')?.value
+          }
         });
         
-        const paymentIntent = await response.json();
-        
-        if (paymentIntent.error) {
-          showError(paymentIntent.error);
-        } else if (paymentIntent.requires_action) {
-          // Handle 3D Secure
-          const {error: actionError} = await stripe.handleCardAction(
-            paymentIntent.client_secret
-          );
-          
-          if (actionError) {
-            showError(actionError);
-          } else {
-            // Confirm payment after action
-            confirmPayment(paymentIntent.id);
-          }
+        if (error) {
+          document.getElementById('card-errors').textContent = error.message;
+          donateButton.disabled = false;
+          donateButton.innerHTML = `Donate $${document.getElementById('donation-amount').value}`;
         } else {
-          // Success!
-          window.location.href = '/thank-you';
+          // Send to your server
+          try {
+            const response = await fetch('/process-donation', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                payment_method_id: paymentMethod.id,
+                amount: document.getElementById('donation-amount').value * 100, // Convert to cents
+                currency: 'usd'
+              })
+            });
+            
+            const paymentIntent = await response.json();
+            
+            if (paymentIntent.error) {
+              showError(paymentIntent.error);
+            } else if (paymentIntent.requires_action) {
+              // Handle 3D Secure
+              const {error: actionError} = await stripe.handleCardAction(
+                paymentIntent.client_secret
+              );
+              
+              if (actionError) {
+                showError(actionError);
+              } else {
+                // Confirm payment after action
+                confirmPayment(paymentIntent.id);
+              }
+            } else {
+              // Success!
+              window.location.href = '/thank-you';
+            }
+          } catch (err) {
+            showError({ message: 'An error occurred. Please try again.' });
+          }
         }
-      }
-    });
+      });
+    }
     
     function showError(error) {
       const errorElement = document.getElementById('card-errors');
       errorElement.textContent = error.message;
-      document.getElementById('donate-button').disabled = false;
-      document.getElementById('donate-button').innerHTML = 
-        `Donate $${document.getElementById('donation-amount').value}`;
+      const donateButton = document.getElementById('donate-button');
+      if (donateButton) {
+        donateButton.disabled = false;
+        donateButton.innerHTML = `Donate $${document.getElementById('donation-amount').value}`;
+      }
     }
+    
+    // Mobile menu toggle for smaller screens
+    function setupMobileMenu() {
+      const menuToggle = document.createElement('button');
+      menuToggle.setAttribute('aria-label', 'Toggle menu');
+      menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+      menuToggle.style.display = 'none';
+      menuToggle.style.background = 'none';
+      menuToggle.style.border = 'none';
+      menuToggle.style.color = 'white';
+      menuToggle.style.fontSize = '1.5rem';
+      menuToggle.style.cursor = 'pointer';
+      
+      const header = document.querySelector('header');
+      const nav = document.querySelector('nav');
+      
+      if (window.innerWidth <= 768) {
+        menuToggle.style.display = 'block';
+        nav.style.display = 'none';
+      }
+      
+      menuToggle.addEventListener('click', () => {
+        nav.style.display = nav.style.display === 'none' ? 'flex' : 'none';
+      });
+      
+      header.prepend(menuToggle);
+      
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+          nav.style.display = 'flex';
+          menuToggle.style.display = 'none';
+        } else {
+          menuToggle.style.display = 'block';
+          nav.style.display = 'none';
+        }
+      });
+    }
+    
+    // Initialize mobile menu
+    document.addEventListener('DOMContentLoaded', setupMobileMenu);
   </script>
 </body>
-</html>
+        </html>
