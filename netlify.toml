@@ -2,22 +2,18 @@
   command = "npm install --production=false && npm run build"
   publish = "dist"
   functions = "functions"
-  edge_functions = "edge-functions"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
   NODE_ENV = "production"
-  # Force Vite to use correct paths
-  VITE_BASE_PATH = "/"
+  NPM_FLAGS = "--production=false"
 
-# For client-side routing (SPA)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
