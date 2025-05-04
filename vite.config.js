@@ -4,13 +4,19 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  publicDir: 'public', // Explicitly point to public folder
+  publicDir: 'public',
   build: {
     outDir: 'dist',
+    emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'public/index.html') // Direct path to HTML
+        main: resolve(__dirname, 'public/index.html')
       }
+    }
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src')
     }
   }
 })
