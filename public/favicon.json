@@ -1,0 +1,29 @@
+{
+  "masterPicture": "logo.png",
+  "iconsPath": "/",
+  "design": {
+    "ios": {
+      "pictureAspect": "backgroundAndMargin",
+      "backgroundColor": "#ffffff",
+      "margin": "14%"
+    },
+    "desktopBrowser": {},
+    "windows": {
+      "pictureAspect": "whiteSilhouette",
+      "backgroundColor": "#1a4b8c"
+    },
+    "androidChrome": {
+      "pictureAspect": "shadow",
+      "themeColor": "#1a4b8c",
+      "manifest": {
+        "name": "Heavenly Nature Ministry",
+        "display": "standalone",
+        "orientation": "portrait"
+      }
+    }
+  },
+  "settings": {
+    "compression": 5,
+    "scalingAlgorithm": "Lanczos"
+  }
+}
