@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "clean-install": "rm -rf node_modules && npm install --legacy-peer-deps --force"
+    "clean-install": "rm -rf node_modules && npm install --legacy-peer-deps --force",
+    "serve": "vite preview --port 4173"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -19,10 +20,9 @@
     "vite": "^5.0.0",
     "@vitejs/plugin-react": "^4.0.3",
     "sass": "^1.66.1",
-    "netlify-cli": "^15.0.0",
-    "typescript": "^5.0.0",
     "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0"
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.0.0"
   },
   "browserslist": {
     "production": [
