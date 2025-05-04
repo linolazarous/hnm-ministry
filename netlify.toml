@@ -17,17 +17,14 @@
   # Vite-specific environment variables
   VITE_STRIPE_KEY = "@stripe_publishable_key"
   VITE_FORMPREE_ID = "@formspree_id"
-  VITE_API_BASE_URL = "https://api.hnm-ministry.org"
 
 [context.production]
   environment = { 
-    VITE_API_BASE_URL = "https://api.hnm-ministry.org",
     NODE_ENV = "production"
   }
 
 [context.deploy-preview]
   environment = { 
-    VITE_API_BASE_URL = "https://staging-api.hnm-ministry.org",
     NODE_ENV = "development"
   }
 
