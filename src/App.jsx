@@ -15,7 +15,7 @@ import Home from '@/pages/Home';
 import Profile from '@/pages/Profile';
 import Livestream from '@/pages/Livestream';
 import Donate from '@/admin/Donate';
-import Success from '@/public/Success'; // Assuming you've moved these to src
+import Success from '@/public/Success';
 import Cancel from '@/public/Cancel';
 
 // Context
@@ -26,46 +26,65 @@ const App = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [aosInitialized, setAosInitialized] = useState(false);
 
-  // Initialize animations and check livestream schedule
+  // Initialize animations with proper configuration
   useEffect(() => {
-    AOS.init({ duration: 800 });
-    checkLivestreamSchedule();
-    
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-      checkLivestreamSchedule();
-    }, 60000);
+    try {
+      AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        mirror: false
+      });
+      setAosInitialized(true);
+    } catch (err) {
+      console.error('AOS initialization failed:', err);
+      setError('Animation system failed to load');
+    }
+  }, []);
 
-    // Simulate loading (replace with actual auth check)
+  // Check livestream schedule
+  useEffect(() => {
+    const checkLivestreamSchedule = () => {
+      const now = new Date();
+      const day = now.getDay(); // 0 = Sunday
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+
+      // Sunday Service 10AM CAT (8AM UTC)
+      const isLivestreamTime = day === 0 && hours === 8 && minutes >= 0 && minutes <= 59;
+      setLivestreamActive(isLivestreamTime);
+      setCurrentTime(now);
+    };
+
+    checkLivestreamSchedule();
+    const timer = setInterval(checkLivestreamSchedule, 60000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Simulate loading (replace with actual auth check)
+  useEffect(() => {
     const loadApp = async () => {
       try {
         await new Promise(resolve => setTimeout(resolve, 1000));
         setLoading(false);
       } catch (err) {
-        setError(err.message);
+        setError(err.message || 'Failed to load application');
         setLoading(false);
       }
     };
 
     loadApp();
-
-    return () => clearInterval(timer);
   }, []);
 
-  const checkLivestreamSchedule = () => {
-    const now = currentTime;
-    const day = now.getDay(); // 0 = Sunday
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-
-    // Sunday Service 10AM CAT (8AM UTC)
-    if (day === 0 && hours === 8 && minutes >= 0 && minutes <= 59) {
-      setLivestreamActive(true);
-    } else {
-      setLivestreamActive(false);
+  // Refresh AOS when route changes
+  useEffect(() => {
+    if (aosInitialized) {
+      AOS.refresh();
     }
-  };
+  }, [window.location.pathname]);
 
   if (loading) {
     return <LoadingSpinner fullScreen />;
