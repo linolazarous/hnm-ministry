@@ -1,26 +1,14 @@
 [build]
-  command = "npm install && npm run build"
+  command = "npm run build"
   publish = "dist"
-  functions = "functions"
+  environment = { NODE_VERSION = "18", NODE_ENV = "development" }
 
-[build.environment]
-  NODE_VERSION = "20"
-  NPM_VERSION = "10"
-  NODE_ENV = "production"
-  VITE_STRIPE_KEY = "@stripe_publishable_key"
-  VITE_FORMPREE_ID = "@formspree_id"
-  VITE_API_BASE_URL = "@api_base_url"
-  VITE_SENTRY_DSN = "@sentry_dsn"
-
-[context.deploy-preview.environment]
-  NODE_ENV = "development"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+[dev]
+  command = "npm run dev"
+  port = 3000
+  targetPort = 5173
+  publish = "dist"
+  autoLaunch = true
 
 [[redirects]]
   from = "/*"
