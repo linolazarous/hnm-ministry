@@ -12,9 +12,6 @@
   VITE_API_BASE_URL = "@api_base_url"
   VITE_SENTRY_DSN = "@sentry_dsn"
 
-[context.production.environment]
-  NODE_ENV = "production"
-
 [context.deploy-preview.environment]
   NODE_ENV = "development"
 
