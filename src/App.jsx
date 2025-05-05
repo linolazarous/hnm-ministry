@@ -26,22 +26,19 @@ const App = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [aosInitialized, setAosInitialized] = useState(false);
 
-  // Initialize animations with proper configuration
+  // Initialize AOS animations
   useEffect(() => {
-    try {
-      AOS.init({
-        duration: 800,
-        easing: 'ease-in-out',
-        once: true,
-        mirror: false
-      });
-      setAosInitialized(true);
-    } catch (err) {
-      console.error('AOS initialization failed:', err);
-      setError('Animation system failed to load');
-    }
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true,
+      mirror: false
+    });
+
+    return () => {
+      AOS.refresh(); // Cleanup on unmount
+    };
   }, []);
 
   // Check livestream schedule
@@ -81,10 +78,14 @@ const App = () => {
 
   // Refresh AOS when route changes
   useEffect(() => {
-    if (aosInitialized) {
+    const handleRouteChange = () => {
       AOS.refresh();
-    }
-  }, [window.location.pathname]);
+    };
+
+    // You might want to use your router's navigation events instead
+    window.addEventListener('popstate', handleRouteChange);
+    return () => window.removeEventListener('popstate', handleRouteChange);
+  }, []);
 
   if (loading) {
     return <LoadingSpinner fullScreen />;
