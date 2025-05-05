@@ -4,13 +4,18 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  publicDir: 'public',
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'public/index.html')
+      external: [
+        '@sentry/react',
+        '@sentry/tracing'
+      ],
+      output: {
+        manualChunks: {
+          sentry: ['@sentry/react', '@sentry/tracing'],
+          vendor: ['react', 'react-dom', 'react-router-dom']
+        }
       }
     }
   },
