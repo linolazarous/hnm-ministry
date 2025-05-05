@@ -2,6 +2,7 @@
   command = "npm install --production=false && npm run build"
   publish = "dist"
   functions = "functions"
+  edge_functions = "edge-functions"
 
 [build.environment]
   NODE_VERSION = "20"
