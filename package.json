@@ -17,10 +17,6 @@
     "@sentry/tracing": "^7.107.0",
     "aos": "^2.3.4"
   },
-  {
-  "dependencies": {
-    "aos": "^2.3.4"
-  }
   "devDependencies": {
     "vite": "^5.0.0",
     "@vitejs/plugin-react": "^4.0.3",
