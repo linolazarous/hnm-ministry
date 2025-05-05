@@ -4,17 +4,25 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  publicDir: 'public', // Explicitly point to public folder
+  publicDir: 'public',
   build: {
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'public/index.html') // Direct path to HTML
+        main: resolve(__dirname, 'public/index.html')
       },
       external: [
         '@sentry/react',
-        '@sentry/tracing'
-      ]
+        '@sentry/tracing',
+        'aos' // Added AOS to external modules
+      ],
+      output: {
+        manualChunks: {
+          sentry: ['@sentry/react', '@sentry/tracing'],
+          animations: ['aos'], // Group AOS separately
+          vendor: ['react', 'react-dom', 'react-router-dom']
+        }
+      }
     }
   },
   resolve: {
