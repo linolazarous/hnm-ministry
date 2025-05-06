@@ -1,13 +1,35 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  publicDir: resolve(__dirname, 'public'),
   build: {
     outDir: 'dist',
-    emptyOutDir: true
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'public/index.html')
+      },
+      // Externalize only truly external dependencies
+      external: []
+    }
   },
-  server: {
-    port: 5173
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+      // Add any other aliases you're using
+      '@components': resolve(__dirname, './src/components'),
+      '@pages': resolve(__dirname, './src/pages'),
+      '@services': resolve(__dirname, './src/services')
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "@/css/_variables.scss";`
+      }
+    }
   }
-})
+});
