@@ -1,76 +1,101 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from '@/App';  // Using path alias (correct)
-import '@/css/style.css'; // Global CSS
-import '@/css/main.scss'; // Global SCSS
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+// Main App Component
+import App from '@/App';
+
+// Global Styles
+import '@/css/style.css';
+import '@/css/main.scss';
+
+// Components
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ScrollToTop from '@/components/ScrollToTop';
+import ErrorMessage from '@/components/ErrorMessage';
+import LoadingSpinner from '@/components/LoadingSpinner';
+
+// Pages
+import Home from '@/pages/Home';
+import Profile from '@/pages/Profile';
+import Livestream from '@/pages/Livestream';
+import Donate from '@/admin/Donate';
+import Success from '@/public/Success';
+import Cancel from '@/public/Cancel';
+
+// Context
+import { AuthProvider } from '@/components/AuthContext';
+
+// Utilities
 import { initErrorTracking } from '@/lib/error-tracking';
 
 // Initialize error tracking first
 initErrorTracking();
 
 /**
- * Load Stripe.js asynchronously with proper error handling
+ * Stripe.js loader with proper error handling
  */
-const loadStripe = () => {
-  return new Promise((resolve) => {
-    if (window.Stripe) {
-      return resolve(window.Stripe);
+const loadStripe = async () => {
+  if (window.Stripe) return window.Stripe;
+
+  try {
+    await new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://js.stripe.com/v3/';
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+
+    if (import.meta.env.VITE_STRIPE_KEY) {
+      window.Stripe = Stripe(import.meta.env.VITE_STRIPE_KEY);
+      return window.Stripe;
     }
-
-    const script = document.createElement('script');
-    script.src = 'https://js.stripe.com/v3/';
-    script.async = true;
-    script.onload = () => {
-      if (import.meta.env.VITE_STRIPE_KEY) {
-        window.Stripe = Stripe(import.meta.env.VITE_STRIPE_KEY);
-        resolve(window.Stripe);
-      } else {
-        console.error('Stripe publishable key is missing');
-        resolve(null);
-      }
-    };
-    script.onerror = () => {
-      console.error('Failed to load Stripe.js');
-      resolve(null);
-    };
-    document.head.appendChild(script);
-  });
-};
-
-/**
- * Register Service Worker with scope validation
- */
-const registerServiceWorker = () => {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
-      .then(registration => {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      })
-      .catch(error => {
-        console.log('ServiceWorker registration failed: ', error);
-      });
+    console.error('Stripe publishable key is missing');
+    return null;
+  } catch (error) {
+    console.error('Failed to load Stripe.js', error);
+    return null;
   }
 };
 
-// DOM Content Loaded Handler
+/**
+ * Service Worker Registration
+ */
+const registerServiceWorker = async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register('/service-worker.js', { 
+        scope: '/' 
+      });
+      console.log('ServiceWorker registered with scope:', registration.scope);
+    } catch (error) {
+      console.error('ServiceWorker registration failed:', error);
+    }
+  }
+};
+
+/**
+ * Main Application Initialization
+ */
 const initializeApp = async () => {
   try {
-    // Parallel initialization
-    await Promise.all([
-      loadStripe(),
-      new Promise(resolve => {
-        if (document.readyState === 'complete') {
-          resolve();
-        } else {
-          window.addEventListener('load', resolve);
-        }
-      })
+    // Wait for DOM and Stripe to load
+    const [_, stripe] = await Promise.all([
+      document.readyState === 'complete' 
+        ? Promise.resolve() 
+        : new Promise(resolve => window.addEventListener('load', resolve)),
+      loadStripe()
     ]);
 
-    // Register service worker after Stripe loads
-    registerServiceWorker();
+    // Register service worker
+    await registerServiceWorker();
 
-    // Render React app
+    // Render the app
     ReactDOM.createRoot(document.getElementById('root')).render(
       <React.StrictMode>
         <App />
@@ -78,6 +103,7 @@ const initializeApp = async () => {
     );
   } catch (error) {
     console.error('Application initialization failed:', error);
+    // You could render a fallback UI here if needed
   }
 };
 
