@@ -1,20 +1,27 @@
 [build]
-  publish = "dist"
-  functions = "functions"
+  command = "npm run build"  # or "vite build"
+  publish = "dist"          # Must match Vite's `outDir`
+  functions = "functions"   # Custom functions directory (if used)
+  base = "."                # Root directory (where package.json is)
 
 [build.environment]
-  NODE_VERSION = "18" 
-  NPM_VERSION = "9"
+  NODE_VERSION = "18"       # Matches Netlify's recommended LTS
+  NPM_VERSION = "9"         # Latest stable NPM
+  NPM_FLAGS = "--production=false"  # Ensures devDependencies are installed (needed for Vite)
   NODE_ENV = "production"
 
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
+    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = true              # Ensures client-side routing works
+  conditions = {Language = ["en"], Country = ["US"]}  # Optional: Geo/language targeting
