@@ -9,7 +9,6 @@
   NPM_VERSION = "10"
   NODE_ENV = "production"
 
-# Include these if you're using them
 [[headers]]
   for = "/*"
   [headers.values]
