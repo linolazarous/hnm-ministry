@@ -1,31 +1,25 @@
 [build]
-  command = "vite build"
+  command = "npm install && npm run build"  # First installs dependencies, then builds
   publish = "dist"
-  functions = "netlify/functions"  # Only include if using Netlify Functions
+  functions = "netlify/functions"  # Only include if using Functions
   base = "."
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "9"
   NODE_ENV = "production"
+  # Ensure devDependencies (like Vite) are installed:
+  NPM_FLAGS = "--production=false"
 
-# Essential security headers for Vite/React
+# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    Content-Security-Policy = """
-      default-src 'self';
-      script-src 'self' 'unsafe-eval' *.stripe.com;
-      style-src 'self' 'unsafe-inline';
-      img-src 'self' data: *.stripe.com;
-      connect-src 'self' *.stripe.com *.googleapis.com;
-      frame-src *.stripe.com;
-    """
+    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    X-Content-Type-Options = "nosniff"
 
-# Critical for SPA routing (React Router)
+# SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
