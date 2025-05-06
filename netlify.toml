@@ -5,7 +5,7 @@
   edge_functions = "edge-functions"
 
 [build.environment]
-  NODE_VERSION = "18"  # Stable LTS version
+  NODE_VERSION = "20"
   NPM_VERSION = "latest"
   NODE_ENV = "production"
   CI = "true"
