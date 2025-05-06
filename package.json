@@ -1,8 +1,4 @@
 {
-  "name": "hnm-ministry",
-  "private": true,
-  "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "build": "vite build",
     "preinstall": "npm install vite --save-dev"  # Safety net for Vite installation
