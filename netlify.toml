@@ -1,25 +1,26 @@
 [build]
-  command = "npm install && npm run build"  # First installs dependencies, then builds
+  command = "npm ci && npm run build"  # Uses clean install for reliability
   publish = "dist"
-  functions = "netlify/functions"  # Only include if using Functions
+  functions = "netlify/functions"     # Remove if not using Functions
   base = "."
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "9"
   NODE_ENV = "production"
-  # Ensure devDependencies (like Vite) are installed:
-  NPM_FLAGS = "--production=false"
+  # Critical for Vite installation:
+  NPM_FLAGS = "--production=false"    # Ensures devDependencies are installed
+  CI = "false"                       # Prevents CI-specific optimizations that may break builds
 
-# Security headers
+# Security headers (simplified)
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy = "default-src 'self' https: *.stripe.com"
+    X-Content-Type-Options = "nosniff"
 
-# SPA routing
+# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
