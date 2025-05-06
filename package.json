@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "prebuild": "npm install",
     "preview": "vite preview",
     "serve": "vite preview --port 4173"
   },
@@ -14,18 +13,15 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.2",
-    "aos": "^3.0.0-beta.6",
-    "@rollup/rollup-linux-x64-gnu": "^3.29.4"
+    "aos": "^3.0.0-beta.6"
   },
   "devDependencies": {
-    "vite": "^4.4.9", # Downgraded from 5.0.0 for stability
     "@vitejs/plugin-react": "^4.0.3",
-    "sass": "^1.66.1",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "postcss-preset-env": "^9.1.1"
+    "vite": "^4.4.9",
+    "sass": "^1.66.1"
   },
-  "resolutions": {
-    "@rollup/rollup-linux-x64-gnu": "3.29.4"
+  "engines": {
+    "node": "18.x",
+    "npm": ">=9.0.0"
   }
 }
