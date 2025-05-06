@@ -1,7 +1,23 @@
-@use '@/css/variables' as *;
+// Import variables first
+@use './variables' as *;
 
+// Then import all other CSS files
+@import './ErrorMessage.css';
+@import './LandingSpinner.css';
+@import './Livestream.css';
+@import './Profile.css';
+@import './ProfileForm.css';
+@import './style.css';
+
+// Your global styles
 :root {
   --header-height: 80px;
+}
+
+body {
+  font-family: $font-main;
+  line-height: 1.6;
+  margin: 0;
 }
 
 body {
