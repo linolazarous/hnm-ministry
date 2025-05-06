@@ -1,17 +1,17 @@
 [build]
-  command = "npm run build"
   publish = "dist"
   functions = "functions"
   edge_functions = "edge-functions"
 
 [build.environment]
-  NODE_VERSION = "20"
-  NPM_VERSION = "latest"
+  NODE_VERSION = "18" # Stable LTS version
+  NPM_VERSION = "9"
   NODE_ENV = "production"
-  CI = "true"
 
-[context.production.environment]
-  NODE_ENV = "production"
+# Netlify will automatically:
+# 1. Run `npm install`
+# 2. Run `npm run build` (from your package.json)
+# No need for explicit build command
 
 [[headers]]
   for = "/*"
