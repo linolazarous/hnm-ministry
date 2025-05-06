@@ -1,21 +1,23 @@
 [build]
-  command = "npm install && npm run build"
+  command = "npm run build"
   publish = "dist"
   functions = "functions"
   edge_functions = "edge-functions"
 
 [build.environment]
-  NODE_VERSION = "18" # Changed from 20 to 18 for better compatibility
-  NPM_VERSION = "9"
+  NODE_VERSION = "18"  # Stable LTS version
+  NPM_VERSION = "latest"
   NODE_ENV = "production"
-  CI = "1"
-  NPM_FLAGS = "--include=optional" # Changed from --no-optional
+  CI = "true"
+
+[context.production.environment]
+  NODE_ENV = "production"
 
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com; script-src 'self' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:"
+    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
 
 [[redirects]]
