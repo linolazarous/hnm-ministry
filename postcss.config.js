@@ -1,6 +1,1 @@
-module.exports = {
-     plugins: [
-       require('autoprefixer'),
-       require('cssnano')
-     ]
-   }
+module.exports = { plugins: { 'autoprefixer': {}, 'cssnano': {} // Add other PostCSS plugins as needed } }
