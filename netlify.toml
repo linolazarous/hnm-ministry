@@ -1,15 +1,15 @@
 [build]
-  command = "npm run build"
+  command = "npm install && npm run build"
   publish = "dist"
   functions = "functions"
   edge_functions = "edge-functions"
 
 [build.environment]
-  NODE_VERSION = "20"
-  NPM_VERSION = "10"
+  NODE_VERSION = "18" # Changed from 20 to 18 for better compatibility
+  NPM_VERSION = "9"
   NODE_ENV = "production"
   CI = "1"
-  NPM_FLAGS = "--no-optional"
+  NPM_FLAGS = "--include=optional" # Changed from --no-optional
 
 [[headers]]
   for = "/*"
@@ -17,16 +17,8 @@
     X-Frame-Options = "DENY"
     Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com; script-src 'self' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-# Additional security headers for specific paths
-[[headers]]
-  for = "/livestream"
-  [headers.values]
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com *.youtube.com; script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.youtube.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:; frame-src https://www.youtube.com"
