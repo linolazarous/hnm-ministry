@@ -1,27 +1,33 @@
 [build]
-  command = "npm run build"  # or "vite build"
-  publish = "dist"          # Must match Vite's `outDir`
-  functions = "functions"   # Custom functions directory (if used)
-  base = "hnm-ministry"                # Root directory (where package.json is)
+  command = "vite build"
+  publish = "dist"
+  functions = "netlify/functions"  # Only include if using Netlify Functions
+  base = "."
 
 [build.environment]
-  NODE_VERSION = "18"       # Matches Netlify's recommended LTS
-  NPM_VERSION = "9"         # Latest stable NPM
-  NPM_FLAGS = "--production=false"  # Ensures devDependencies are installed (needed for Vite)
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
   NODE_ENV = "production"
 
+# Essential security headers for Vite/React
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:"
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-eval' *.stripe.com;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: *.stripe.com;
+      connect-src 'self' *.stripe.com *.googleapis.com;
+      frame-src *.stripe.com;
+    """
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
     X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
 
+# Critical for SPA routing (React Router)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  force = true              # Ensures client-side routing works
-  conditions = {Language = ["en"], Country = ["US"]}  # Optional: Geo/language targeting
+  force = true
