@@ -12,14 +12,14 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'public/index.html')
       },
-      // Externalize only truly external dependencies
+      
       external: []
     }
   },
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
-      // Add any other aliases you're using
+    
       '@components': resolve(__dirname, './src/components'),
       '@pages': resolve(__dirname, './src/pages'),
       '@services': resolve(__dirname, './src/services')
