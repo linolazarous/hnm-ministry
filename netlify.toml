@@ -2,7 +2,7 @@
   command = "npm run build"  # or "vite build"
   publish = "dist"          # Must match Vite's `outDir`
   functions = "functions"   # Custom functions directory (if used)
-  base = "."                # Root directory (where package.json is)
+  base = "hnm-ministry"                # Root directory (where package.json is)
 
 [build.environment]
   NODE_VERSION = "18"       # Matches Netlify's recommended LTS
