@@ -1,37 +1,22 @@
 {
   "name": "hnm-ministry",
-  "version": "1.0.0",
   "private": true,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "serve": "vite preview --port 4173"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.14.2",
-    "@stripe/stripe-js": "^3.0.0",
-    "@sentry/react": "^7.107.0",
-    "@sentry/tracing": "^7.107.0",
-    "aos": "^2.3.4",
-    "vite": "^5.0.0"
+    "react-router-dom": "^6.14.2"
   },
   "devDependencies": {
+    "vite": "^5.0.0",
     "@vitejs/plugin-react": "^4.0.3",
     "sass": "^1.66.1"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
