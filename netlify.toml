@@ -5,8 +5,8 @@
   base = "."
 
 [build.environment]
-  NODE_VERSION = "20"
-  NPM_VERSION = "10"
+  NODE_VERSION = "18"
+  NPM_VERSION = ""
   NODE_ENV = "production"
   # Critical for Vite installation:
   NPM_FLAGS = "--production=false"    # Ensures devDependencies are installed
