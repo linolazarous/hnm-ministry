@@ -1,10 +1,27 @@
 {
+  "name": "hnm-ministry",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
   "scripts": {
+    "dev": "vite",
     "build": "vite build",
-    "preinstall": "npm install vite --save-dev"  # Safety net for Vite installation
+    "preview": "vite preview",
+    "prepare": "npm install vite @vitejs/plugin-react --save-dev"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.2",
+    "aos": "^3.0.0-beta.6"
   },
   "devDependencies": {
-    "vite": "^5.0.0",               # Confirm version matches your project
-    "@vitejs/plugin-react": "^4.2.1" # Required for React projects
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "sass": "^1.66.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }
