@@ -1,28 +1,36 @@
 [build]
-  command = "npm ci && npm run build"  # Uses clean install for reliability
+  command = "npm install --legacy-peer-deps && npm run build"
   publish = "dist"
-  functions = "netlify/functions"     # Remove if not using Functions
-  base = "."
+  functions = "netlify/functions"  # Remove if not using Functions
+  edge_functions = "netlify/edge-functions"  # Remove if not using Edge Functions
 
 [build.environment]
-  NODE_VERSION = "22.15.0"
-  NPM_VERSION = "11.3.0"
+  # Stable versions that work with Vite 5
+  NODE_VERSION = "20.13.1"  # LTS version known to work well with Vite
+  NPM_VERSION = ""  # Let Netlify use default npm for Node version
+  
+  # Dependency installation settings
+  NPM_FLAGS = "--legacy-peer-deps"
+  NODE_ENV = "production"
+  
+  # Vite-specific optimizations
+  VITE_STRIPE_KEY = "$STRIPE_PUBLISHABLE_KEY"
 
-  # Critical for Vite installation:
-  NPM_FLAGS = "--production=false"    # Ensures devDependencies are installed
-  CI = "false"                       # Prevents CI-specific optimizations that may break builds
+# Development context (optional)
+[context.develop]
+  NODE_ENV = "development"
 
-# Security headers (simplified)
+# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com"
+    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com; script-src 'self' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:"
     X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
 
 # SPA fallback
 [[redirects]]
   from = "/*"
-  to = "public/index.html"
+  to = "/index.html"
   status = 200
-  force = true
