@@ -1,7 +1,9 @@
 // Import variables first
+// All @use rules must be at the very top
 @use './variables' as *;
+@use 'sass:math';
 
-// Then import all other CSS files
+// Then your other CSS imports
 @import './ErrorMessage.css';
 @import './LandingSpinner.css';
 @import './Livestream.css';
@@ -9,10 +11,18 @@
 @import './ProfileForm.css';
 @import './style.css';
 
-// Your global styles
+// Then your custom styles
 :root {
   --header-height: 80px;
 }
+
+body {
+  font-family: $font-main;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// Rest of your styles...
 
 body {
   font-family: $font-main;
