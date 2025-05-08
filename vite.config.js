@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
-import autoprefixer from 'autoprefixer';
+import postcssPresetEnv from 'postcss-preset-env';
 import cssnano from 'cssnano';
 
 export default defineConfig({
@@ -13,8 +13,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'public/index.html')
-      },
-      external: []
+      }
     }
   },
   resolve: {
@@ -35,15 +34,19 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [
-        autoprefixer(),
-        cssnano({
-          preset: 'default'
-        })
+        postcssPresetEnv({
+          stage: 3,
+          features: {
+            'nesting-rules': true
+          },
+          autoprefixer: { grid: true }
+        }),
+        cssnano({ preset: 'default' })
       ]
     },
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@css/_variables.scss";`
+        additionalData: `@use "@css/_variables.scss" as *;`
       }
     }
   }
