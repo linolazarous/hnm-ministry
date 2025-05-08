@@ -1,27 +1,38 @@
 [build]
   command = "npm install --legacy-peer-deps && npm run build"
   publish = "dist"
-  functions = "netlify/functions"  
+  functions = "netlify/functions"
 
 [build.environment]
-  NODE_VERSION = "20.13.1"  
+  NODE_VERSION = "20.13.1"
   NPM_FLAGS = "--legacy-peer-deps"
   NODE_ENV = "production"
-
-  # Environment variables
+  
+  # Formspree configuration
+  FORMPREE_ID = "$FORMPREE_ID"
+  FORMPREE_ENDPOINT = "https://formspree.io/f/$FORMPREE_ID"
+  
+  # Stripe configuration
   VITE_STRIPE_KEY = "$STRIPE_PUBLISHABLE_KEY"
-  VITE_FORMPREE_ID = "$API_FORMSPREE_ID"
+  STRIPE_PUBLISHABLE_KEY = "$STRIPE_PUBLISHABLE_KEY"
 
-# Security headers
+# Form handling
+[[redirects]]
+  from = "/submit-form"
+  to = "https://formspree.io/f/$FORMPREE_ID"
+  status = 200
+  force = true
+
+# Security headers (updated for Formspree and Stripe)
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com; script-src 'self' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:"
+    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.formspree.io *.googleapis.com *.gstatic.com; script-src 'self' 'unsafe-inline' https://js.stripe.com https://formspree.io; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https: *.formspree.io *.stripe.com; frame-src https://js.stripe.com"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# SPA routing
+# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
