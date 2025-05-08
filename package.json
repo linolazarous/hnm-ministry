@@ -6,17 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "prepare": "npm install vite @vitejs/plugin-react --save-dev"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "vite": "^5.0.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.14.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.5.3",
     "aos": "^3.0.0-beta.6",
-    "@vitejs/plugin-react": "^4.2.1",
-    "sass": "^1.66.1",
+    "sass": "^1.66.1"
+  },
+  "devDependencies": {
+    "vite": "^6.5.0",
+    "@vitejs/plugin-react": "^5.0.2",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
     "cssnano": "^6.0.1",
