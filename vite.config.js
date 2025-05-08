@@ -30,7 +30,7 @@ export default defineConfig(({ mode }) => {
         '@js': resolve(__dirname, './src/js'),
         '@lib': resolve(__dirname, './src/lib'),
         '@pages': resolve(__dirname, './src/pages'),
-        '@payment': resolve(__dirname, './src/payment'),
+        '@payment': resolve(__dirname, './functions/stripe-payment.js'),
         '@services': resolve(__dirname, './src/services'),
         '@utils': resolve(__dirname, './src/utils')
       }
