@@ -1,24 +1,16 @@
 [build]
   command = "npm install --legacy-peer-deps && npm run build"
   publish = "dist"
-  functions = "netlify/functions"  # Remove if not using Functions
-  edge_functions = "netlify/edge-functions"  # Remove if not using Edge Functions
+  functions = "netlify/functions"  
 
 [build.environment]
-  # Stable versions that work with Vite 5
-  NODE_VERSION = "20.13.1"  # LTS version known to work well with Vite
-  NPM_VERSION = ""  # Let Netlify use default npm for Node version
-  
-  # Dependency installation settings
+  NODE_VERSION = "20.13.1"  
   NPM_FLAGS = "--legacy-peer-deps"
   NODE_ENV = "production"
-  
-  # Vite-specific optimizations
-  VITE_STRIPE_KEY = "$STRIPE_PUBLISHABLE_KEY"
 
-# Development context (optional)
-[context.develop]
-  NODE_ENV = "development"
+  # Environment variables
+  VITE_STRIPE_KEY = "$STRIPE_PUBLISHABLE_KEY"
+  VITE_FORMPREE_ID = "$API_FORMSPREE_ID"
 
 # Security headers
 [[headers]]
@@ -29,7 +21,7 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# SPA fallback
+# SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
