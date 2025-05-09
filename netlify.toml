@@ -2,7 +2,6 @@
   command = "npm install --production=false && npm run build"
   publish = "dist"
   functions = "functions"
-  edge_functions = "edge-functions"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -10,7 +9,7 @@
   NODE_ENV = "production"
   NPM_FLAGS = "--production=false"
   
-  # Environment variables
+  # Environment variables (set in Netlify UI)
   VITE_STRIPE_KEY = "@stripe_publishable_key"
   VITE_FORMPREE_ID = "@formspree_id"
   VITE_API_BASE_URL = "@api_base_url"
