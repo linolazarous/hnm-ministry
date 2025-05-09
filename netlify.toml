@@ -1,33 +1,11 @@
 [build]
-  command = "cd hnm-ministry && npm install --legacy-peer-deps --force && npm run build"
+  command = "npm run build"
   publish = "hnm-ministry/dist"
-  functions = "functions"
-  
+  functions = "hnm-ministry/functions"
+
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  NPM_FLAGS = "--legacy-peer-deps --force"
-  NODE_ENV = "production"
-  NODE_OPTIONS = "--max-old-space-size=4096"
-  VITE_STRIPE_KEY = "@stripe_key"
-  VITE_FORMPREE_ID = "@formspree_id"
-  VITE_API_BASE_URL = "@api_url"
-
-[context.production.environment]
   NODE_ENV = "production"
 
-[context.deploy-preview.environment]
-  NODE_ENV = "development"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-  force = true
+# Remove ALL other sections temporarily
