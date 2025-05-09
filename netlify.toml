@@ -1,26 +1,35 @@
 [build]
-  command = "npm install --production=false && npm run build"
-  publish = "dist"
-  functions = "functions"
+  # Let Netlify handle all dependency installation and building
+  command = "npm install --force && npm run build"
+  publish = "dist"            # Vite's default output folder
+  functions = "functions"     # Serverless 
 
 [build.environment]
-  NODE_VERSION = "20"
+  # Node.js environment
+  NODE_VERSION = "20"         # Current LTS
   NPM_VERSION = "10"
+  
+  # Dependency resolution (bypasses peer conflicts)
+  NPM_FLAGS = "--legacy-peer-deps --force"
+  
+  # Build optimizations
   NODE_ENV = "production"
-  NPM_FLAGS = "--production=false"
+  NODE_OPTIONS = "--max-old-space-size=4096" # Prevents memory issues
   
   # Environment variables (set in Netlify UI)
-  VITE_STRIPE_KEY = "@stripe_publishable_key"
+  VITE_STRIPE_KEY = "@stripe_key"
   VITE_FORMPREE_ID = "@formspree_id"
-  VITE_API_BASE_URL = "@api_base_url"
-  VITE_SENTRY_DSN = "@sentry_dsn"
+  VITE_API_BASE_URL = "@api_url"
 
+# Production-specific config
 [context.production.environment]
   NODE_ENV = "production"
 
+# Preview deployments (PRs)
 [context.deploy-preview.environment]
   NODE_ENV = "development"
 
+# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -28,7 +37,9 @@
     Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
 
+# API redirects to serverless functions
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
   status = 200
+  force = true
