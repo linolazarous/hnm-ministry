@@ -5,18 +5,8 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
-  
-  # Environment variables
-  VITE_STRIPE_KEY = "$STRIPE_PUBLISHABLE_KEY"
-  FORMPREE_ENDPOINT = "https://formspree.io/f/$FORMPREE_ID"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
