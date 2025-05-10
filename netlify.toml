@@ -1,17 +1,24 @@
-# Let Netlify handle all dependency installation and building
+[build]
   command = "npm install --force && npm run build"
-  publish = "dist"            # Vite's default output folder
-  functions = "functions"     # Serverless 
+  publish = "hnm-ministry/dist"  # Adjusted for your subfolder structure
+  functions = "hnm-ministry/functions"
+  base = "hnm-ministry"  # Critical for subdirectory projects
 
 [build.environment]
-  # Node.js environment
-  NODE_VERSION = "22.15.0"         # Current LTS
-  NPM_VERSION = "11.3.0"
+  NODE_VERSION = "20"  # Recommended stable version
+  NPM_VERSION = "10"
+  NODE_ENV = "production"
   
-  # Environment variables (set in Netlify UI)
+  # Environment variables (reference Netlify UI secrets)
   VITE_STRIPE_KEY = "@stripe_key"
   VITE_FORMPREE_ID = "@formspree_id"
   VITE_API_BASE_URL = "@api_url"
+
+# Required for SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 # Security headers
 [[headers]]
@@ -20,8 +27,4 @@
     X-Frame-Options = "DENY"
     Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-
-[[redirects]] 
-from = "/*" 
-to = "/index.html" 
-status = 200
+    X-Content-Type-Options = "nosniff"
