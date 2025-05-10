@@ -1,23 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { fileURLToPath } from 'url'
-import path from 'path'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173
   },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@css': path.resolve(__dirname, './src/css')
-    }
-  },
   build: {
-    outDir: '../dist',  # Adjusted for base directory
+    outDir: 'dist',
     emptyOutDir: true,
     sourcemap: true,
     rollupOptions: {
@@ -32,7 +22,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@css/variables" as *;`
+        additionalData: `@import "./src/css/_variables.scss";`
       }
     }
   }
