@@ -2,10 +2,10 @@
   from = "/*"
   to = "/index.html"
   status = 200
+  force = true  # Add this to override default Netlify behavior
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+# For SPA routing - handle all client-side routes
+[[redirects]]
+  from = "/app/*"
+  to = "/index.html"
+  status = 200
