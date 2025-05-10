@@ -1,12 +1,12 @@
 [build]
   command = "npm install --force && npm run build"
-  publish = "hnm-ministry/dist"  # Adjusted for your subfolder structure
+  publish = "dist"  # Adjusted for your subfolder structure
   functions = "hnm-ministry/functions"
-  base = "hnm-ministry"  # Critical for subdirectory projects
+  base = ""  # Critical for subdirectory projects
 
 [build.environment]
-  NODE_VERSION = "20"  # Recommended stable version
-  NPM_VERSION = "10"
+  NODE_VERSION = "22.15.0"  # Recommended stable version
+  NPM_VERSION = "11.3.0"
   NODE_ENV = "production"
   
   # Environment variables (reference Netlify UI secrets)
