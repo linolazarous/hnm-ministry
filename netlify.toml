@@ -5,15 +5,8 @@
 
 [build.environment]
   # Node.js environment
-  NODE_VERSION = "20"         # Current LTS
-  NPM_VERSION = "10"
-  
-  # Dependency resolution (bypasses peer conflicts)
-  NPM_FLAGS = "--legacy-peer-deps --force"
-  
-  # Build optimizations
-  NODE_ENV = "production"
-  NODE_OPTIONS = "--max-old-space-size=4096" # Prevents memory issues
+  NODE_VERSION = "22.15.0"         # Current LTS
+  NPM_VERSION = "11.3.0"
   
   # Environment variables (set in Netlify UI)
   VITE_STRIPE_KEY = "@stripe_key"
@@ -39,6 +32,6 @@
 # API redirects to serverless functions
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  to = "/index.html"
   status = 200
   force = true
