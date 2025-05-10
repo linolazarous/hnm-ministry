@@ -13,14 +13,6 @@
   VITE_FORMPREE_ID = "@formspree_id"
   VITE_API_BASE_URL = "@api_url"
 
-# Production-specific config
-[context.production.environment]
-  NODE_ENV = "production"
-
-# Preview deployments (PRs)
-[context.deploy-preview.environment]
-  NODE_ENV = "development"
-
 # Security headers
 [[headers]]
   for = "/*"
@@ -29,9 +21,7 @@
     Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
 
-# API redirects to serverless functions
-[[redirects]]
-  from = "/api/*"
-  to = "/index.html"
-  status = 200
-  force = true
+[[redirects]] 
+from = "/*" 
+to = "/index.html" 
+status = 200
