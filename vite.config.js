@@ -1,29 +1,53 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+import postcssPresetEnv from 'postcss-preset-env';
+import cssnano from 'cssnano';
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    port: 5173
-  },
+  publicDir: resolve(__dirname, 'public'),
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: true,
     rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          stripe: ['@stripe/stripe-js']
-        }
+      input: {
+        main: resolve(__dirname, 'public/index.html')
       }
     }
   },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+      '@admin': resolve(__dirname, './src/admin'),
+      '@components': resolve(__dirname, './src/components'),
+      '@css': resolve(__dirname, './src/css'),
+      '@hooks': resolve(__dirname, './src/hooks'),
+      '@js': resolve(__dirname, './src/js'),
+      '@lib': resolve(__dirname, './src/lib'),
+      '@pages': resolve(__dirname, './src/pages'),
+      '@payment': resolve(__dirname, './src/payment'),
+      '@services': resolve(__dirname, './src/services'),
+      '@utils': resolve(__dirname, './src/utils')
+    }
+  },
   css: {
+    postcss: {
+      plugins: [
+        postcssPresetEnv({
+          stage: 3,
+          features: {
+            'nesting-rules': true
+          },
+          autoprefixer: { grid: true }
+        }),
+        cssnano({ preset: 'default' })
+      ]
+    },
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "./src/css/_variables.scss";`
+        additionalData: `@use "@css/_variables.scss" as *;`
       }
     }
   }
-})
+});
