@@ -1,7 +1,12 @@
 export default defineConfig({
-  base: '/',  // Ensure this is set to root
+  base: '/',
   build: {
-    outDir: '../dist',  // Should match netlify.toml publish dir
-    emptyOutDir: true
+    outDir: '../dist',
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html')
+      }
+    }
   }
 })
