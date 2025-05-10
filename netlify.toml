@@ -1,24 +1,30 @@
-[build]
-  command = "npm install --legacy-peer-deps --force && npm run build"
-  publish = "dist"
-  functions = "functions"
-  base = "hnm-ministry"  # Add this line since your files are in the hnm-ministry subdirectory
+# Let Netlify handle all dependency installation and building
+  command = "npm install --force && npm run build"
+  publish = "dist"            # Vite's default output folder
+  functions = "functions"     # Serverless 
 
 [build.environment]
-  NODE_VERSION = "20"
+  # Node.js environment
+  NODE_VERSION = "20"         # Current LTS
   NPM_VERSION = "10"
-  NPM_FLAGS = "--legacy-peer-deps --force"
-  NODE_ENV = "production"
-  NODE_OPTIONS = "--max-old-space-size=4096"
   
-  # Environment variables (reference Netlify UI secrets)
+  # Dependency resolution (bypasses peer conflicts)
+  NPM_FLAGS = "--legacy-peer-deps --force"
+  
+  # Build optimizations
+  NODE_ENV = "production"
+  NODE_OPTIONS = "--max-old-space-size=4096" # Prevents memory issues
+  
+  # Environment variables (set in Netlify UI)
   VITE_STRIPE_KEY = "@stripe_key"
   VITE_FORMPREE_ID = "@formspree_id"
   VITE_API_BASE_URL = "@api_url"
 
+# Production-specific config
 [context.production.environment]
   NODE_ENV = "production"
 
+# Preview deployments (PRs)
 [context.deploy-preview.environment]
   NODE_ENV = "development"
 
@@ -27,19 +33,10 @@
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    Content-Security-Policy = """
-      default-src 'self';
-      script-src 'self' https://js.stripe.com;
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-      font-src 'self' https://fonts.gstatic.com;
-      img-src 'self' data: https://*.stripe.com;
-      connect-src 'self' https://api.stripe.com;
-      frame-src https://js.stripe.com;
-    """
+    Content-Security-Policy = "default-src 'self' https: *.stripe.com *.googleapis.com *.gstatic.com"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    X-Content-Type-Options = "nosniff"
 
-# Redirects
+# API redirects to serverless functions
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
