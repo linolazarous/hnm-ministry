@@ -1,45 +1,13 @@
-name: CI/CD Pipeline  # Correct first line
-on: push
-  publish = "public"  # Required (even if empty)
-  functions = "functions"  # Required (even if empty)
-
-# API Proxies
-[[redirects]]
-  from = "/api/stripe/*"
-  to = "https://api.stripe.com/:splat"
-  status = 200
-  force = true
-  headers = { Authorization = "Bearer $STRIPE_SECRET_KEY" }
-
-[[redirects]]
-  from = "/api/youtube/*"
-  to = "https://www.googleapis.com/youtube/v3/:splat"
-  status = 200
-  force = true
-  headers = { Authorization = "Bearer $YOUTUBE_API_KEY" }
-
-[[redirects]]
-  from = "/api/facebook/*"
-  to = "https://graph.facebook.com/v19.0/:splat"
-  status = 200
-  force = true
-  headers = { Authorization = "Bearer $FACEBOOK_CLIENT_TOKEN" }
-
-[[redirects]]
-  from = "/api/formspree/*"
-  to = "https://formspree.io/f/$FORMSPREE_ID"
-  status = 200
-  force = true
-  headers = { Accept = "application/json" }
-
-# SPA Fallback (Must be last)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-[[headers]]
-  for = "/api/*"
-  [headers.values]
-    X-Robots-Tag = "none"
-    Content-Security-Policy = "default-src 'none'"
+name: Netlify Redirects Deployment  # Line 1: Must be the name
+on: [push]  # Triggers on push to main branch
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4  # Check out code
+      - uses: netlify/actions/cli@v2
+        with:
+          args: deploy --prod  # Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
