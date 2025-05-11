@@ -1,7 +1,3 @@
-[build]
-  publish = "public"
-  functions = "functions"
-
 [build.environment]
   # Facebook
   FACEBOOK_APP_ID = "@facebook_app_id"
