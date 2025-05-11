@@ -1,7 +1,58 @@
-- name: Netlify Deploy
-  env:
-    STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-    YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-    FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
-    FORMSPREE_FORM_ID: ${{ secrets.FORMSPREE_FORM_ID }}
-  run: netlify deploy --prod
+[build]
+  publish = "public"
+  functions = "functions"
+
+[build.environment]
+  # Facebook
+  FACEBOOK_APP_ID = "@facebook_app_id"
+  FACEBOOK_CLIENT_TOKEN = "@facebook_client_token"
+  
+  # Stripe
+  STRIPE_SECRET_KEY = "@stripe_secret_key"
+  
+  # YouTube
+  YOUTUBE_API_KEY = "@youtube_api_key"
+  
+  # Formspree
+  FORMSPREE_ID = "@formspree_id"
+
+# API Proxies
+[[redirects]]
+  from = "/api/stripe/*"
+  to = "https://api.stripe.com/:splat"
+  status = 200
+  force = true
+  headers = { Authorization = "Bearer $STRIPE_SECRET_KEY" }
+
+[[redirects]]
+  from = "/api/youtube/*"
+  to = "https://www.googleapis.com/youtube/v3/:splat"
+  status = 200
+  force = true
+  headers = { Authorization = "Bearer $YOUTUBE_API_KEY" }
+
+[[redirects]]
+  from = "/api/facebook/*"
+  to = "https://graph.facebook.com/v19.0/:splat"
+  status = 200
+  force = true
+  headers = { Authorization = "Bearer $FACEBOOK_CLIENT_TOKEN" }
+
+[[redirects]]
+  from = "/api/formspree/*"
+  to = "https://formspree.io/f/$FORMSPREE_ID"
+  status = 200
+  force = true
+  headers = { Accept = "application/json" }
+
+# SPA Fallback (Must be last)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    X-Robots-Tag = "none"
+    Content-Security-Policy = "default-src 'none'"
