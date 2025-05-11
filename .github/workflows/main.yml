@@ -1,16 +1,6 @@
-[build.environment]
-  # Facebook
-  FACEBOOK_APP_ID = "@facebook_app_id"
-  FACEBOOK_CLIENT_TOKEN = "@facebook_client_token"
-  
-  # Stripe
-  STRIPE_SECRET_KEY = "@stripe_secret_key"
-  
-  # YouTube
-  YOUTUBE_API_KEY = "@youtube_api_key"
-  
-  # Formspree
-  FORMSPREE_ID = "@formspree_id"
+[build]
+  publish = "public"  # Required (even if empty)
+  functions = "functions"  # Required (even if empty)
 
 # API Proxies
 [[redirects]]
