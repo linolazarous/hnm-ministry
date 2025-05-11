@@ -1,4 +1,5 @@
-[[build]]
+name: CI/CD Pipeline  # Correct first line
+on: push
   publish = "public"  # Required (even if empty)
   functions = "functions"  # Required (even if empty)
 
