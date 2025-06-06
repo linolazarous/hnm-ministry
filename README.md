@@ -1,6 +1,6 @@
 # Heavenly Nature Ministry
 
-![HNM Logo](/public/logo.png)
+![HNM Logo](/public/images/logo.png)
 
 A digital platform for Heavenly Nature Ministry's online presence, featuring livestreaming, donations, and member engagement tools.
 
