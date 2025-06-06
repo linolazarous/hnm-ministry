@@ -285,7 +285,7 @@ ul {
 /* === Hero Section === */
 .hero {
   background: linear-gradient(rgba(var(--primary-color-rgb), 0.8), rgba(var(--primary-color-rgb), 0.7)),
-              url('images/hero-background.jpg'); /* Replace with actual background image */
+              url('../images/hero-background.jpg'); /* Replace with actual background image */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
