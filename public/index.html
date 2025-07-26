@@ -3,20 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Heavenly Nature Ministry - Empowering generations through faith in South Sudan">
+  <meta name="description" content="Heavenly Nature Ministry - Empowering generations through faith and providing support to children and communities in Juba, South Sudan.">
   <title>Heavenly Nature Ministry | Juba, South Sudan</title>
 
   <link rel="icon" href="images/favicon.ico" sizes="any">
   <link rel="icon" href="images/logo.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-  <link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#1a4b8c">
 
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#1a4b8c">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" crossorigin="anonymous">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" crossorigin="anonymous">
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" as="style">
   <link rel="preload" href="css/main.css" as="style">
 
@@ -24,12 +21,10 @@
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
   <link rel="stylesheet" href="css/main.css">
-
-  <link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"></noscript>
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -39,38 +34,42 @@
   <a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
   
   <header class="site-header">
+  <div class="header-container">
     <div class="logo-container">
       <a href="#" aria-label="Home - Heavenly Nature Ministry">
-        <img src="images/logo.png" 
-             alt="Heavenly Nature Ministry Logo" 
-             width="180" 
-             height="60"
-             loading="lazy"
-             decoding="async">
+        <img src="images/logo.webp" alt="Heavenly Nature Ministry Logo" width="180" height="50">
       </a>
-      <span class="logo-text">Heavenly Nature Ministry</span>
     </div>
     
-    <button class="menu-toggle" 
-            aria-label="Toggle menu"
-            aria-expanded="false"
-            aria-controls="main-navigation">
-      <span class="menu-icon" aria-hidden="true">
-        <i class="fas fa-bars"></i>
-      </span>
-    </button>
-    
-    <nav id="main-navigation" aria-label="Main navigation">
+    <nav id="main-navigation" class="main-nav" aria-label="Main navigation">
       <ul class="nav-list">
-        <li><a href="#about" class="nav-link"><i class="fas fa-cross" aria-hidden="true"></i> <span>About Us</span></a></li>
-        <li><a href="#mission" class="nav-link"><i class="fas fa-hand-holding-heart" aria-hidden="true"></i> <span>Our Mission</span></a></li>
-        <li><a href="#sermons" class="nav-link"><i class="fas fa-video" aria-hidden="true"></i> <span>Sermons</span></a></li>
-        <li><a href="#events" class="nav-link"><i class="fas fa-calendar-alt" aria-hidden="true"></i> <span>Events</span></a></li>
-        <li><a href="#gallery" class="nav-link"><i class="fas fa-images" aria-hidden="true"></i> <span>Gallery</span></a></li>
-        <li><a href="#contact" class="nav-link contact-button"><i class="fas fa-envelope" aria-hidden="true"></i> <span>Contact</span></a></li>
+        <li><a href="#about" class="nav-link">About Us</a></li>
+        <li><a href="#mission" class="nav-link">Our Mission</a></li>
+        <li><a href="#events" class="nav-link">Events</a></li>
+        <li><a href="#gallery" class="nav-link">Gallery</a></li>
+        <li><a href="#donate" class="nav-link donate-button">Donate</a></li>
       </ul>
     </nav>
-  </header>
+
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+      <i class="fas fa-bars icon-open"></i>
+      <i class="fas fa-times icon-close"></i>
+    </button>
+  </div>
+</header>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <nav aria-label="Mobile navigation">
+      <ul class="mobile-nav-list">
+        <li><a href="#about" class="mobile-nav-link">About Us</a></li>
+        <li><a href="#mission" class="mobile-nav-link">Our Mission</a></li>
+        <li><a href="#events" class="mobile-nav-link">Events</a></li>
+        <li><a href="#gallery" class="mobile-nav-link">Gallery</a></li>
+        <li><a href="#donate" class="mobile-nav-link">Donate</a></li>
+        <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
 
   <main id="main-content">
     <section class="hero" aria-labelledby="hero-heading">
@@ -78,517 +77,186 @@
         <h1 id="hero-heading">Welcome to Heavenly Nature Ministry</h1>
         <p class="hero-tagline">"We are one" <span class="scripture-ref">(John 17:21)</span></p>
         <div class="hero-buttons">
-          <a href="#sermons" class="cta-button" aria-label="Watch our live stream">
-            <i class="fas fa-video" aria-hidden="true"></i> Watch Live
+          <a href="#donate" class="cta-button">
+            <i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Help Our Mission
           </a>
-          <a href="#contact" class="cta-button outline" aria-label="Contact us">
+          <a href="#contact" class="cta-button outline">
             <i class="fas fa-envelope" aria-hidden="true"></i> Get In Touch
           </a>
         </div>
       </div>
-      </section>
-      	
-      <section id="about" class="section" aria-labelledby="about-heading">
-  <div class="section-content">
-    <h2 id="about-heading">Our Vision & Goal</h2>
-    <p class="section-intro">We envision self-reliant and God-fearing generations in South Sudan and beyond, transformed by the power of Christ's love.</p>
+    </section>
     
-    <div class="mission-grid" role="list">
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="100" role="listitem">
-        <div class="mission-icon" aria-hidden="true">
-          <i class="fas fa-pray"></i>
-        </div>
-        <h3>Spiritual Growth</h3>
-        <p>Empowering children spiritually with the Word of God, teaching them to obey and honor God's Word in their lives.</p>
-      </div>
-      
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="200" role="listitem">
-        <div class="mission-icon" aria-hidden="true">
-          <i class="fas fa-hands-helping"></i>
-        </div>
-        <h3>Physical Support</h3>
-        <p>Providing physical support and resources to help the community thrive in challenging circumstances.</p>
-      </div>
-      
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="300" role="listitem">
-        <div class="mission-icon" aria-hidden="true">
-          <i class="fas fa-graduation-cap"></i>
-        </div>
-        <h3>Mental Development</h3>
-        <p>Building people in the Word of God to become useful citizens in South Sudan and beyond.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="mission" class="section section--alt" aria-labelledby="mission-heading">
-  <div class="section-content">
-    <h2 id="mission-heading">Our Mission</h2>
-    <p class="section-intro">Heavenly Nature Ministry exists to empower street/abandoned children and orphans to fully utilize their spiritual, physical, and mental gifts to become self-reliant and harmonious citizens in society.</p>
-    
-    <h3 class="core-values-title">Core Values: SEE HIM</h3>
-    <div class="mission-grid mission-grid--values" role="list">
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="100" role="listitem">
-        <h3><span class="icon" aria-hidden="true"><i class="fas fa-search"></i></span> Seek God First</h3>
-        <p><cite>Matthew 6:33</cite>"But seek first his kingdom and his righteousness, and all these things will be given to you as well."</p>
-      </div>
-      
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="200" role="listitem">
-        <h3><span class="icon" aria-hidden="true"><i class="fas fa-bullhorn"></i></span> Evangelism</h3>
-        <p><cite>Matthew 28:19</cite>"Therefore go and make disciples of all nations..."</p>
-      </div>
-      
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="300" role="listitem">
-        <h3><span class="icon" aria-hidden="true"><i class="fas fa-star"></i></span> Excellence</h3>
-        <p><cite>Daniel 5:14, 6:3</cite>"Now I have heard that the spirit of the gods is in you..."</p>
-      </div>
-      
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="100" role="listitem">
-        <h3><span class="icon" aria-hidden="true"><i class="fas fa-user-friends"></i></span> Honor & Humility</h3>
-        <p><cite>Romans 12:10, 1 Peter 5:5</cite>"Be devoted to one another in love. Honor one another above yourselves."</p>
-      </div>
-      
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="200" role="listitem">
-        <h3><span class="icon" aria-hidden="true"><i class="fas fa-shield-alt"></i></span> Integrity</h3>
-        <p><cite>Job 31:6</cite>"Let me be weighed in an even balance, that God may know mine integrity."</p>
-      </div>
-      
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="300" role="listitem">
-        <h3><span class="icon" aria-hidden="true"><i class="fas fa-users"></i></span> Mentoring</h3>
-        <p><cite>2 Timothy 2:2</cite>"And the things you have heard me say... entrust to reliable people who will also be qualified to teach others."</p>
-      </div>
-    </div>
-  </div>
-</section>
-    
-    <section id="sermons" class="section" aria-labelledby="sermons-heading">
-  <div class="section-content">
-    <h2 id="sermons-heading">Sermons & Livestream</h2>
-    <p class="section-intro">Join us for powerful teachings and worship. Our sermons are streamed live every Sunday at 9:00 AM CAT and available for replay.</p>
-    
-    <div class="livestream-container" data-aos="fade-up">
-      <div class="livestream-info">
-        <div class="livestream-status" id="livestream-status" aria-live="polite">
-          <span class="live-indicator" aria-hidden="true"></span>
-          <span id="status-text">Checking live status...</span>
-        </div>
-        <div class="livestream-schedule">
-          <span class="visually-hidden">Schedule:</span>
-          <i class="fas fa-calendar-alt" aria-hidden="true"></i> Sundays at 9:00 AM CAT
-        </div>
-      </div>
-      
-      <div class="video-container">
-        <iframe 
-          id="youtube-embed"
-          src="https://www.youtube.com/embed/videoseries?list=UCug1LOg7QTil8tdzrAIvy8g" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen
-          title="Heavenly Nature Ministry Live Stream & Sermons"
-          loading="lazy"
-          aria-label="YouTube live stream player">
-        </iframe>
-      </div>
-      
-      <div class="livestream-actions">
-        <button id="unmute-btn" class="stream-control" aria-pressed="false">
-          <span class="icon" aria-hidden="true"><i class="fas fa-volume-mute"></i></span>
-          <span class="btn-text">Unmute</span>
-        </button>
-        <a href="https://www.youtube.com/channel/UCug1LOg7QTil8tdzrAIvy8g/live" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           class="stream-control">
-          <span class="icon" aria-hidden="true"><i class="fab fa-youtube"></i></span>
-          Watch on YouTube
-        </a>
-      </div>
-    </div>
-    
-    <div class="countdown-container" id="countdown-container" hidden aria-live="polite">
-      <h3>Next Live Service In:</h3>
-      <div class="countdown" id="countdown">
-        <span class="countdown-unit"><span id="days">00</span>d</span> 
-        <span class="countdown-unit"><span id="hours">00</span>h</span> 
-        <span class="countdown-unit"><span id="minutes">00</span>m</span> 
-        <span class="countdown-unit"><span id="seconds">00</span>s</span>
-      </div>
-    </div>
-    
-    <div class="previous-sermons" data-aos="fade-up">
-      <a href="https://www.youtube.com/channel/UCug1LOg7QTil8tdzrAIvy8g/videos" target="_blank" rel="noopener noreferrer" class="cta-button">
-        <span class="icon" aria-hidden="true"><i class="fas fa-video"></i></span>
-        Watch Previous Sermons
-      </a>
-    </div>
-  </div>
-</section>
-
-<section id="events" class="section section--alt" aria-labelledby="events-heading">
-  <div class="section-content">
-    <h2 id="events-heading" data-aos="fade-up">Upcoming Events</h2>
-    <p class="section-intro" data-aos="fade-up">Join us for these special gatherings throughout the year</p>
-
-    <div class="event-card" data-aos="fade-up">
-      <div class="event-banner">
-        <img src="images/children-festivals-banner.jpg" 
-             alt="Children smiling at Heavenly Nature Ministry's Annual Festival" 
-             loading="lazy"
-             class="event-image">
-        <div class="event-date">
-          <span class="event-day">28</span>
-          <span class="event-month">DEC</span>
-        </div>
-      </div>
-      <div class="event-details">
-        <h3>Annual Children's Festival</h3>
-        <div class="event-meta">
-          <p><i class="fas fa-clock" aria-hidden="true"></i> 9:00 AM - 3:00 PM CAT</p>
-          <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Church Main Premises</p>
-        </div>
-        <p class="event-description"><strong>A day of hope and transformation where we:</strong><br>
-- Bring street children, abandoned children, and orphans to the church<br>
-- Share meals together in fellowship<br>  
-- Provide spiritual ministry and counseling<br>  
-- Respect each child's choice to stay or return after receiving care<br>  
-- Offer games, worship, and faith-building activities
-        </p>
-        <a href="#contact" class="cta-button">
-          <i class="fas fa-calendar-check" aria-hidden="true"></i> Register Your Child
-        </a>
-      </div>
-    </div>
-
-    <h3 class="core-values-title" data-aos="fade-up">Regular Weekly Events</h3>
-    <div class="mission-grid" data-aos="fade-up">
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="100">
-        <div class="mission-icon">
-          <i class="fas fa-church" aria-hidden="true"></i>
-        </div>
-        <h3>Sunday Service</h3>
-        <p><strong>Every Sunday</strong><br>9:00 AM - 1:00 PM</p>
-        <p><strong>Join us for:</strong><br>Spirit-filled praise and worship<br>Powerful biblical teaching<br>Communion and prayer<br>All are welcome  
-          </p>
-      </div>
-      
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="200">
-        <div class="mission-icon">
-          <i class="fas fa-users" aria-hidden="true"></i>
-        </div>
-        <h3>Youth Fellowship</h3>
-        <p><strong>Every Tuesday</strong><br>4:00 PM - 6:00 PM</p>
-        <p>Bible study and activities</p>
-      </div>
-      
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="300">
-        <div class="mission-icon">
-          <i class="fas fa-pray" aria-hidden="true"></i>
-        </div>
-        <h3>Weekly Prayer Gathering</h3>
-        <p><strong>Every Saturday</strong><br>10:00 AM - 12:00 PM</p>
-        <p>Join us for a powerful time of corporate prayer, biblical meditation, and spiritual renewal as we intercede for our community and nation—all are welcome to deepen their spiritual connection.
-</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="schedule" class="section section--alt" aria-labelledby="schedule-heading">
-  <div class="section-content">
-    <h2 id="schedule-heading">Weekly Schedule</h2>
-    <p class="section-intro">Join us for our regular services and events. All are welcome to participate in our worship and fellowship.</p>
-    
-    <div class="schedule-grid" role="list">
-      <div class="schedule-card" data-aos="fade-up" data-aos-delay="100" role="listitem">
-        <h3>Sunday's Main Service</h3>
-        <p><span class="icon" aria-hidden="true"><i class="far fa-clock"></i></span> Every Sunday at 9:00 AM - 1:00 PM CAT</p>
-        <p><span class="icon" aria-hidden="true"><i class="fas fa-map-marker-alt"></i></span> Church Main Premises</p>
-      </div>
-      
-      <div class="schedule-card" data-aos="fade-up" data-aos-delay="200" role="listitem">
-        <h3>Student's Service</h3>
-        <p><span class="icon" aria-hidden="true"><i class="far fa-clock"></i></span> Every Sunday at 3:00 - 4:30 PM CAT</p>
-        <p><span class="icon" aria-hidden="true"><i class="fas fa-map-marker-alt"></i></span> Church Main Premises</p>
-      </div>
-      
-      <div class="schedule-card" data-aos="fade-up" data-aos-delay="300" role="listitem">
-        <h3>Bible Studies</h3>
-        <p><span class="icon" aria-hidden="true"><i class="far fa-clock"></i></span> Every Monday, Thursday and Friday at 4:00 - 5:30 PM CAT</p>
-        <p><span class="icon" aria-hidden="true"><i class="fas fa-map-marker-alt"></i></span> Church Main Premises</p>
-      </div>
-      
-      <div class="schedule-card" data-aos="fade-up" data-aos-delay="400" role="listitem">
-        <h3>Counseling and Guidance</h3>
-        <p><span class="icon" aria-hidden="true"><i class="far fa-clock"></i></span> Every Tuesday and Friday at 3:00 - 5:30 PM CAT</p>
-        <p><span class="icon" aria-hidden="true"><i class="fas fa-map-marker-alt"></i></span> Church Main Premises</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="gallery" class="section" aria-labelledby="gallery-heading">
-  <div class="section-content">
-    <h2 id="gallery-heading" data-aos="fade-up">Ministry Gallery</h2>
-    <p class="section-intro" data-aos="fade-up">Capturing God's work through our community</p>
-
-    <div class="gallery-grid">
-      <!-- Sunday Service Segment -->
-      <div class="gallery-segment" data-aos="fade-up">
-        <h3 class="gallery-title">Sunday Worship Services</h3>
-        <div class="gallery-images">
-          <div class="gallery-item">
-            <img src="images/gallery/sunday-service-1.jpg" loading="lazy" alt="Congregation praising during Sunday service">
-            <div class="gallery-caption">Sunday morning worship</div>
-          </div>
-          <div class="gallery-item">
-            <img src="images/gallery/sunday-service-2.jpg" loading="lazy" alt="People praying together at Heavenly Nature Ministry">
-            <div class="gallery-caption">Corporate prayer time</div>
-          </div>
-          <div class="gallery-item">
-            <img src="images/gallery/sunday-service-3.jpg" loading="lazy" alt="Pastor preaching to congregation">
-            <div class="gallery-caption">Biblical teaching</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Orphanage Centre Segment -->
-      <div class="gallery-segment" data-aos="fade-up">
-        <h3 class="gallery-title">Heavenly Nature Orphanage Centre</h3>
-        <div class="gallery-images">
-          <div class="gallery-item">
-            <img src="images/gallery/orphanage-1.jpg" loading="lazy" alt="Children enjoying meal at orphanage">
-            <div class="gallery-caption">Sharing meals together</div>
-          </div>
-          <div class="gallery-item">
-            <img src="images/gallery/orphanage-2.jpg" loading="lazy" alt="Staff helping children with homework">
-            <div class="gallery-caption">Academic support</div>
-          </div>
-          <div class="gallery-item">
-            <img src="images/gallery/orphanage-3.jpg" loading="lazy" alt="Children praying together">
-            <div class="gallery-caption">Spiritual development</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sunday School Segment -->
-      <div class="gallery-segment" data-aos="fade-up">
-        <h3 class="gallery-title">Children's Sunday School</h3>
-        <div class="gallery-images">
-          <div class="gallery-item">
-            <img src="images/gallery/sunday-school-1.jpg" loading="lazy" alt="Children singing during Sunday school">
-            <div class="gallery-caption">Joyful worship</div>
-          </div>
-          <div class="gallery-item">
-            <img src="images/gallery/sunday-school-2.jpg" loading="lazy" alt="Teacher telling Bible story to children">
-            <div class="gallery-caption">Bible lessons</div>
-          </div>
-          <div class="gallery-item">
-            <img src="images/gallery/sunday-school-3.jpg" loading="lazy" alt="Children doing craft activities">
-            <div class="gallery-caption">Creative learning</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Nursery & Primary School Segment -->
-      <div class="gallery-segment" data-aos="fade-up">
-        <h3 class="gallery-title">Nursery & Primary School</h3>
-        <div class="gallery-images">
-          <div class="gallery-item">
-            <img src="images/gallery/school-1.jpg" loading="lazy" alt="Pupils in classroom learning">
-            <div class="gallery-caption">Quality education</div>
-          </div>
-          <div class="gallery-item">
-            <img src="images/gallery/school-2.jpg" loading="lazy" alt="Children playing during break time">
-            <div class="gallery-caption">Playtime activities</div>
-          </div>
-          <div class="gallery-item">
-            <img src="images/gallery/school-3.jpg" loading="lazy" alt="School choir performing">
-            <div class="gallery-caption">Talent development</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="contact" class="section section--alt" aria-labelledby="contact-heading">
-  <div class="section-content">
-    <h2 id="contact-heading">Contact </h2>
-    <p class="section-intro">Contact us for prayer requests, ministry inquiries, or to learn how you can partner with our mission to transform lives through Christ's love.</p>
-
-    <div class="contact-container">
-      <form 
-        name="contact" 
-        method="POST" 
-        data-netlify="true" 
-        data-aos="fade-up"
-        netlify-honeypot="bot-field"
-        class="contact-form"
-      >
-        <input type="hidden" name="form-name" value="contact">
+    <section id="about" class="section" aria-labelledby="about-heading">
+      <div class="section-content">
+        <h2 id="about-heading" data-aos="fade-up">Our Vision & Goal</h2>
+        <p class="section-intro" data-aos="fade-up">We envision self-reliant and God-fearing generations in South Sudan and beyond, transformed by the power of Christ's love.</p>
         
-        <div class="visually-hidden">
-          <label for="bot-field">Don't fill this out if you're human:</label>
-          <input id="bot-field" name="bot-field">
-        </div>
-
-        <div class="form-group">
-          <label for="name">Your Name <span class="required">*</span></label>
-          <input type="text" id="name" name="name" required aria-required="true">
-        </div>
-        
-        <div class="form-group">
-          <label for="email">Email Address <span class="required">*</span></label>
-          <input type="email" id="email" name="email" required aria-required="true">
-        </div>
-        
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone" inputmode="tel">
-        </div>
-        
-        <div class="form-group">
-          <label for="subject">Subject</label>
-          <select id="subject" name="subject">
-            <option value="general">General Inquiry</option>
-            <option value="prayer">Prayer Request</option>
-            <option value="testimony">Testimony</option>
-            <option value="volunteer">Volunteer Opportunity</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label for="message">Your Message <span class="required">*</span></label>
-          <textarea id="message" name="message" rows="5" required aria-required="true"></textarea>
-        </div>
-        
-        <button type="submit" class="submit-button">
-          <span class="icon" aria-hidden="true"><i class="fas fa-paper-plane"></i></span>
-          <span>Send Message</span>
-        </button>
-      </form>
-
-      <div class="contact-info" data-aos="fade-up" data-aos-delay="100">
-        <div class="info-grid" role="list">
-          <div class="info-card" role="listitem">
-            <h3><span class="icon" aria-hidden="true"><i class="fas fa-map-marker-alt"></i></span> Visit Us</h3>
-            <address>
-              <a href="https://www.google.com/maps/search/?api=1&query=Gudele+2,+Joppa+Block+3,+Juba,+South+Sudan" 
-                 target="_blank" 
-                 rel="noopener noreferrer"
-                 class="contact-link">
-                Gudele 2, Joppa Block 3<br>
-                Opp. Oasis Co.LTD<br>
-                Juba, South Sudan
-              </a>
-            </address>
+        <div class="mission-grid" role="list">
+          <div class="mission-card" data-aos="fade-up" data-aos-delay="100" role="listitem">
+            <div class="mission-icon"><i class="fas fa-pray"></i></div>
+            <h3>Spiritual Growth</h3>
+            <p>Empowering children spiritually with the Word of God, teaching them to obey and honor God's Word.</p>
           </div>
-          
-          <div class="info-card" role="listitem">
-            <h3><span class="icon" aria-hidden="true"><i class="fas fa-phone-alt"></i></span> Call Us</h3>
-            <p>
-              <a href="tel:+211926006202" class="contact-link">+211 926 006 202</a><br>
-              <a href="tel:+211986602002" class="contact-link">+211 986 602 002</a>
-            </p>
+          <div class="mission-card" data-aos="fade-up" data-aos-delay="200" role="listitem">
+            <div class="mission-icon"><i class="fas fa-hands-helping"></i></div>
+            <h3>Physical Support</h3>
+            <p>Providing resources to help the community thrive in challenging circumstances.</p>
           </div>
-          
-          <div class="info-card" role="listitem">
-            <h3><span class="icon" aria-hidden="true"><i class="fas fa-envelope"></i></span> Email Us</h3>
-            <p>
-              <a href="mailto:heavenlynatureministry@gmail.com?subject=Inquiry%20from%20Website" 
-                 class="contact-link">
-                heavenlynatureministry@gmail.com
-              </a>
-            </p>
+          <div class="mission-card" data-aos="fade-up" data-aos-delay="300" role="listitem">
+            <div class="mission-icon"><i class="fas fa-graduation-cap"></i></div>
+            <h3>Mental Development</h3>
+            <p>Building people in the Word of God to become useful and productive citizens.</p>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<footer class="site-footer">
-  <div class="footer-content">
-    <div class="footer-grid">
-      <div class="footer-about">
-        <div class="footer-logo">
-          <img src="images/logo-white.png" 
-               alt="Heavenly Nature Ministry Logo" 
-               width="180" 
-               height="80" 
-               loading="lazy"
-               decoding="async">
-        </div>
-        <p>Through Christ's love and faith, we empower generations and transform lives across South Sudan and beyond.</p>
-        <div class="social-links" aria-label="Social media links">
-          <a href="https://www.facebook.com/p/Heavenly-Nature-Ministry-100076222624322/" 
-             target="_blank" 
-             rel="noopener noreferrer"
-             aria-label="Facebook">
-            <span class="icon" aria-hidden="true"><i class="fab fa-facebook-f"></i></span>
-          </a>
-          <a href="https://www.youtube.com/channel/UCug1LOg7QTil8tdzrAIvy8g/live" 
-             target="_blank" 
-             rel="noopener noreferrer"
-             aria-label="YouTube">
-            <span class="icon" aria-hidden="true"><i class="fab fa-youtube"></i></span>
-          </a>
-          <a href="https://wa.me/211926006202" 
-             target="_blank" 
-             rel="noopener noreferrer"
-             aria-label="WhatsApp">
-            <span class="icon" aria-hidden="true"><i class="fab fa-whatsapp"></i></span>
-          </a>
-          <a href="mailto:heavenlynatureministry@gmail.com" 
-             aria-label="Email">
-            <span class="icon" aria-hidden="true"><i class="fas fa-envelope"></i></span>
-          </a>
-        </div>
-      </div>
-      
-      <nav class="footer-links" aria-label="Footer navigation">
-        <h3>Quick Links</h3>
-        <ul>
-          <li><a href="#about"><span class="icon" aria-hidden="true"><i class="fas fa-chevron-right"></i></span> About Us</a></li>
-          <li><a href="#mission"><span class="icon" aria-hidden="true"><i class="fas fa-chevron-right"></i></span> Our Mission</a></li>
-          <li><a href="#sermons"><span class="icon" aria-hidden="true"><i class="fas fa-chevron-right"></i></span> Sermons</a></li>
-          <li><a href="#events"><span class="icon" aria-hidden="true"><i class="fas fa-chevron-right"></i></span> Events</a></li>
-          <li><a href="#gallery"><span class="icon" aria-hidden="true"><i class="fas fa-images"></i></span> gallery</a></li>
-          <li><a href="#contact"><span class="icon" aria-hidden="true"><i class="fas fa-chevron-right"></i></span> Contact</a></li>
-        </ul>
-      </nav>
-      
-      <div class="footer-contact">
-        <h3>Contact</h3>
-        <address>
-          <p><span class="icon" aria-hidden="true"><i class="fas fa-map-marker-alt"></i></span> Gudele 2, Joppa Block 3,<br>Opp. Oasis Co.LTD,<br>Juba, South Sudan</p>
-          <p><span class="icon" aria-hidden="true"><i class="fas fa-phone-alt"></i></span> <a href="tel:+211926006202">+211 926 006 202</a></p>
-          <p><span class="icon" aria-hidden="true"><i class="fas fa-envelope"></i></span> <a href="mailto:heavenlynatureministry@gmail.com">heavenlynatureministry@gmail.com</a></p>
-        </address>
+    <section id="mission" class="section section--alt" aria-labelledby="mission-heading">
+      <div class="section-content">
+        <h2 id="mission-heading" data-aos="fade-up">Our Mission</h2>
+        <p class="section-intro" data-aos="fade-up">To empower street/abandoned children and orphans to fully utilize their spiritual, physical, and mental gifts to become self-reliant and harmonious citizens.</p>
         
-        <h3 class="service-times">Service Times</h3>
-        <div class="service-hours">
-          <p><span class="icon" aria-hidden="true"><i class="far fa-clock"></i></span> Sunday: 9:00 AM - 1:00 PM</p>
-          <p><span class="icon" aria-hidden="true"><i class="far fa-clock"></i></span> Bible Study: Mon, Thu, Fri 4:00 PM</p>
+        <h3 class="core-values-title" data-aos="fade-up">Core Values: SEE HIM</h3>
+        <div class="values-grid" role="list">
+          <div class="mission-card" data-aos="fade-up" role="listitem"><h3><i class="fas fa-search"></i> Seek God First</h3><p><cite>Matthew 6:33</cite></p></div>
+          <div class="mission-card" data-aos="fade-up" data-aos-delay="100" role="listitem"><h3><i class="fas fa-bullhorn"></i> Evangelism</h3><p><cite>Matthew 28:19</cite></p></div>
+          <div class="mission-card" data-aos="fade-up" data-aos-delay="200" role="listitem"><h3><i class="fas fa-star"></i> Excellence</h3><p><cite>Daniel 6:3</cite></p></div>
+          <div class="mission-card" data-aos="fade-up" role="listitem"><h3><i class="fas fa-user-friends"></i> Honor & Humility</h3><p><cite>Romans 12:10</cite></p></div>
+          <div class="mission-card" data-aos="fade-up" data-aos-delay="100" role="listitem"><h3><i class="fas fa-shield-alt"></i> Integrity</h3><p><cite>Job 31:6</cite></p></div>
+          <div class="mission-card" data-aos="fade-up" data-aos-delay="200" role="listitem"><h3><i class="fas fa-users"></i> Mentoring</h3><p><cite>2 Timothy 2:2</cite></p></div>
         </div>
       </div>
-    </div>
+    </section>
     
-    <div class="footer-bottom">
-      <p class="copyright">
-        © <span id="current-year"></span> Heavenly Nature Ministry. All Rights Reserved.
-      </p>
+    <section id="events" class="section" aria-labelledby="events-heading">
+      <div class="section-content">
+        <h2 id="events-heading" data-aos="fade-up">Our Gatherings</h2>
+        <p class="section-intro" data-aos="fade-up">Join us for our special and weekly events. All are welcome!</p>
+
+        <div class="event-card" data-aos="fade-up">
+          <div class="event-banner">
+            <img src="images/children-festivals-banner.webp" alt="Children smiling at Heavenly Nature Ministry's Annual Festival" loading="lazy" class="event-image">
+            <div class="event-date"><span class="event-day">28</span><span class="event-month">DEC</span></div>
+          </div>
+          <div class="event-details">
+            <h3>Annual Children's Festival</h3>
+            <div class="event-meta">
+              <p><i class="fas fa-clock"></i> 9:00 AM - 3:00 PM CAT</p>
+              <p><i class="fas fa-map-marker-alt"></i> Church Main Premises</p>
+            </div>
+            <p class="event-description">A day of hope and transformation where we bring children together for meals, ministry, counseling, games, and worship.</p>
+            <a href="#contact" class="cta-button small"><i class="fas fa-calendar-check"></i> Learn More</a>
+          </div>
+        </div>
+
+        <h3 class="core-values-title" data-aos="fade-up">Weekly Schedule</h3>
+        <div class="schedule-grid" role="list">
+            <div class="schedule-card" data-aos="fade-up" role="listitem"><h3>Sunday's Main Service</h3><p><i class="far fa-clock"></i> Sun: 9:00 AM - 1:00 PM</p></div>
+            <div class="schedule-card" data-aos="fade-up" data-aos-delay="100" role="listitem"><h3>Student's Service</h3><p><i class="far fa-clock"></i> Sun: 3:00 PM - 4:30 PM</p></div>
+            <div class="schedule-card" data-aos="fade-up" data-aos-delay="200" role="listitem"><h3>Bible Studies</h3><p><i class="far fa-clock"></i> Mon, Thu, Fri: 4:00 PM - 5:30 PM</p></div>
+            <div class="schedule-card" data-aos="fade-up" data-aos-delay="300" role="listitem"><h3>Counseling</h3><p><i class="far fa-clock"></i> Tue, Fri: 3:00 PM - 5:30 PM</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="section section--alt" aria-labelledby="gallery-heading">
+      <div class="section-content">
+        <h2 id="gallery-heading" data-aos="fade-up">Ministry Gallery</h2>
+        <p class="section-intro" data-aos="fade-up">Capturing God's work through our community</p>
+
+        <div class="gallery-grid">
+          <div class="gallery-item" data-aos="fade-up"><img src="images/gallery/worship.webp" loading="lazy" alt="Congregation praising"><div class="gallery-caption">Worship</div></div>
+          <div class="gallery-item" data-aos="fade-up" data-aos-delay="100"><img src="images/gallery/fellowship.webp" loading="lazy" alt="Children enjoying meal"><div class="gallery-caption">Fellowship</div></div>
+          <div class="gallery-item" data-aos="fade-up" data-aos-delay="200"><img src="images/gallery/teaching.webp" loading="lazy" alt="Bible story time"><div class="gallery-caption">Teaching</div></div>
+          <div class="gallery-item" data-aos="fade-up"><img src="images/gallery/education.webp" loading="lazy" alt="Pupils in classroom"><div class="gallery-caption">Education</div></div>
+          <div class="gallery-item" data-aos="fade-up" data-aos-delay="100"><img src="images/gallery/pastor.webp" loading="lazy" alt="Pastor preaching"><div class="gallery-caption">The Word</div></div>
+          <div class="gallery-item" data-aos="fade-up" data-aos-delay="200"><img src="images/gallery/prayer.webp" loading="lazy" alt="Children praying"><div class="gallery-caption">Prayer</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="donate" class="section" aria-labelledby="donate-heading">
+      <div class="section-content">
+        <h2 id="donate-heading" data-aos="fade-up">Support Our Ministry</h2>
+        <p class="section-intro" data-aos="fade-up">Your generosity helps us continue our mission in South Sudan.</p>
+        <div class="donation-options" data-aos="fade-up">
+          <div class="donation-card">
+            <h3>One-Time Donation</h3><p>Make a single contribution to support our programs.</p>
+            <button class="cta-button"><i class="fas fa-hand-holding-heart"></i> Donate Now</button>
+          </div>
+          <div class="donation-card">
+            <h3>Monthly Support</h3><p>Sustain our ministry with a recurring monthly gift.</p>
+            <button class="cta-button"><i class="fas fa-calendar-alt"></i> Give Monthly</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section section--alt" aria-labelledby="contact-heading">
+      <div class="section-content">
+        <h2 id="contact-heading" data-aos="fade-up">Contact Us</h2>
+        <p class="section-intro" data-aos="fade-up">We'd love to hear from you. Send us a message for prayer, inquiries, or partnership.</p>
+        <div class="contact-container">
+          <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-form" data-aos="fade-up">
+            <input type="hidden" name="form-name" value="contact">
+            <p class="visually-hidden"><label>Don’t fill this out if you’re human: <input name="bot-field"></label></p>
+            <div class="form-group"><label for="name">Your Name <span class="required">*</span></label><input type="text" id="name" name="name" required></div>
+            <div class="form-group"><label for="email">Email Address <span class="required">*</span></label><input type="email" id="email" name="email" required></div>
+            <div class="form-group"><label for="subject">Subject</label><select id="subject" name="subject"><option value="general">General Inquiry</option><option value="prayer">Prayer Request</option><option value="volunteer">Volunteer</option></select></div>
+            <div class="form-group"><label for="message">Your Message <span class="required">*</span></label><textarea id="message" name="message" rows="5" required></textarea></div>
+            <button type="submit" class="submit-button"><i class="fas fa-paper-plane"></i> Send Message</button>
+          </form>
+
+          <div class="contact-info" data-aos="fade-up" data-aos-delay="100">
+            <div class="info-card"><h3><i class="fas fa-map-marker-alt"></i> Visit Us</h3><address><a href="#" target="_blank" rel="noopener noreferrer">Gudele 2, Joppa Block 3<br>Juba, South Sudan</a></address></div>
+            <div class="info-card"><h3><i class="fas fa-phone-alt"></i> Call Us</h3><p><a href="tel:+211926006202">+211 926 006 202</a><br><a href="tel:+211986602002">+211 986 602 002</a></p></div>
+            <div class="info-card"><h3><i class="fas fa-envelope"></i> Email Us</h3><p><a href="mailto:info@heavenlynatureministry.com">info@heavenlynatureministry.com</a></p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <img src="images/logo-white.webp" alt="Heavenly Nature Ministry Logo" width="180" height="50" loading="lazy">
+          <p>Empowering generations and transforming lives through Christ's love across South Sudan.</p>
+          <div class="social-links">
+            <a href="https://www.facebook.com/p/Heavenly-Nature-Ministry-100076222624322/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://wa.me/211926006202" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+            <li><a href="#mission"><i class="fas fa-chevron-right"></i> Our Mission</a></li>
+            <li><a href="#events"><i class="fas fa-chevron-right"></i> Events</a></li>
+            <li><a href="#donate"><i class="fas fa-chevron-right"></i> Donate</a></li>
+            <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+          </ul>
+        </nav>
+        <div class="footer-contact">
+          <h3>Service Times</h3>
+          <p><i class="far fa-clock"></i> Sunday: 9:00 AM - 1:00 PM</p>
+          <p><i class="far fa-clock"></i> Bible Study: Mon, Thu, Fri @ 4PM</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="current-year"></span> Heavenly Nature Ministry. All Rights Reserved.</p>
+      </div>
     </div>
-  </div>
-</footer>
+  </footer>
 
-<button class="back-to-top" id="back-to-top" aria-label="Back to top">
-  <span class="icon" aria-hidden="true"><i class="fas fa-arrow-up"></i></span>
-</button>
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="js/main.js" defer></script>
-
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/main.js" defer></script>
 </body>
 </html>
