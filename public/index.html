@@ -34,45 +34,44 @@
   <a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
   
   <header class="site-header">
-  <div class="header-container">
-    <div class="logo-container">
-      <a href="#" aria-label="Home - Heavenly Nature Ministry">
-        <img src="images/logo.webp" alt="Heavenly Nature Ministry Logo" width="180" height="50">
-      </a>
+    <div class="header-container">
+      <div class="logo-container">
+        <a href="#" aria-label="Home - Heavenly Nature Ministry">
+          <img src="images/logo.webp" alt="Heavenly Nature Ministry Logo" width="180" height="50" loading="lazy">
+        </a>
+      </div>
+      
+      <nav id="main-navigation" class="main-nav" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><a href="#about" class="nav-link">About Us</a></li>
+          <li><a href="#mission" class="nav-link">Our Mission</a></li>
+          <li><a href="#events" class="nav-link">Events</a></li>
+          <li><a href="#gallery" class="nav-link">Gallery</a></li>
+          <li><a href="#donate" class="nav-link donate-button">Donate</a></li>
+        </ul>
+      </nav>
+
+      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+        </span>
+      </button>
     </div>
-    
-    <nav id="main-navigation" class="main-nav" aria-label="Main navigation">
-      <ul class="nav-list">
-        <li><a href="#about" class="nav-link">About Us</a></li>
-        <li><a href="#mission" class="nav-link">Our Mission</a></li>
-        <li><a href="#events" class="nav-link">Events</a></li>
-        <li><a href="#gallery" class="nav-link">Gallery</a></li>
-        <li><a href="#donate" class="nav-link donate-button">Donate</a></li>
-      </ul>
-    </nav>
+  </header>
 
-    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
-      <i class="fas fa-bars icon-open"></i>
-      <i class="fas fa-times icon-close"></i>
-    </button>
-  </div>
-</header>
-
-  <div class="mobile-menu" id="mobile-menu">
-    <nav aria-label="Mobile navigation">
-      <ul class="mobile-nav-list">
-        <li><a href="#about" class="mobile-nav-link">About Us</a></li>
-        <li><a href="#mission" class="mobile-nav-link">Our Mission</a></li>
-        <li><a href="#events" class="mobile-nav-link">Events</a></li>
-        <li><a href="#gallery" class="mobile-nav-link">Gallery</a></li>
-        <li><a href="#donate" class="mobile-nav-link">Donate</a></li>
-        <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
+  <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation">
+    <ul class="mobile-nav-list">
+      <li><a href="#about" class="mobile-nav-link">About Us</a></li>
+      <li><a href="#mission" class="mobile-nav-link">Our Mission</a></li>
+      <li><a href="#events" class="mobile-nav-link">Events</a></li>
+      <li><a href="#gallery" class="mobile-nav-link">Gallery</a></li>
+      <li><a href="#donate" class="mobile-nav-link donate-button">Donate</a></li>
+      <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
+    </ul>
+  </nav>
 
   <main id="main-content">
-    <section class="hero" aria-labelledby="hero-heading">
+    <section class="hero" aria-labelledby="hero-heading" style="background-image: url('images/hero-bg.webp');">
       <div class="hero-content" data-aos="fade-up">
         <h1 id="hero-heading">Welcome to Heavenly Nature Ministry</h1>
         <p class="hero-tagline">"We are one" <span class="scripture-ref">(John 17:21)</span></p>
@@ -209,7 +208,7 @@
           </form>
 
           <div class="contact-info" data-aos="fade-up" data-aos-delay="100">
-            <div class="info-card"><h3><i class="fas fa-map-marker-alt"></i> Visit Us</h3><address><a href="#" target="_blank" rel="noopener noreferrer">Gudele 2, Joppa Block 3<br>Juba, South Sudan</a></address></div>
+            <div class="info-card"><h3><i class="fas fa-map-marker-alt"></i> Visit Us</h3><address><a href="https://www.google.com/maps/search/?api=1&query=Gudele+2,+Joppa+Block+3,+Juba,+South+Sudan" target="_blank" rel="noopener noreferrer">Gudele 2, Joppa Block 3<br>Juba, South Sudan</a></address></div>
             <div class="info-card"><h3><i class="fas fa-phone-alt"></i> Call Us</h3><p><a href="tel:+211926006202">+211 926 006 202</a><br><a href="tel:+211986602002">+211 986 602 002</a></p></div>
             <div class="info-card"><h3><i class="fas fa-envelope"></i> Email Us</h3><p><a href="mailto:info@heavenlynatureministry.com">info@heavenlynatureministry.com</a></p></div>
           </div>
