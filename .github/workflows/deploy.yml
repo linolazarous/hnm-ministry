@@ -12,6 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      - name: Create .env file
+        run: |
+          echo "FACEBOOK_APP_ID=${{ secrets.FACEBOOK_APP_ID }}" > .env
+          echo "FACEBOOK_CLIENT_TOKEN=${{ secrets.FACEBOOK_CLIENT_TOKEN }}" >> .env
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> .env
+          echo "YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }}" >> .env
+      
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
       
@@ -20,5 +27,4 @@ jobs:
           netlify deploy --prod --dir=public --functions=functions \
           --message="Deploy from GitHub Actions" \
           --auth=${{ secrets.NETLIFY_AUTH_TOKEN }} \
-          --site=${{ secrets.NETLIFY_SITE_ID }} \
-          --env=YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }},STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }},FACEBOOK_CLIENT_TOKEN=${{ secrets.FACEBOOK_CLIENT_TOKEN }}
+          --site=${{ secrets.NETLIFY_SITE_ID }}
