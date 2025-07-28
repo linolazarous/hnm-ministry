@@ -1,0 +1,24 @@
+name: Deploy to Netlify
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+      
+      - name: Deploy to Netlify
+        run: |
+          netlify deploy --prod --dir=public --functions=functions \
+          --message="Deploy from GitHub Actions" \
+          --auth=${{ secrets.NETLIFY_AUTH_TOKEN }} \
+          --site=${{ secrets.NETLIFY_SITE_ID }} \
+          --env=YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }},STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }},FACEBOOK_CLIENT_TOKEN=${{ secrets.FACEBOOK_CLIENT_TOKEN }}
