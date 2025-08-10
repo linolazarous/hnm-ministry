@@ -1,6 +1,6 @@
 # Heavenly Nature Ministry
 
-![HNM Logo](/public/images/logo.png)
+![HNM Logo](public/images/logo.webp)
 
 A digital platform for Heavenly Nature Ministry's online presence, featuring livestreaming, donations, and member engagement tools.
 
@@ -52,4 +52,5 @@ A digital platform for Heavenly Nature Ministry's online presence, featuring liv
 │   └── pages/       # Route components
 ├── functions/       # Serverless functions
 └── netlify/         # Deployment configs
+
 
