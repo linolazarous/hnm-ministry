@@ -154,7 +154,7 @@
     <div class="icon" aria-hidden="true">✓</div>
     <h1>Donation Successful!</h1>
     <p>Thank you for your generous support of Heavenly Nature Ministry. Your contribution will help us continue our mission of empowering generations through faith.</p>
-    <p>A receipt has been sent to your email. For any questions, please contact us at <a href="mailto:donations@hnm.org" style="color: var(--accent-gold);">donations@hnm.org</a></p>
+    <p>A receipt has been sent to your email. For any questions, please contact us at <a href="mailto:info@heavenlynatureministry.com" style="color: var(--accent-gold);">info@heavenlynatureministry.com</a></p>
     
     <div class="action-buttons">
       <a href="/" class="btn">Return Home</a>
@@ -195,6 +195,26 @@
       }
     });
   </script>
-  <script src="/shared.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load donation details
+      const details = JSON.parse(sessionStorage.getItem('donationDetails') || '{}');
+      const detailsEl = document.getElementById('donation-details');
+      
+      if (details.amount) {
+        detailsEl.innerHTML = `
+          <p>Thank you for your donation of $${details.amount}!</p>
+          <p>Receipt sent to ${details.email || 'your email'}.</p>
+        `;
+      } else {
+        detailsEl.innerHTML = `<p>Thank you for your donation!</p>`;
+      }
+      
+      // Clear storage after display
+      sessionStorage.removeItem('donationDetails');
+    });
+  </script>
+    <script src="shared.js"></script>
 </body>
 </html>
