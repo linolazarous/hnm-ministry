@@ -33,7 +33,6 @@ A digital platform for Heavenly Nature Ministry's online presence, featuring liv
 **Backend:**
 - Netlify Functions
 - Stripe API
-- Formspree
 
 **Utilities:**
 - React Router 6
@@ -52,5 +51,6 @@ A digital platform for Heavenly Nature Ministry's online presence, featuring liv
 │   └── pages/       # Route components
 ├── functions/       # Serverless functions
 └── netlify/         # Deployment configs
+
 
 
