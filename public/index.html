@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Heavenly Nature Ministry - Empowering generations through faith and providing support to children and communities in Juba, South Sudan.">
+  <meta name="description" content="Heavenly Nature Ministry - Empowering South Sudan's vulnerable children through Christ-centered transformation">
   <title>Heavenly Nature Ministry | Juba, South Sudan</title>
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="css/main.min.css" as="style">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" as="style" crossorigin>
+  <link rel="preload" href="js/main.min.js" as="script">
 
   <!-- Favicons -->
   <link rel="icon" href="images/favicon.ico" sizes="any">
@@ -13,21 +18,11 @@
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#1a4b8c">
 
-  <!-- Preloads -->
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" crossorigin="anonymous">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" as="style">
-  <link rel="preload" href="css/main.css" as="style">
-
-  <!-- DNS Prefetch -->
-  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-
   <!-- CSS -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main.min.css">
 
   <!-- Additional Meta -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -75,11 +70,12 @@
   </nav>
 
   <main id="main-content">
+  	
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-overlay"></div>
       <div class="hero-content" data-aos="fade-up">
         <h1 id="hero-heading">Welcome to Heavenly Nature Ministry</h1>
-        <p class="hero-tagline">"We are one" <span class="scripture-ref">(John 17:21)</span></p>
+        <p class="hero-tagline">"We are one"<span class="slogan-ref">Empowering South Sudan’s vulnerable children through Christ-centered transformation—spiritually, physically, and mentally—to build self-reliant, God-fearing generations</span></p>
         <div class="hero-buttons">
           <a href="#donate" class="cta-button">
             <i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Help Our Mission
@@ -170,32 +166,72 @@
         <p class="section-intro" data-aos="fade-up">Capturing God's work through our community</p>
 
         <div class="gallery-grid">
-          <div class="gallery-item" data-aos="fade-up"><img src="images/gallery/worship.webp" loading="lazy" alt="Congregation praising"><div class="gallery-caption">Worship</div></div>
-          <div class="gallery-item" data-aos="fade-up" data-aos-delay="100"><img src="images/gallery/fellowship.webp" loading="lazy" alt="Children enjoying meal"><div class="gallery-caption">Fellowship</div></div>
-          <div class="gallery-item" data-aos="fade-up" data-aos-delay="200"><img src="images/gallery/teaching.webp" loading="lazy" alt="Bible story time"><div class="gallery-caption">Teaching</div></div>
-          <div class="gallery-item" data-aos="fade-up"><img src="images/gallery/education.webp" loading="lazy" alt="Pupils in classroom"><div class="gallery-caption">Education</div></div>
-          <div class="gallery-item" data-aos="fade-up" data-aos-delay="100"><img src="images/gallery/pastor.webp" loading="lazy" alt="Pastor preaching"><div class="gallery-caption">The Word</div></div>
-          <div class="gallery-item" data-aos="fade-up" data-aos-delay="200"><img src="images/gallery/prayer.webp" loading="lazy" alt="Children praying"><div class="gallery-caption">Prayer</div></div>
+          <div class="gallery-item" data-aos="fade-up"><img src="images/worship.webp" loading="lazy" alt="Congregation praising"><div class="gallery-caption">Worship</div></div>
+          <div class="gallery-item" data-aos="fade-up" data-aos-delay="100"><img src="images/fellowship.webp" loading="lazy" alt="Children enjoying meal"><div class="gallery-caption">Fellowship</div></div>
+          <div class="gallery-item" data-aos="fade-up" data-aos-delay="200"><img src="images/teaching.webp" loading="lazy" alt="Bible story time"><div class="gallery-caption">Teaching</div></div>
+          <div class="gallery-item" data-aos="fade-up"><img src="images/education.webp" loading="lazy" alt="Pupils in classroom"><div class="gallery-caption">Education</div></div>
+          <div class="gallery-item" data-aos="fade-up" data-aos-delay="100"><img src="images/pastor.webp" loading="lazy" alt="Pastor preaching"><div class="gallery-caption">The Word</div></div>
+          <div class="gallery-item" data-aos="fade-up" data-aos-delay="200"><img src="images/prayer.webp" loading="lazy" alt="Children praying"><div class="gallery-caption">Prayer</div></div>
         </div>
       </div>
     </section>
 
     <section id="donate" class="section" aria-labelledby="donate-heading">
-      <div class="section-content">
-        <h2 id="donate-heading" data-aos="fade-up">Support Our Ministry</h2>
-        <p class="section-intro" data-aos="fade-up">Your generosity helps us continue our mission in South Sudan.</p>
-        <div class="donation-options" data-aos="fade-up">
-          <div class="donation-card">
-            <h3>One-Time Donation</h3><p>Make a single contribution to support our programs.</p>
-            <button class="cta-button"><i class="fas fa-hand-holding-heart"></i> Donate Now</button>
-          </div>
-          <div class="donation-card">
-            <h3>Monthly Support</h3><p>Sustain our ministry with a recurring monthly gift.</p>
-            <button class="cta-button"><i class="fas fa-calendar-alt"></i> Give Monthly</button>
-          </div>
+  <div class="section-content">
+    <h2 id="donate-heading" data-aos="fade-up">Support Our Ministry</h2>
+    <p class="section-intro" data-aos="fade-up">Your generosity helps us continue our mission in South Sudan. Choose your preferred donation method:</p>
+    
+    <div class="donation-options" data-aos="fade-up">
+      <!-- Stripe Donation Options -->
+      <div class="donation-card">
+        <h3><i class="fab fa-cc-stripe"></i> Online Donation</h3>
+        <p>Secure online payment via credit/debit card</p>
+        <div class="donation-buttons">
+          <button class="cta-button"><i class="fas fa-hand-holding-heart"></i> One-Time Donation</button>
+          <button class="cta-button"><i class="fas fa-calendar-alt"></i> Monthly Support</button>
         </div>
       </div>
-    </section>
+      
+      <!-- Bank Transfer Option -->
+      <div class="donation-card">
+        <h3><i class="fas fa-university"></i> Bank Transfer</h3>
+        <p>Make a direct bank transfer to our account:</p>
+        <div class="bank-details">
+          <p><strong>Bank Name:</strong> Equity Bank Limited Southern Sudan</p>
+          <p><strong>Head Office Switch Code:</strong> EQBLSSJB</p>
+          <p><strong>Account Name:</strong> Heavenly Nature Ministry</p>
+          <p><strong>Account Number:</strong> 2010211361856</p>
+        </div>
+        <button class="cta-button outline copy-button" data-clipboard-text="2010211361856">
+          <i class="fas fa-copy"></i> Copy Account Number
+        </button>
+      </div>
+      
+      <!-- Mobile Money Option -->
+      <div class="donation-card">
+        <h3><i class="fas fa-mobile-alt"></i> Mobile Money</h3>
+        <p>Send your donation via Mobile Money:</p>
+        <div class="momo-details">
+          <p><strong>Mobile Number:</strong> +211 926 006 202</p>
+          <p><strong>Network:</strong> MTN South Sudan</p>
+          <p><strong>Account Name:</strong> Heavenly Nature Ministry</p>
+        </div>
+        <div class="momo-buttons">
+          <a href="tel:*200*6*+211926006202*amount* your-pin#" class="cta-button outline">
+            <i class="fas fa-phone-alt"></i> Dial USSD
+          </a>
+          <a href="https://wa.me/+211926006202?text=I%20want%20to%20donate%20via%20Mobile%20Money" class="cta-button outline" target="_blank">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="donation-note" data-aos="fade-up">
+      <p><i class="fas fa-info-circle"></i> For any issues with donations or to request a receipt, please <a href="#contact">contact us</a> with your payment details.</p>
+    </div>
+  </div>
+</section>
 
     <section id="contact" class="section section--alt" aria-labelledby="contact-heading">
       <div class="section-content">
@@ -223,45 +259,50 @@
   </main>
 
   <footer class="site-footer">
-    <div class="footer-content">
-      <div class="footer-grid">
-        <div class="footer-about">
-          <img src="images/logo-white.webp" alt="Heavenly Nature Ministry Logo" width="180" height="50" loading="lazy">
-          <p>Empowering generations and transforming lives through Christ's love across South Sudan.</p>
-          <div class="social-links">
-            <a href="https://www.facebook.com/p/Heavenly-Nature-Ministry-100076222624322/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-            <a href="https://wa.me/211926006202" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-          </div>
-        </div>
-        <nav class="footer-links" aria-label="Footer navigation">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
-            <li><a href="#mission"><i class="fas fa-chevron-right"></i> Our Mission</a></li>
-            <li><a href="#events"><i class="fas fa-chevron-right"></i> Events</a></li>
-            <li><a href="#donate"><i class="fas fa-chevron-right"></i> Donate</a></li>
-            <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
-          </ul>
-        </nav>
-        <div class="footer-contact">
-          <h3>Service Times</h3>
-          <p><i class="far fa-clock"></i> Sunday: 9:00 AM - 1:00 PM</p>
-          <p><i class="far fa-clock"></i> Bible Study: Mon, Thu, Fri @ 4PM</p>
+  <div class="footer-content">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <img src="images/logo-white.webp" alt="Heavenly Nature Ministry Logo" width="180" height="50" loading="lazy">
+        <p>"Empowering South Sudan's vulnerable children through Christ-centered transformation—spiritually, physically, and mentally—to build self-reliant, God-fearing generations."</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/p/Heavenly-Nature-Ministry-100076222624322/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="https://wa.me/211926006202" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; <span id="current-year"></span> Heavenly Nature Ministry. All Rights Reserved.</p>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+          <li><a href="index.html#mission"><i class="fas fa-chevron-right"></i> Our Mission</a></li>
+          <li><a href="index.html#events"><i class="fas fa-chevron-right"></i> Events</a></li>
+          <li><a href="index.html#donate"><i class="fas fa-chevron-right"></i> Donate</a></li>
+          <li><a href="index.html#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+        </ul>
+      </nav>
+      <div class="footer-contact">
+        <h3>Service Times</h3>
+        <p><i class="far fa-clock"></i> Sunday: 9:00 AM - 1:00 PM</p>
+        <p><i class="far fa-clock"></i> Bible Study: Mon, Thu, Fri @ 4PM</p>
       </div>
     </div>
-  </footer>
+    <div class="footer-bottom">
+      <p>&copy; <span id="current-year"></span> Heavenly Nature Ministry. All Rights Reserved.</p>
+      <div class="legal-links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <span class="separator">|</span>
+        <a href="terms-and-conditions.html">Terms & Conditions</a>
+       </div>
+     </div>
+   </div>
+ </footer>
 
   <button class="back-to-top" id="back-to-top" aria-label="Back to top">
     <i class="fas fa-arrow-up"></i>
   </button>
 
   <!-- JavaScript -->
-  <script src="js/main.js" defer></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/main.min.js" defer></script>
 </body>
 </html>
