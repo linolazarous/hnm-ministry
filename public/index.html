@@ -10,7 +10,7 @@
   <link rel="preload" href="css/main.min.css" as="style">
   <link rel="preload" href="js/main.min.js" as="script">
 
-  <!-- Favicons -->
+  <!-- Favicon and theme -->
   <link rel="icon" href="images/favicon.ico" sizes="any">
   <link rel="icon" href="images/logo.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -18,50 +18,10 @@
   <meta name="theme-color" content="#1a4b8c">
 
   <!-- Fonts & Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" crossorigin>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
   <link rel="stylesheet" href="css/main.min.css">
-
-  <!-- Open Graph / Twitter Meta -->
-  <meta property="og:title" content="Heavenly Nature Ministry | Juba, South Sudan">
-  <meta property="og:description" content="Empowering South Sudan's vulnerable children through Christ-centered transformation">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://heavenlynatureministry.com">
-  <meta property="og:image" content="https://heavenlynatureministry.com/images/og-image.jpg">
-  <meta property="og:site_name" content="Heavenly Nature Ministry">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Heavenly Nature Ministry | Juba, South Sudan">
-  <meta name="twitter:description" content="Empowering South Sudan's vulnerable children through Christ-centered transformation">
-  <meta name="twitter:image" content="https://heavenlynatureministry.com/images/twitter-image.jpg">
-
-  <!-- Schema.org Organization Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Heavenly Nature Ministry",
-    "url": "https://heavenlynatureministry.com",
-    "logo": "https://heavenlynatureministry.com/images/logo.svg",
-    "description": "Empowering South Sudan's vulnerable children through Christ-centered transformation",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Gudele 2, Joppa Block 3",
-      "addressLocality": "Juba",
-      "addressCountry": "South Sudan"
-    },
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+211-926-006-202",
-      "contactType": "customer service"
-    },
-    "sameAs": [
-      "https://www.facebook.com/share/12LD7tYTe1z/",
-      "https://www.youtube.com/@HeavenlyNatureMinistryInc"
-    ]
-  }
-  </script>
 </head>
 
 <body>
@@ -70,15 +30,15 @@
   <header class="site-header">
     <div class="header-container">
       <div class="logo-container">
-        <a href="/" aria-label="Home - Heavenly Nature Ministry">
+        <a href="/" aria-label="Home">
           <img src="images/logo.webp" alt="Heavenly Nature Ministry Logo" width="180" height="50" loading="eager">
         </a>
       </div>
 
-      <nav id="main-navigation" class="main-nav" aria-label="Main navigation">
+      <nav id="main-navigation" class="main-nav">
         <ul class="nav-list">
           <li><a href="#about" class="nav-link">About Us</a></li>
-          <li><a href="#mission" class="nav-link">Our Mission</a></li>
+          <li><a href="#mission" class="nav-link">Mission</a></li>
           <li><a href="#events" class="nav-link">Events</a></li>
           <li><a href="#gallery" class="nav-link">Gallery</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
@@ -86,26 +46,14 @@
         </ul>
       </nav>
 
-      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span class="hamburger-box"><span class="hamburger-inner"></span></span>
       </button>
     </div>
   </header>
 
-  <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation">
-    <ul class="mobile-nav-list">
-      <li><a href="#about" class="mobile-nav-link">About Us</a></li>
-      <li><a href="#mission" class="mobile-nav-link">Our Mission</a></li>
-      <li><a href="#events" class="mobile-nav-link">Events</a></li>
-      <li><a href="#gallery" class="mobile-nav-link">Gallery</a></li>
-      <li><a href="#donate" class="mobile-nav-link donate-button">Donate</a></li>
-      <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
-    </ul>
-  </nav>
-
   <main id="main-content">
-
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-overlay"></div>
       <div class="hero-content" data-aos="fade-up">
@@ -118,33 +66,31 @@
       </div>
     </section>
 
-    <!-- Other sections (About, Mission, Events, Gallery) remain unchanged from your original file -->
-
     <!-- Donate Section -->
-    <section id="donate" class="section" aria-labelledby="donate-heading">
+    <section id="donate" class="section">
       <div class="section-content">
-        <h2 id="donate-heading" data-aos="fade-up">Support Our Ministry</h2>
+        <h2 data-aos="fade-up">Support Our Ministry</h2>
         <p class="section-intro" data-aos="fade-up">Your generosity helps us continue our mission in South Sudan.</p>
 
         <div class="donation-options" data-aos="fade-up">
-          <!-- Stripe -->
+          <!-- Stripe Online Donation -->
           <div class="donation-card">
             <h3><i class="fab fa-cc-stripe"></i> Online Donation</h3>
-            <p>Secure online payment via Stripe:</p>
+            <p>Give securely through Stripe:</p>
             <div class="donation-buttons">
-              <a href="https://donate.stripe.com/test_XXXXXXXX" target="_blank" rel="noopener noreferrer" class="cta-button">
+              <a href="https://donate.stripe.com/test_XXXXXXXX?success_url=https://heavenlynatureministry.netlify.app/success.html&cancel_url=https://heavenlynatureministry.netlify.app/cancel.html" target="_blank" rel="noopener noreferrer" class="cta-button">
                 <i class="fas fa-hand-holding-heart"></i> One-Time Donation
               </a>
-              <a href="https://donate.stripe.com/test_YYYYYYYY" target="_blank" rel="noopener noreferrer" class="cta-button">
+              <a href="https://donate.stripe.com/test_YYYYYYYY?success_url=https://heavenlynatureministry.netlify.app/success.html&cancel_url=https://heavenlynatureministry.netlify.app/cancel.html" target="_blank" rel="noopener noreferrer" class="cta-button">
                 <i class="fas fa-calendar-alt"></i> Monthly Support
               </a>
             </div>
           </div>
 
-          <!-- Bank -->
+          <!-- Bank Donation -->
           <div class="donation-card">
             <h3><i class="fas fa-university"></i> Bank Transfer</h3>
-            <p>Make a direct transfer:</p>
+            <p>Transfer directly to:</p>
             <div class="bank-details">
               <p><strong>Bank:</strong> Equity Bank Limited Southern Sudan</p>
               <p><strong>Code:</strong> EQBLSSJB</p>
@@ -160,7 +106,7 @@
             <h3><i class="fas fa-mobile-alt"></i> Mobile Money</h3>
             <p><strong>MTN South Sudan:</strong> +211 926 006 202</p>
             <a href="https://wa.me/211926006202" class="cta-button outline" target="_blank" rel="noopener noreferrer">
-              <i class="fab fa-whatsapp"></i> Send on WhatsApp
+              <i class="fab fa-whatsapp"></i> Send via WhatsApp
             </a>
           </div>
         </div>
@@ -172,18 +118,18 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section section--alt" aria-labelledby="contact-heading">
+    <section id="contact" class="section section--alt">
       <div class="section-content">
-        <h2 id="contact-heading" data-aos="fade-up">Contact Us</h2>
-        <form name="contact" method="POST" data-netlify="true" action="/thank-you" class="contact-form" data-aos="fade-up">
+        <h2 data-aos="fade-up">Contact Us</h2>
+        <form name="contact" method="POST" data-netlify="true" action="/success" class="contact-form" data-aos="fade-up">
           <input type="hidden" name="form-name" value="contact">
           <div class="form-group">
             <label for="name">Your Name *</label>
-            <input type="text" name="name" id="name" required>
+            <input type="text" id="name" name="name" required>
           </div>
           <div class="form-group">
             <label for="email">Email *</label>
-            <input type="email" name="email" id="email" required>
+            <input type="email" id="email" name="email" required>
           </div>
           <div class="form-group">
             <label for="subject">Subject</label>
@@ -195,7 +141,7 @@
           </div>
           <div class="form-group">
             <label for="message">Message *</label>
-            <textarea name="message" id="message" rows="5" required></textarea>
+            <textarea id="message" name="message" rows="5" required></textarea>
           </div>
           <button type="submit" class="submit-button"><i class="fas fa-paper-plane"></i> Send Message</button>
         </form>
@@ -209,7 +155,6 @@
     </div>
   </footer>
 
-  <!-- Back to Top -->
   <button class="back-to-top" id="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
 
   <!-- Scripts -->
@@ -219,11 +164,9 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       AOS.init();
-
-      // Footer year
       document.getElementById('current-year').textContent = new Date().getFullYear();
 
-      // Copy account number
+      // Copy account
       const copyBtn = document.getElementById('copy-account');
       copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(copyBtn.dataset.text).then(() => {
@@ -240,7 +183,5 @@
       backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     });
   </script>
-
-  <noscript>Please enable JavaScript to view this website correctly.</noscript>
 </body>
 </html>
