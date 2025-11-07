@@ -58,7 +58,7 @@
       <div class="hero-overlay"></div>
       <div class="hero-content" data-aos="fade-up">
         <h1 id="hero-heading">Welcome to Heavenly Nature Ministry</h1>
-        <p class="hero-tagline">“We are one” — Empowering South Sudan’s vulnerable children through Christ-centered transformation—spiritually, physically, and mentally.</p>
+        <p class="hero-tagline">"We are one" — Empowering South Sudan's vulnerable children through Christ-centered transformation—spiritually, physically, and mentally.</p>
         <div class="hero-buttons">
           <a href="#donate" class="cta-button"><i class="fas fa-hand-holding-heart"></i> Help Our Mission</a>
           <a href="#contact" class="cta-button outline"><i class="fas fa-envelope"></i> Get In Touch</a>
@@ -78,10 +78,17 @@
             <h3><i class="fab fa-cc-stripe"></i> Online Donation</h3>
             <p>Give securely through Stripe:</p>
             <div class="donation-buttons">
-              <a href="https://donate.stripe.com/test_XXXXXXXX?success_url=https://heavenlynatureministry.netlify.app/success.html&cancel_url=https://heavenlynatureministry.netlify.app/cancel.html" target="_blank" rel="noopener noreferrer" class="cta-button">
+              <!-- REPLACE THESE WITH YOUR ACTUAL STRIPE DONATION LINKS -->
+              <a href="https://donate.stripe.com/your-actual-one-time-donation-link" 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 class="cta-button">
                 <i class="fas fa-hand-holding-heart"></i> One-Time Donation
               </a>
-              <a href="https://donate.stripe.com/test_YYYYYYYY?success_url=https://heavenlynatureministry.netlify.app/success.html&cancel_url=https://heavenlynatureministry.netlify.app/cancel.html" target="_blank" rel="noopener noreferrer" class="cta-button">
+              <a href="https://donate.stripe.com/your-actual-monthly-donation-link" 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 class="cta-button">
                 <i class="fas fa-calendar-alt"></i> Monthly Support
               </a>
             </div>
@@ -150,6 +157,39 @@
   </main>
 
   <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <img src="images/logo-white.webp" alt="Heavenly Nature Ministry Logo" width="180" height="50" loading="lazy">
+          <p>"Empowering South Sudan's vulnerable children through Christ-centered transformation—spiritually, physically, and mentally—to build self-reliant, God-fearing generations."</p>
+          <div class="social-icons">
+            <!-- Fixed Facebook Link -->
+            <a href="https://www.facebook.com/share/12LD7tYTe1z/" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               aria-label="Visit our Facebook page">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            
+            <!-- Fixed YouTube Link -->
+            <a href="https://www.youtube.com/@HeavenlyNatureMinistryInc" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               aria-label="Visit our YouTube channel">
+              <i class="fab fa-youtube"></i>
+            </a>
+            
+            <!-- WhatsApp (already working) -->
+            <a href="https://wa.me/211926006202" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               aria-label="Contact us on WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="footer-bottom">
       <p>&copy; <span id="current-year"></span> Heavenly Nature Ministry. All Rights Reserved.</p>
     </div>
@@ -163,24 +203,72 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      AOS.init();
+      // Initialize AOS animations
+      AOS.init({
+        duration: 800,
+        once: true
+      });
+
+      // Set current year in footer
       document.getElementById('current-year').textContent = new Date().getFullYear();
 
-      // Copy account
+      // Copy account number functionality
       const copyBtn = document.getElementById('copy-account');
-      copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(copyBtn.dataset.text).then(() => {
-          copyBtn.textContent = 'Copied!';
-          setTimeout(() => copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Account Number', 2000);
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(copyBtn.dataset.text).then(() => {
+            const originalHTML = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => {
+              copyBtn.innerHTML = originalHTML;
+            }, 2000);
+          }).catch(err => {
+            console.error('Failed to copy: ', err);
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = copyBtn.dataset.text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const originalHTML = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => {
+              copyBtn.innerHTML = originalHTML;
+            }, 2000);
+          });
+        });
+      }
+
+      // Back to top functionality
+      const backToTop = document.getElementById('back-to-top');
+      if (backToTop) {
+        window.addEventListener('scroll', () => {
+          backToTop.classList.toggle('visible', window.scrollY > 400);
+        });
+        
+        backToTop.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+      }
+
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
         });
       });
-
-      // Back to top
-      const backToTop = document.getElementById('back-to-top');
-      window.addEventListener('scroll', () => {
-        backToTop.classList.toggle('visible', window.scrollY > 400);
-      });
-      backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     });
   </script>
 </body>
